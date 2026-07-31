@@ -399,7 +399,7 @@ Il existe un autre type de saut conditionnel, les **sauts arithmétiques**. Ils 
 |---|---|---|
 | = | `JEQ label` | `JEQ label` |
 | > | `JG label` | `JA label` |
-| < | `JL label` | `JB label` |
+| `<` | `JL label` | `JB label` |
 | ≠ | `JNE label` | `JNE label` |
 
 *Exemple :*

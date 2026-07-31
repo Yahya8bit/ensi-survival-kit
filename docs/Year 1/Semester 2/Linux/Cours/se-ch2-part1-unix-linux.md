@@ -540,7 +540,7 @@ Changer les permissions : `chmod`
 $ chmod num fichier
 ```
 
-`num` : équivalent numérique des nouvelles permissions qu'on veut appliquer sur `fichier`. *Exemple :* `chmod 644 fichier` <=> `rw-r--r--`
+`num` : équivalent numérique des nouvelles permissions qu'on veut appliquer sur `fichier`. *Exemple :* `chmod 644 fichier` ⟺ `rw-r--r--`
 
 ```bash
 $ chmod [u|o|g] ± r|w|x fichier

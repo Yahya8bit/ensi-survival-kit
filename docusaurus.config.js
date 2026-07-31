@@ -1,15 +1,18 @@
 // @ts-check
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/vsDark");
-const math = require("remark-math");
-const katex = require("rehype-katex");
+const { themes: prismThemes } = require("prism-react-renderer");
 
 const config = async () => {
+  const { default: math } = await import("remark-math");
+  const { default: katex } = await import("rehype-katex");
+
   /** @type {import('@docusaurus/types').Config} */
   return {
     markdown: {
       mermaid: true,
+      hooks: {
+        onBrokenMarkdownLinks: "warn",
+      },
     },
     themes: [
       "@docusaurus/theme-mermaid",
@@ -28,7 +31,6 @@ const config = async () => {
     url: "https://YOUR_GITHUB_USERNAME.github.io",
     baseUrl: process.env.BASE_URL ?? "/",
     onBrokenLinks: "throw",
-    onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.ico",
     organizationName: "YOUR_GITHUB_USERNAME",
     projectName: "ensi-knowledge",
@@ -139,8 +141,8 @@ const config = async () => {
           copyright: `Licensed under GPL v3.0`,
         },
         prism: {
-          theme: lightCodeTheme,
-          darkTheme: darkCodeTheme,
+          theme: prismThemes.github,
+          darkTheme: prismThemes.vsDark,
           additionalLanguages: [
             "bash",
             "csharp",

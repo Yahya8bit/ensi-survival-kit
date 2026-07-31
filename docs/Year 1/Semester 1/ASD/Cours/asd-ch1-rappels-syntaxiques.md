@@ -81,7 +81,7 @@ Dès que l'on a besoin de stocker une information au cours d'un algorithme, on u
 
 Valeurs : Vrai, Faux.
 
-Opérations : relationnelles (Faux < Vrai), logiques : négation (`non`), conjonction (`et`), disjonction (`ou`)
+Opérations : relationnelles (Faux &lt; Vrai), logiques : négation (`non`), conjonction (`et`), disjonction (`ou`)
 
 | A | B | Non A | A et B | A ou B |
 |---|---|-------|--------|--------|
