@@ -1,0 +1,52 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+        exclude: .yarn
+      - id: trailing-whitespace
+        exclude: .yarn
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint-fix
+        name: markdownlint-fix
+        description: "Fixes the style of Markdown/Commonmark files."
+        entry: markdownlint --fix -c .markdownlint.yaml
+        language: node
+        types: [markdown]
+        minimum_pre_commit_version: 0.15.0
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+        args: ["--severity=style"]
+
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: yarn format
+        language: system
+        types: [file, javascript]
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: generate_slugs
+        name: generate_slugs
+        entry: python scripts/generate_slugs.py
+        language: system
+        types: [file, python]
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: generate_contributors
+        name: generate_contributors
+        entry: bash -c "gh api repos/YOUR_GITHUB_USERNAME/ensi-knowledge/contributors > data/contributors.json"
+        language: system
+        types: [file, python]
+        pass_filenames: false
