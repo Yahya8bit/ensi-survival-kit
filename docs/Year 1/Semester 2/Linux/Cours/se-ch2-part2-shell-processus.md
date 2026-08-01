@@ -174,7 +174,7 @@ Mécanisme de communication asynchrone entre processus.
 </TabItem>
 <TabItem value="pdf" label="PDF">
 
-<iframe src="/pdfs/se-ch2-part2-shell-awk-sed-processus.pdf" width="100%" height="800px" style={{border: '1px solid var(--ifm-color-emphasis-300)'}} />
+<PdfViewer file="/pdfs/se-ch2-part2-shell-awk-sed-processus.pdf" />
 
 </TabItem>
 </Tabs>

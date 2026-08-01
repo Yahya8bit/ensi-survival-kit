@@ -249,7 +249,7 @@ Pour cela, il faut utiliser un circuit de décodage d'adresses : un **décodeur 
 </TabItem>
 <TabItem value="pdf" label="PDF">
 
-<iframe src="/pdfs/micp-ch2-memoires.pdf" width="100%" height="800px" style={{border: '1px solid var(--ifm-color-emphasis-300)'}} />
+<PdfViewer file="/pdfs/micp-ch2-memoires.pdf" />
 
 </TabItem>
 </Tabs>

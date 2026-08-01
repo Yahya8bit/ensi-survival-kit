@@ -288,7 +288,7 @@ Puisque CS contient la valeur FFFFH et IP la valeur 0000H, la 1ère instruction 
 </TabItem>
 <TabItem value="pdf" label="PDF">
 
-<iframe src="/pdfs/micp-ch3-microprocesseur-8086.pdf" width="100%" height="800px" style={{border: '1px solid var(--ifm-color-emphasis-300)'}} />
+<PdfViewer file="/pdfs/micp-ch3-microprocesseur-8086.pdf" />
 
 </TabItem>
 </Tabs>

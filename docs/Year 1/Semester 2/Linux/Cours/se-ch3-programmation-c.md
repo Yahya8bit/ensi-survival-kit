@@ -200,7 +200,7 @@ Sections du manuel : 1 (commandes utilisateur), 2 (appels système), 3 (biblioth
 </TabItem>
 <TabItem value="pdf" label="PDF">
 
-<iframe src="/pdfs/se-ch3-programmation-c.pdf" width="100%" height="800px" style={{border: '1px solid var(--ifm-color-emphasis-300)'}} />
+<PdfViewer file="/pdfs/se-ch3-programmation-c.pdf" />
 
 </TabItem>
 </Tabs>

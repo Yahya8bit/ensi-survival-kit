@@ -369,11 +369,11 @@ Pour fonctionner, un microprocesseur nécessite donc au minimum les éléments s
 
 **Partie 1 : Architecture de Base**
 
-<iframe src="/pdfs/micp-ch1-part1.pdf" width="100%" height="800px" style={{border: '1px solid var(--ifm-color-emphasis-300)'}} />
+<PdfViewer file="/pdfs/micp-ch1-part1.pdf" />
 
 **Partie 2 : Fonctionnement d'un microprocesseur**
 
-<iframe src="/pdfs/micp-ch1-part2.pdf" width="100%" height="800px" style={{border: '1px solid var(--ifm-color-emphasis-300)'}} />
+<PdfViewer file="/pdfs/micp-ch1-part2.pdf" />
 
 </TabItem>
 </Tabs>

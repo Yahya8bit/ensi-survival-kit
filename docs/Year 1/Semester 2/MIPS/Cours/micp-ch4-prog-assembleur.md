@@ -599,7 +599,7 @@ sous_prog1      endp
 </TabItem>
 <TabItem value="pdf" label="PDF">
 
-<iframe src="/pdfs/micp-ch4-prog-assembleur.pdf" width="100%" height="800px" style={{border: '1px solid var(--ifm-color-emphasis-300)'}} />
+<PdfViewer file="/pdfs/micp-ch4-prog-assembleur.pdf" />
 
 </TabItem>
 </Tabs>

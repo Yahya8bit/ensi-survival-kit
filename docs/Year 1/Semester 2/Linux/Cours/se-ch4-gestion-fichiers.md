@@ -187,7 +187,7 @@ Chaque fichier possède des droits pour le **propriétaire**, le **groupe** et l
 </TabItem>
 <TabItem value="pdf" label="PDF">
 
-<iframe src="/pdfs/se-ch4-gestion-fichiers.pdf" width="100%" height="800px" style={{border: '1px solid var(--ifm-color-emphasis-300)'}} />
+<PdfViewer file="/pdfs/se-ch4-gestion-fichiers.pdf" />
 
 </TabItem>
 </Tabs>

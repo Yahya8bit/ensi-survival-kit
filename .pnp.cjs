@@ -64,6 +64,7 @@ const RAW_RUNTIME_STATE =
           ["prism-react-renderer", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:2.4.1"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:18.3.1"],\
+          ["react-pdf", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:10.4.1"],\
           ["rehype-katex", "npm:7.0.1"],\
           ["remark-math", "npm:6.0.0"],\
           ["tailwindcss", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:3.2.4"],\
@@ -8832,6 +8833,125 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@napi-rs/canvas", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "../../.yarn/berry/cache/@napi-rs-canvas-npm-0.1.100-656d01a5c8-10c0.zip/node_modules/@napi-rs/canvas/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas", "npm:0.1.100"],\
+          ["@napi-rs/canvas-android-arm64", "npm:0.1.100"],\
+          ["@napi-rs/canvas-darwin-arm64", "npm:0.1.100"],\
+          ["@napi-rs/canvas-darwin-x64", "npm:0.1.100"],\
+          ["@napi-rs/canvas-linux-arm-gnueabihf", "npm:0.1.100"],\
+          ["@napi-rs/canvas-linux-arm64-gnu", "npm:0.1.100"],\
+          ["@napi-rs/canvas-linux-arm64-musl", "npm:0.1.100"],\
+          ["@napi-rs/canvas-linux-riscv64-gnu", "npm:0.1.100"],\
+          ["@napi-rs/canvas-linux-x64-gnu", "npm:0.1.100"],\
+          ["@napi-rs/canvas-linux-x64-musl", "npm:0.1.100"],\
+          ["@napi-rs/canvas-win32-arm64-msvc", "npm:0.1.100"],\
+          ["@napi-rs/canvas-win32-x64-msvc", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-android-arm64", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-android-arm64-npm-0.1.100-e92a7907a7/node_modules/@napi-rs/canvas-android-arm64/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-android-arm64", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-darwin-arm64", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-darwin-arm64-npm-0.1.100-a48fd15c37/node_modules/@napi-rs/canvas-darwin-arm64/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-darwin-arm64", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-darwin-x64", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-darwin-x64-npm-0.1.100-06c2a86bba/node_modules/@napi-rs/canvas-darwin-x64/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-darwin-x64", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-linux-arm-gnueabihf", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-linux-arm-gnueabihf-npm-0.1.100-1f35abec0e/node_modules/@napi-rs/canvas-linux-arm-gnueabihf/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-linux-arm-gnueabihf", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-linux-arm64-gnu", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-linux-arm64-gnu-npm-0.1.100-540f3bef6e/node_modules/@napi-rs/canvas-linux-arm64-gnu/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-linux-arm64-gnu", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-linux-arm64-musl", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-linux-arm64-musl-npm-0.1.100-9413936e2e/node_modules/@napi-rs/canvas-linux-arm64-musl/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-linux-arm64-musl", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-linux-riscv64-gnu", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-linux-riscv64-gnu-npm-0.1.100-3fb3e44580/node_modules/@napi-rs/canvas-linux-riscv64-gnu/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-linux-riscv64-gnu", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-linux-x64-gnu", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-linux-x64-gnu-npm-0.1.100-313e0233e2/node_modules/@napi-rs/canvas-linux-x64-gnu/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-linux-x64-gnu", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-linux-x64-musl", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-linux-x64-musl-npm-0.1.100-12eb4ccdb6/node_modules/@napi-rs/canvas-linux-x64-musl/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-linux-x64-musl", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-win32-arm64-msvc", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-win32-arm64-msvc-npm-0.1.100-6f95e6b84c/node_modules/@napi-rs/canvas-win32-arm64-msvc/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-win32-arm64-msvc", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@napi-rs/canvas-win32-x64-msvc", [\
+      ["npm:0.1.100", {\
+        "packageLocation": "./.yarn/unplugged/@napi-rs-canvas-win32-x64-msvc-npm-0.1.100-6db82291d8/node_modules/@napi-rs/canvas-win32-x64-msvc/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas-win32-x64-msvc", "npm:0.1.100"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@noble/hashes", [\
       ["npm:1.4.0", {\
         "packageLocation": "../../.yarn/berry/cache/@noble-hashes-npm-1.4.0-9389282fd6-10c0.zip/node_modules/@noble/hashes/",\
@@ -15087,6 +15207,7 @@ const RAW_RUNTIME_STATE =
           ["prism-react-renderer", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:2.4.1"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:18.3.1"],\
+          ["react-pdf", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:10.4.1"],\
           ["rehype-katex", "npm:7.0.1"],\
           ["remark-math", "npm:6.0.0"],\
           ["tailwindcss", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:3.2.4"],\
@@ -18566,6 +18687,24 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["make-cancellable-promise", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "../../.yarn/berry/cache/make-cancellable-promise-npm-2.0.0-60a423fc43-10c0.zip/node_modules/make-cancellable-promise/",\
+        "packageDependencies": [\
+          ["make-cancellable-promise", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["make-event-props", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "../../.yarn/berry/cache/make-event-props-npm-2.0.0-cc28c48af9-10c0.zip/node_modules/make-event-props/",\
+        "packageDependencies": [\
+          ["make-event-props", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["make-fetch-happen", [\
       ["npm:10.2.1", {\
         "packageLocation": "../../.yarn/berry/cache/make-fetch-happen-npm-10.2.1-f1cc7cd2df-10c0.zip/node_modules/make-fetch-happen/",\
@@ -18996,6 +19135,26 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/merge-descriptors-npm-1.0.3-10b44ad75c-10c0.zip/node_modules/merge-descriptors/",\
         "packageDependencies": [\
           ["merge-descriptors", "npm:1.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["merge-refs", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "../../.yarn/berry/cache/merge-refs-npm-2.0.0-dc302724e0-10c0.zip/node_modules/merge-refs/",\
+        "packageDependencies": [\
+          ["merge-refs", "npm:2.0.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:113dc15bc33873313838817ecb04de588e0af119f032c03c8354d3289050170659abf345b704643847db0c9936c7219567b12916a2027616220b437e574bf032#npm:2.0.0", {\
+        "packageLocation": "./.yarn/__virtual__/merge-refs-virtual-eaeea788f3/3/.yarn/berry/cache/merge-refs-npm-2.0.0-dc302724e0-10c0.zip/node_modules/merge-refs/",\
+        "packageDependencies": [\
+          ["@types/react", null],\
+          ["merge-refs", "virtual:113dc15bc33873313838817ecb04de588e0af119f032c03c8354d3289050170659abf345b704643847db0c9936c7219567b12916a2027616220b437e574bf032#npm:2.0.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react"\
         ],\
         "linkType": "HARD"\
       }]\
@@ -20734,6 +20893,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/path-type-npm-4.0.0-10d47fc86a-10c0.zip/node_modules/path-type/",\
         "packageDependencies": [\
           ["path-type", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["pdfjs-dist", [\
+      ["npm:5.4.296", {\
+        "packageLocation": "../../.yarn/berry/cache/pdfjs-dist-npm-5.4.296-8918b8ec71-10c0.zip/node_modules/pdfjs-dist/",\
+        "packageDependencies": [\
+          ["@napi-rs/canvas", "npm:0.1.100"],\
+          ["pdfjs-dist", "npm:5.4.296"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -23133,6 +23302,40 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-pdf", [\
+      ["npm:10.4.1", {\
+        "packageLocation": "../../.yarn/berry/cache/react-pdf-npm-10.4.1-3c047f0ceb-10c0.zip/node_modules/react-pdf/",\
+        "packageDependencies": [\
+          ["react-pdf", "npm:10.4.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:10.4.1", {\
+        "packageLocation": "./.yarn/__virtual__/react-pdf-virtual-113dc15bc3/3/.yarn/berry/cache/react-pdf-npm-10.4.1-3c047f0ceb-10c0.zip/node_modules/react-pdf/",\
+        "packageDependencies": [\
+          ["@types/react", null],\
+          ["@types/react-dom", null],\
+          ["clsx", "npm:2.1.1"],\
+          ["dequal", "npm:2.0.3"],\
+          ["make-cancellable-promise", "npm:2.0.0"],\
+          ["make-event-props", "npm:2.0.0"],\
+          ["merge-refs", "virtual:113dc15bc33873313838817ecb04de588e0af119f032c03c8354d3289050170659abf345b704643847db0c9936c7219567b12916a2027616220b437e574bf032#npm:2.0.0"],\
+          ["pdfjs-dist", "npm:5.4.296"],\
+          ["react", "npm:18.3.1"],\
+          ["react-dom", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:18.3.1"],\
+          ["react-pdf", "virtual:a79d86a4b46ae2652263a59106a1619f1c738fd9858196ebe6907b9f339afe96494cb7d1f2f9255b1d9f0cfef6f11d719bda305de74de36263a901538de576b3#npm:10.4.1"],\
+          ["tiny-invariant", "npm:1.3.3"],\
+          ["warning", "npm:4.0.3"]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-router", [\
       ["npm:5.3.4", {\
         "packageLocation": "../../.yarn/berry/cache/react-router-npm-5.3.4-cc0757f6df-10c0.zip/node_modules/react-router/",\
@@ -25451,6 +25654,13 @@ const RAW_RUNTIME_STATE =
           ["tiny-invariant", "npm:1.3.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:1.3.3", {\
+        "packageLocation": "../../.yarn/berry/cache/tiny-invariant-npm-1.3.3-e622f1447c-10c0.zip/node_modules/tiny-invariant/",\
+        "packageDependencies": [\
+          ["tiny-invariant", "npm:1.3.3"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["tiny-warning", [\
@@ -26330,6 +26540,16 @@ const RAW_RUNTIME_STATE =
           ["@types/unist", "npm:3.0.3"],\
           ["unist-util-stringify-position", "npm:4.0.0"],\
           ["vfile-message", "npm:4.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["warning", [\
+      ["npm:4.0.3", {\
+        "packageLocation": "../../.yarn/berry/cache/warning-npm-4.0.3-291e921d6d-10c0.zip/node_modules/warning/",\
+        "packageDependencies": [\
+          ["loose-envify", "npm:1.4.0"],\
+          ["warning", "npm:4.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\

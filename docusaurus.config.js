@@ -25,15 +25,15 @@ const config = async () => {
         }),
       ],
     ],
-    title: "ENSI Knowledge",
+    title: "ENSI Survival Kit",
     tagline:
       "A Guide on how to survive your studies at ENSI. You will find tips, references, projects & cheat sheets.",
-    url: "https://YOUR_GITHUB_USERNAME.github.io",
+    url: "https://Yahya8bit.github.io",
     baseUrl: process.env.BASE_URL ?? "/",
     onBrokenLinks: "throw",
     favicon: "img/favicon.ico",
-    organizationName: "YOUR_GITHUB_USERNAME",
-    projectName: "ensi-knowledge",
+    organizationName: "Yahya8bit",
+    projectName: "ensi-survival-kit",
 
     i18n: {
       defaultLocale: "en",
@@ -80,7 +80,7 @@ const config = async () => {
             rehypePlugins: [katex],
             sidebarPath: require.resolve("./sidebars.js"),
             editUrl:
-              "https://github.com/YOUR_GITHUB_USERNAME/ensi-knowledge/edit/master",
+              "https://github.com/Yahya8bit/ensi-survival-kit/edit/master",
           },
           theme: {
             customCss: require.resolve("./src/css/custom.css"),
@@ -110,7 +110,7 @@ const config = async () => {
               label: "Docs",
             },
             {
-              href: "https://github.com/YOUR_GITHUB_USERNAME/ensi-knowledge",
+              href: "https://github.com/Yahya8bit/ensi-survival-kit",
               label: "GitHub",
               position: "right",
             },
@@ -133,7 +133,7 @@ const config = async () => {
               items: [
                 {
                   label: "GitHub",
-                  href: "https://github.com/YOUR_GITHUB_USERNAME/ensi-knowledge",
+                  href: "https://github.com/Yahya8bit/ensi-survival-kit",
                 },
               ],
             },

@@ -15,8 +15,6 @@ You can find different resources that may be helpful for your studies. Select yo
 
 In case you want to contribute / report an issue, please do it here:
 
-[https://github.com/YOUR_GITHUB_USERNAME/ensi-knowledge](https://github.com/YOUR_GITHUB_USERNAME/ensi-knowledge)
+[https://github.com/Yahya8bit/ensi-survival-kit](https://github.com/Yahya8bit/ensi-survival-kit)
 
-## FAQ
 
-Coming soon :-)
