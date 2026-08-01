@@ -1,0 +1,8 @@
+{
+  "label": "TP",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Practical lab exercises (travaux pratiques) for architecture et microprocesseurs."
+  }
+}

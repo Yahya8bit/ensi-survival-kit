@@ -1,7 +1,7 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 title: POO — La STL et les Fichiers en C++
-sidebar_label: Ch3 — STL & Fichiers
+sidebar_label: Ch3 (P2) — STL & Fichiers
 hide_title: true
 ---
 

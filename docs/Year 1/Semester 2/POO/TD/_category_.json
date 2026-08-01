@@ -1,4 +1,8 @@
 {
   "label": "TD",
-  "position": 2
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Tutorial exercises (travaux dirigés) and their corrections for programmation orientée objet."
+  }
 }

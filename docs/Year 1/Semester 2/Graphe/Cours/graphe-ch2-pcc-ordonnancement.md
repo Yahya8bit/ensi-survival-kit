@@ -68,6 +68,8 @@ Algorithmes de Dijkstra et de Bellman → PCC à origine unique. Algorithme de F
 
 **Exemple.** Recherche des PCC depuis le sommet `C`, sur un graphe à 7 sommets `A,B,C,D,E,F,G`. Après application de l'algorithme, on obtient l'arborescence des plus courts chemins depuis `C` : `π*(C)=0`, `π*(D)=5`, `π*(E)=8`, `π*(F)=10`, `π*(B)=18`, `π*(A)=19`, `π*(G)=12`.
 
+<DijkstraVisualizer />
+
 **Exemple 2 (Dijkstra sur graphe simple).** Sur un réseau `1→{2,3,4}`, `4→{2,5}`, `3→5`, `2→5` (arcs valués), on obtient le PCC de 1 à 5 : `µ: 1→4→2→5`, de valeur `π*(5)=6`.
 
 ## Algorithme de Bellman

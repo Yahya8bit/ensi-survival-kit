@@ -32,13 +32,11 @@ Follow this [guide](https://docs.volta.sh/guide/getting-started)
 
 ### Dependencies Installation
 
-Install your dependencies. **Yarn V2** [Plug'n'Play](https://yarnpkg.com/features/pnp) is active and you won't find any node_module folder.
+Install your dependencies. This project uses **Yarn Berry** with the `node-modules` linker, so a regular `node_modules/` folder is created.
 
 ```bash
 yarn
 ```
-
-For Vscode users make sure to apply .vscode/settings.json when prompted.
 
 ## Local Development
 

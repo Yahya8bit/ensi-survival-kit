@@ -79,6 +79,8 @@ On construit un ACM `T(S_T,A_T)` de manière incrémentale. Au début, `A_T` est
 
 **Exemple (câblage de trottoirs entre 6 immeubles A-F).** Les arêtes triées : `EF(750), CE(790), BE(835), BD(850), BF(920), BC(1160), BA(1320), AF(2640), CF(2880)`. En appliquant Kruskal : on retient `EF, CE, BE, BD` (4 arêtes, sans cycle), puis `BF` et `BC` forment des cycles (rejetées), puis `BA` est retenue (5ᵉ arête = `n-1` pour `n=6` sommets) → **FIN**. **Poids total de l'ACM : 750+790+835+850+1320 = 4545.**
 
+<KruskalVisualizer />
+
 :::note Remarque
 L'algorithme de Kruskal se généralise directement pour trouver un arbre couvrant de poids **maximal** : il suffit de trier les arêtes par ordre **décroissant**.
 :::

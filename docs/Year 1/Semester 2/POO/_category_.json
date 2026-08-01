@@ -1,4 +1,8 @@
 {
   "label": "POO",
-  "position": 5
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Course materials for programmation orientée objet."
+  }
 }

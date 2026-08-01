@@ -1,4 +1,8 @@
 {
   "label": "Cours",
-  "position": 1
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Lecture notes and course chapters for programmation orientée objet."
+  }
 }

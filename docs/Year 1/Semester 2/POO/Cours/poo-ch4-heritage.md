@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 title: POO — L'Héritage en C++
 sidebar_label: Ch4 — Héritage
 hide_title: true

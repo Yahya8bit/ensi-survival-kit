@@ -26,6 +26,10 @@ import TabItem from '@theme/TabItem';
 
    Calculer la taille du disque dur en termes de nombre de faces, nombre de cylindres, nombre de pistes, nombre de secteurs, nombre de blocs physiques et taille en octets.
 
+   Essayez avec vos propres valeurs :
+
+   <DiskCalculator />
+
    <details>
    <summary>Correction</summary>
 

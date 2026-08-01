@@ -1,4 +1,8 @@
 {
   "label": "Maths de l’ing",
-  "position": 4
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Course materials for Maths de l’ing."
+  }
 }

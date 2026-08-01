@@ -94,37 +94,58 @@ On classe généralement les périphériques en deux types : les périphériques
 
 ### Schéma synoptique d'un ordinateur
 
-```
-Clavier   ─┐                              ┌─→ Ecran
-Souris    ─┼─→ [ Microprocesseur ]        ├─→ Imprimante
-Microphone─┘   [ Mémoire Centrale ]  ─────┤
-               [ Contrôleurs d'E/S ]      └─→ Baffles
-                       ↕
-                   Stockage
+```mermaid
+flowchart LR
+    subgraph IN[" "]
+    direction TB
+        Clavier
+        Souris
+        Microphone
+    end
+    subgraph CENTRAL[" "]
+    direction TB
+        Micro["Microprocesseur"]
+        MC["Mémoire Centrale"]
+        CES["Contrôleurs d'E/S"]
+    end
+    subgraph OUT[" "]
+    direction TB
+        Ecran
+        Imprimante
+        Baffles
+    end
+    Clavier --> CENTRAL
+    Souris --> CENTRAL
+    Microphone --> CENTRAL
+    CENTRAL --> Ecran
+    CENTRAL --> Imprimante
+    CENTRAL --> Baffles
+    CENTRAL <--> Stockage(("Stockage"))
 ```
 
 ### Schéma général d'un ordinateur
 
-```
-┌─────────────────────┐            ┌──────────────────────┐
-│      Processeur      │            │   Mémoire Principale  │
-│  ┌────────────────┐   │  codes    │      (M.P.)            │
-│  │ Unité de        │◄──┼──instr.──┤  ┌─────────────────┐   │
-│  │ commande        │   │           │  │   Programme      │   │
-│  └───────┬────────┘   │           │  └─────────────────┘   │
-│          ▼             │  données  │  ┌─────────────────┐   │
-│  ┌────────────────┐   │◄──binaires┼─►│    Données        │   │
-│  │ Unité de        │   │           │  └─────────────────┘   │
-│  │ traitement (UAL)│   │           └──────────────────────┘
-│  └───────┬────────┘   │
-└──────────┼─────────────┘
-           ▼ informations codées en binaire
-   ┌─────────────────┐
-   │ Unité d'entrées/  │
-   │ sorties           │
-   └───┬───────────┬───┘
-       ▼           ▼
-   CLAVIER       ECRAN
+```mermaid
+flowchart TB
+    subgraph Top[" "]
+    direction LR
+        subgraph P["Processeur"]
+            direction TB
+            UCmd["Unité de commande"]
+            UAL["Unité de traitement (UAL)"]
+            UCmd --> UAL
+        end
+        subgraph MP["Mémoire principale (M.P.)"]
+            direction TB
+            Prog["Programme"]
+            Data["Données"]
+        end
+    end
+    UCmd <-->|codes instr.| Prog
+    UAL <-->|données binaires| Data
+    P <-->|informations codées en binaire| IOU["Unité E/S"]
+    IOU --> Clavier2["CLAVIER"]
+    IOU --> Ecran2["ECRAN"]
 ```
 
 ## Modèle de Von Neumann
@@ -139,13 +160,17 @@ John Von Neumann est à l'origine d'un modèle de machine universelle de traitem
 
 Les différents organes du système sont reliés par des voies de communication appelées **bus**.
 
-```
-┌───────────────┐   ┌──────────────────┐   ┌─────────────┐
-│ Unité centrale │   │ Mémoire Principale│   │ Interface E/S│
-└───────┬────────┘   └─────────┬────────┘   └──────┬──────┘
-        │                       │                     │
-        ▼                       ▼                     ▼
-════════════════════════ bus ═══════════════════════════════
+```mermaid
+flowchart TB
+    subgraph TOP[" "]
+    direction LR
+        UC["Unité centrale"]
+        MP["Mémoire Principale"]
+        IES["Interface E/S"]
+    end
+    UC <--> BUS["bus"]
+    MP <--> BUS
+    IES <--> BUS
 ```
 
 ## L'unité centrale
@@ -204,18 +229,27 @@ En effet, le microprocesseur peut communiquer avec les différentes mémoires et
 
 Lorsqu'on réalise un système microprogrammé, on attribue donc à chaque périphérique une zone d'adresse et une fonction « décodage d'adresse » est donc nécessaire afin de fournir les signaux de sélection de chacun des composants.
 
-```
-                     ┌──────────────────┐
-                     │ Décodeur d'adresses│
-                     └─────────┬──────────┘
-Bus d'adresses ══════════════════════════════════
-                     Bus de commande
-                     ┌───┬────────────┬───┐
-┌───────────────┐   ┌▼───────────┐  ┌▼──────────┐
-│ Unité centrale │   │  Mémoire    │  │ Interface  │
-│                │   │  Principale │  │    E/S     │
-└───────┬────────┘   └──────┬──────┘  └─────┬──────┘
-Bus de données ═══════════════════════════════════
+```mermaid
+flowchart TB
+    DEC["Décodeur d'adresses"]
+    BA["Bus d'adresses"]
+    BC["Bus de commande"]
+    subgraph ROW[" "]
+    direction LR
+        UC["Unité centrale"]
+        MP["Mémoire Principale"]
+        IES["Interface E/S"]
+    end
+    BD["Bus de données"]
+
+    UC --> BA
+    BA --> DEC
+    DEC --> BC
+    BC --> MP
+    BC --> IES
+    UC <--> BD
+    MP <--> BD
+    IES <--> BD
 ```
 
 ## Partie 2 : Fonctionnement d'un microprocesseur
@@ -229,16 +263,28 @@ L'élément de base d'un calculateur est constitué par :
 - le programme à exécuter : suite d'instructions élémentaires ;
 - les données à traiter.
 
-```
-                  ┌─ unité centrale de traitement (UCT) ─┐
-horloge ──────►[unité de contrôle]     [registres]
-                       │                    ↕
-                       ▼               [unité arithmétique
-                [ordres/commandes]      et logique (UAL)]◄──────┐
-                                              ↕                  │
-                                       [unité de transfert]◄──►[unité
-                                              ↕                d'entrées/
-                                       [mémoire centrale]      sorties]◄──► monde extérieur
+```mermaid
+flowchart LR
+    Horloge["horloge"]
+    subgraph UCT["unité centrale de traitement (UCT)"]
+    direction LR
+        UControl["unité de contrôle"]
+        Reg["registres"]
+        UAL["unité arithmétique et logique (UAL)"]
+        UControl -->|ordre/commande| Reg
+        UControl -->|ordre/commande| UAL
+        Reg <-->|données| UAL
+    end
+    UTransfert["unité de transfert"]
+    UES["unité d'entrées/sorties"]
+    MC["mémoire centrale"]
+    Monde["monde extérieur (périphériques, capteurs, actionneurs, …)"]
+
+    Horloge -->|ordre/commande| UControl
+    UAL <-->|données| UTransfert
+    UTransfert <-->|données| UES
+    UTransfert <-->|données| MC
+    UES <-->|données| Monde
 ```
 
 **L'unité centrale de traitement** (UCT, CPU : *Central Processing Unit*) est constituée :
@@ -343,17 +389,29 @@ Pendant que l'instruction est décodée, le pointeur d'instruction est incrémen
 
 Pour fonctionner, un microprocesseur nécessite donc au minimum les éléments suivants :
 
-```
-┌────────────────────┬─────────────────────────┐
-│  Unité Arithmétique │  registres                │
-│  et Logique (UAL)   │  - pointeur d'instruction │
-│                      │  - registre d'instruction │
-│                      │  - accumulateur           │
-│                      │  - indicateurs d'état      │
-├──────────────────────┼─────────────────────────┤
-│  séquenceur           │  décodeur d'instructions   │
-│  [horloge]─[quartz]   │                            │
-└────────────────────┴─────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph TOP[" "]
+    direction LR
+        UAL["Unité Arithmétique et Logique (UAL)"]
+        subgraph REG["registres"]
+        direction TB
+            PI["pointeur d'instruction"]
+            RI["registre d'instruction"]
+            ACC["accumulateur"]
+            IND["indicateurs d'état"]
+        end
+    end
+    subgraph BOTTOM[" "]
+    direction LR
+        subgraph SEQ["séquenceur"]
+        direction TB
+            HORLOGE["horloge"]
+            QUARTZ["quartz"]
+            HORLOGE --- QUARTZ
+        end
+        DEC["décodeur d'instructions"]
+    end
 ```
 
 ### Applications

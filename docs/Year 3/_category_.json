@@ -1,4 +1,8 @@
 {
   "label": "Year 3",
-  "position": 3
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Course notes and materials for Year 3 at ENSI."
+  }
 }

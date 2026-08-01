@@ -76,9 +76,11 @@ Archivage / Backup (CD-ROM, DVD, bandes magnétiques)
 
 La présence de mémoire cache permet **d'accélérer l'exécution d'un programme** (elle accélère les communications entre microprocesseur et mémoire principale). De ce fait, plus la taille de la mémoire cache est grande, plus la taille des programmes accélérés peut être élevée. Il y a cependant une limite au-delà de laquelle l'augmentation de la taille du cache ne sert plus à rien.
 
-```
-CPU ⇄ L1 ⇄ L2 ⇄ Mémoire principale
-     (mot)  (ligne)
+```mermaid
+flowchart LR
+    CPU <-->|Mot| L1
+    L1 <-->|Ligne| L2
+    L2 <--> MP["Mémoire principale"]
 ```
 
 La mémoire cache possède plusieurs sens. La première définition, la plus simple à comprendre, est celle utilisée par certains logiciels, par **stockage d'informations sur le disque dur**. La deuxième est un peu plus complexe, car elle intervient dans le fonctionnement des **traitements numériques du processeur**.
@@ -114,12 +116,13 @@ Le nombre de lignes d'adresses dépend de la capacité de la mémoire : n lignes
 2<sup>10</sup> = 1024 octets adressables, et là, pour des raisons pratiques on dit que 1024 octets = 1 Ko, au lieu de 1.024 Ko.
 :::
 
-```
-n lignes d'adresses  A0..An-1  →┐                    ┌→ p lignes de données D0..Dp-1 (p=8 en général)
-                                 │      RAM ou ROM      │
-signal de lecture RD/OE ────────┤                    │
-signal d'écriture WR (RAM) ─────┤                    │
-validation de boîtier CS ───────┘  (chip select)     
+```mermaid
+flowchart LR
+    ADDR["n lignes d'adresses (A0 … An-1)"] --> CHIP["RAM ou ROM"]
+    RD["signal de lecture RD / OE"] --> CHIP
+    WR["signal d'écriture WR (RAM)"] --> CHIP
+    CS["validation de boîtier CS (chip select)"] --> CHIP
+    CHIP <--> DATA["p lignes de données (D0 … Dp-1, souvent p=8)"]
 ```
 
 ## Interfaçage microprocesseur/mémoire
@@ -203,12 +206,19 @@ Pour cela, il faut utiliser un circuit de décodage d'adresses : un **décodeur 
 
 ## Classification des mémoires
 
-```
-                mémoires à semiconducteurs
-                    /                \
-          mémoires mortes         mémoires vives
-         /    |     |    \             |     \
-      ROM   PROM  EPROM EEPROM      DRAM     SRAM
+```mermaid
+flowchart TD
+    ROOT["mémoires à semiconducteurs"]
+    MORTES["mémoires mortes"]
+    VIVES["mémoires vives"]
+    ROOT --> MORTES
+    ROOT --> VIVES
+    MORTES --> ROM
+    MORTES --> PROM
+    MORTES --> EPROM
+    MORTES --> EEPROM
+    VIVES --> DRAM
+    VIVES --> SRAM
 ```
 
 ### Mémoires vives

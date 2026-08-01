@@ -93,7 +93,11 @@ const config = async () => {
       /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
       ({
         mermaid: {
-          theme: { light: "default", dark: "dark" },
+          // Real per-mode colors are applied in the swizzled
+          // src/theme/Mermaid component (mermaid.options.themeVariables is
+          // a single object shared across light/dark, and mermaid parses
+          // colors synchronously so CSS var() strings aren't usable here).
+          theme: { light: "base", dark: "base" },
         },
         navbar: {
           title: "Home",

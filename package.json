@@ -4,7 +4,6 @@
   "private": true,
   "packageManager": "yarn@4.9.2",
   "scripts": {
-    "postinstall": "[ \"$CI\" = \"true\" ] || [ \"$NETLIFY\" = \"true\" ] || yarn dlx @yarnpkg/sdks vscode",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
@@ -40,7 +39,6 @@
     "@types/node": "^24.0.3",
     "autoprefixer": "^10.4.13",
     "clsx": "^1.2.1",
-    "docusaurus-theme-search-typesense": "^0.26.0",
     "hast-util-is-element": "1.1.0",
     "postcss": "^8.4.21",
     "posthog-js": "^1.255.0",

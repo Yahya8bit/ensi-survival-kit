@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 title: POO — Le Polymorphisme en C++
 sidebar_label: Ch5 — Polymorphisme
 hide_title: true
