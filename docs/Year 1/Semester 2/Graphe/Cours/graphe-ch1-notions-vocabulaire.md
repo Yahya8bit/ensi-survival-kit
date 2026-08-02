@@ -52,31 +52,31 @@ Certains problèmes classiques (plus court chemin, minimiser la longueur des con
 
 ## 1. Définitions et concepts de base
 
-**Graphe orienté** : couple `G(S,A)` où `S` est un ensemble fini de **sommets** (ou nœuds, `|S|=n`) et `A ⊂ S × S` un ensemble fini d'**arcs** (`|A|=m`). L'**ordre** d'un graphe est son nombre de sommets.
+**Graphe orienté** : couple $G(S,A)$ où $S$ est un ensemble fini de **sommets** (ou nœuds, $|S|=n$) et $A \subset S \times S$ un ensemble fini d'**arcs** ($|A|=m$). L'**ordre** d'un graphe est son nombre de sommets.
 
-Pour un arc `u = (i,j)`, `i` est l'**extrémité initiale** (ou origine), `j` l'**extrémité finale** (ou destination).
+Pour un arc $u = (i,j)$, $i$ est l'**extrémité initiale** (ou origine), $j$ l'**extrémité finale** (ou destination).
 
-**Graphe non orienté** : couple `G(S,A)` où `A ⊂ S × S` est un ensemble d'**arêtes** — on s'intéresse uniquement à l'existence ou non d'une liaison entre deux sommets.
+**Graphe non orienté** : couple $G(S,A)$ où $A \subset S \times S$ est un ensemble d'**arêtes** — on s'intéresse uniquement à l'existence ou non d'une liaison entre deux sommets.
 
 :::note Remarque
-Un graphe est une application `G : X × X → U`, `(x,y) ↦ u(x,y)`.
+Un graphe est une application $G : X \times X \to U$, $(x,y) \mapsto u(x,y)$.
 :::
 
-**Graphe valué** `G=(S,A,C)` : on associe une fonction `C : A → IR` appelée **coût** (poids, valeur) des arcs, notée `c(i,j)` ou `cᵢⱼ`. Exemples : longueur d'une route, temps de parcours, capacité d'une connexion.
+**Graphe valué** $G=(S,A,C)$ : on associe une fonction $C : A \to IR$ appelée **coût** (poids, valeur) des arcs, notée $c(i,j)$ ou $c_{ij}$. Exemples : longueur d'une route, temps de parcours, capacité d'une connexion.
 
-- **Graphe symétrique** : `∀i,j ∈ S, (i,j)∈A ⟹ (j,i)∈A`.
-- **Graphe antisymétrique** : `∀i,j ∈ S, (i,j)∈A ⟹ (j,i)∉A`.
-- **Graphe complet** : `∀i,j ∈ S`, si `(i,j)∉A` alors `(j,i)∈A`.
+- **Graphe symétrique** : $\forall i,j \in S, (i,j)\in A \Rightarrow (j,i)\in A$.
+- **Graphe antisymétrique** : $\forall i,j \in S, (i,j)\in A \Rightarrow (j,i)\notin A$.
+- **Graphe complet** : $\forall i,j \in S$, si $(i,j)\notin A$ alors $(j,i)\in A$.
 
 ### Successeurs, prédécesseurs, degrés
 
-- `i` est **successeur** (ou suivant) de `j` si `(j,i)∈A` ; l'ensemble des successeurs de `i` est noté `S(i)`.
-- `j` est **prédécesseur** (ou précédent) de `i` si `(j,i)∈A` ; l'ensemble des prédécesseurs de `i` est noté `P(i)`.
+- $i$ est **successeur** (ou suivant) de $j$ si $(j,i)\in A$ ; l'ensemble des successeurs de $i$ est noté $S(i)$.
+- $j$ est **prédécesseur** (ou précédent) de $i$ si $(j,i)\in A$ ; l'ensemble des prédécesseurs de $i$ est noté $P(i)$.
 
 **Degrés** :
-- **Degré extérieur** `d⁺(i) = |S(i)|` (nombre de successeurs).
-- **Degré intérieur** `d⁻(i) = |P(i)|` (nombre de prédécesseurs).
-- **Degré** `d(i) = d⁺(i) + d⁻(i)` (nombre d'arcs dont `i` est origine et/ou destination). Une boucle est comptée **deux fois**.
+- **Degré extérieur** $d^+(i) = |S(i)|$ (nombre de successeurs).
+- **Degré intérieur** $d^-(i) = |P(i)|$ (nombre de prédécesseurs).
+- **Degré** $d(i) = d^+(i) + d^-(i)$ (nombre d'arcs dont $i$ est origine et/ou destination). Une boucle est comptée **deux fois**.
 
 Un graphe est **régulier** si tous ses sommets ont le même degré.
 
@@ -84,23 +84,23 @@ Un graphe est **régulier** si tous ses sommets ont le même degré.
 
 - Deux **sommets** sont **adjacents** (voisins) s'ils sont joints par un arc dont ils sont les extrémités.
 - Deux **arcs** sont **adjacents** s'ils ont au moins une extrémité commune.
-- Un arc `(i,i)` est appelé une **boucle**.
+- Un arc $(i,i)$ est appelé une **boucle**.
 
-**Incidence** : soit `S₁ ⊂ S`. Un arc de `A` est **incident à `S₁` de l'extérieur** si son extrémité terminale est dans `S₁` et son extrémité initiale dans `S\S₁`. Il est **incident à `S₁` de l'intérieur** s'il est incident à `S\S₁` de l'extérieur.
+**Incidence** : soit $S_1 \subset S$. Un arc de $A$ est **incident à $S_1$ de l'extérieur** si son extrémité terminale est dans $S_1$ et son extrémité initiale dans $S\setminus S_1$. Il est **incident à $S_1$ de l'intérieur** s'il est incident à $S\setminus S_1$ de l'extérieur.
 
 ## Chaîne — Chemin — Cycle — Circuit
 
-- **Chaîne** (graphe orienté) : suite de sommets `(i₁,...,iₙ)` telle que `(iₚ,iₚ₊₁)∈A` **ou** `(iₚ₊₁,iₚ)∈A` (on ne tient pas compte du sens).
-- **Chemin** (graphe orienté) : suite de sommets `(i₁,...,iₙ)` telle que `(iₚ,iₚ₊₁)∈A` (on respecte le sens des arcs).
-- **Cycle** : une chaîne telle que `i₁ = iₙ`.
-- **Circuit** : un chemin tel que `i₁ = iₙ`.
+- **Chaîne** (graphe orienté) : suite de sommets $(i_1,\ldots,i_n)$ telle que $(i_p,i_{p+1})\in A$ **ou** $(i_{p+1},i_p)\in A$ (on ne tient pas compte du sens).
+- **Chemin** (graphe orienté) : suite de sommets $(i_1,\ldots,i_n)$ telle que $(i_p,i_{p+1})\in A$ (on respecte le sens des arcs).
+- **Cycle** : une chaîne telle que $i_1 = i_n$.
+- **Circuit** : un chemin tel que $i_1 = i_n$.
 
 :::note Remarques
 1. Dans un graphe **non orienté**, une chaîne est un chemin et inversement.
 2. Dans un graphe **non orienté**, un cycle est un circuit et inversement.
 :::
 
-`i` est **ascendant** de `j` s'il existe un chemin d'origine `i` et de destination `j` ; `j` est alors un **descendant** de `i`.
+$i$ est **ascendant** de $j$ s'il existe un chemin d'origine $i$ et de destination $j$ ; $j$ est alors un **descendant** de $i$.
 
 ## Chaîne eulérienne — Cycle eulérien
 
@@ -117,13 +117,13 @@ Un **cycle eulérien** est une chaîne eulérienne **fermée** (sommet de dépar
 
 ### Algorithme d'Euler — détermination pratique d'une chaîne eulérienne
 
-Soit `G(S,A)` un graphe connexe avec **seulement deux sommets de degré impair** : `x` et `y`.
+Soit $G(S,A)$ un graphe connexe avec **seulement deux sommets de degré impair** : $x$ et $y$.
 
-1. On choisit une chaîne d'origine `x` et d'extrémité `y`, ne contenant jamais deux fois la même arête.
+1. On choisit une chaîne d'origine $x$ et d'extrémité $y$, ne contenant jamais deux fois la même arête.
 2. On choisit un sommet de la chaîne précédente et, à partir de ce sommet, on adjoint un **cycle** (chaîne fermée ne contenant pas deux fois la même arête) ne contenant pas d'arêtes déjà utilisées.
 3. On réitère l'étape 2 sur la chaîne obtenue jusqu'à avoir utilisé toutes les arêtes du graphe.
 
-La chaîne obtenue entre `x` et `y` est alors, par construction, eulérienne.
+La chaîne obtenue entre $x$ et $y$ est alors, par construction, eulérienne.
 
 **Exemple.** Graphe à 6 sommets `A,B,C,D,E,F` de degrés `2,3,4,4,2,3` : seuls `B` et `F` ont un degré impair, donc il existe une chaîne eulérienne entre `B` et `F`.
 - Étape 1 : la chaîne `B–D–F` convient.
@@ -145,61 +145,61 @@ Contrairement au cas eulérien (arêtes), on s'intéresse ici aux chaînes/cycle
 Il n'existe **pas** de critère nécessaire et suffisant simple pour l'existence de cycles hamiltoniens (contrairement au cas eulérien), même si de nombreux théorèmes donnent des **conditions suffisantes**.
 :::
 
-**Théorème de Dirac (1952).** Soit `G` un graphe simple avec `n ≥ 3` sommets. Si `deg(x) ≥ n/2` pour chaque sommet `x`, alors `G` est hamiltonien.
+**Théorème de Dirac (1952).** Soit $G$ un graphe simple avec $n \ge 3$ sommets. Si $\deg(x) \ge n/2$ pour chaque sommet $x$, alors $G$ est hamiltonien.
 
 ## Graphes particuliers
 
-**Sous-graphe.** Soit `X ⊂ S` et `A_X = {u=(a,b)∈A / a,b∈X}`. Alors `G_X(X,A_X)` est le **sous-graphe de `G(S,A)` induit par `X`** : on l'obtient en enlevant un ou plusieurs sommets de `G`, ainsi que toutes les arêtes incidentes à ces sommets.
+**Sous-graphe.** Soit $X \subset S$ et $A_X = \{u=(a,b)\in A \mid a,b\in X\}$. Alors $G_X(X,A_X)$ est le **sous-graphe de $G(S,A)$ induit par $X$** : on l'obtient en enlevant un ou plusieurs sommets de $G$, ainsi que toutes les arêtes incidentes à ces sommets.
 
-**Graphe partiel.** Soit `A' ⊂ A`. Alors `G'(S,A')` est un **graphe partiel de `G(S,A)`** : on garde tous les sommets mais on enlève des arcs/arêtes.
+**Graphe partiel.** Soit $A' \subset A$. Alors $G'(S,A')$ est un **graphe partiel de $G(S,A)$** : on garde tous les sommets mais on enlève des arcs/arêtes.
 
 ## 2. Représentation d'un graphe
 
 - **Représentation sagittale** : le dessin du graphe.
 
-- **Matrice d'adjacence** (matrice incidence sommets-sommets). Pour `G(S,A)` d'ordre `n`, matrice carrée `B(n,n)=(bᵢⱼ)` : `bᵢⱼ=1` si `(i,j)∈A`, `0` sinon. **Place mémoire : `n²`.**
+- **Matrice d'adjacence** (matrice incidence sommets-sommets). Pour $G(S,A)$ d'ordre $n$, matrice carrée $B(n,n)=(b_{ij})$ : $b_{ij}=1$ si $(i,j)\in A$, $0$ sinon. **Place mémoire : $n^2$.**
 
-  Si le graphe est **valué**, on utilise une matrice `V` où `mᵢⱼ` est la valuation de l'arc `(i,j)` si `(i,j)∈A` (une valeur particulière — souvent `0` ou `∞` — signale l'absence d'arc).
+  Si le graphe est **valué**, on utilise une matrice $V$ où $m_{ij}$ est la valuation de l'arc $(i,j)$ si $(i,j)\in A$ (une valeur particulière — souvent $0$ ou $\infty$ — signale l'absence d'arc).
 
   :::note Remarque
   Pour un graphe **non orienté**, la matrice d'adjacence est **symétrique** : on peut ne mémoriser que la partie triangulaire supérieure.
   :::
 
-- **Matrice d'incidence sommets-arcs.** Pour `G(S,A)` orienté et **sans boucle**, `n` sommets, `m` arcs `A={uₖ, 1≤k≤m}` : matrice `C(n,m)=(cᵢₖ)`, `cᵢₖ = 1` si `i` est l'extrémité initiale de `uₖ`, `-1` si `i` est l'extrémité finale de `uₖ`, `0` sinon. **Place mémoire : `n×m`.**
+- **Matrice d'incidence sommets-arcs.** Pour $G(S,A)$ orienté et **sans boucle**, $n$ sommets, $m$ arcs $A=\{u_k, 1\le k\le m\}$ : matrice $C(n,m)=(c_{ik})$, $c_{ik} = 1$ si $i$ est l'extrémité initiale de $u_k$, $-1$ si $i$ est l'extrémité finale de $u_k$, $0$ sinon. **Place mémoire : $n\times m$.**
 
-- **Matrice d'incidence sommets-arêtes** (graphe non orienté) : `C(n,m)=(cᵢₖ)`, `cᵢₖ=1` si `i` est une extrémité de `uₖ`, `0` sinon.
+- **Matrice d'incidence sommets-arêtes** (graphe non orienté) : $C(n,m)=(c_{ik})$, $c_{ik}=1$ si $i$ est une extrémité de $u_k$, $0$ sinon.
 
-- **Représentation par liste de successeurs** : tableau `Γ⁺(S)` de `n` listes chaînées, indicé par les sommets ; la liste `Γ⁺(i)` contient tous les successeurs de `i` (éventuellement avec la valuation associée à chaque arc).
+- **Représentation par liste de successeurs** : tableau $\Gamma^+(S)$ de $n$ listes chaînées, indicé par les sommets ; la liste $\Gamma^+(i)$ contient tous les successeurs de $i$ (éventuellement avec la valuation associée à chaque arc).
 
 ## 3. Connexité
 
-**Graphe connexe** (ou simplement connexe) : `∀i,j∈S`, il existe une **chaîne** entre `i` et `j`. Un graphe orienté est connexe si le graphe non orienté associé est connexe.
+**Graphe connexe** (ou simplement connexe) : $\forall i,j\in S$, il existe une **chaîne** entre $i$ et $j$. Un graphe orienté est connexe si le graphe non orienté associé est connexe.
 
-**Composante connexe** `C` d'un graphe `G=(S,A)` : sous-ensemble **maximal** de sommets tels que deux quelconques d'entre eux soient reliés par une chaîne. Si `i∈C` : `∀j∈C`, il existe une chaîne reliant `i` à `j` ; `∀k∈S\C`, il n'existe pas de chaîne reliant `i` à `k`.
+**Composante connexe** $C$ d'un graphe $G=(S,A)$ : sous-ensemble **maximal** de sommets tels que deux quelconques d'entre eux soient reliés par une chaîne. Si $i\in C$ : $\forall j\in C$, il existe une chaîne reliant $i$ à $j$ ; $\forall k\in S\setminus C$, il n'existe pas de chaîne reliant $i$ à $k$.
 
-- Les composantes connexes de `G=(S,A)` forment une **partition** de `S`.
+- Les composantes connexes de $G=(S,A)$ forment une **partition** de $S$.
 - Un graphe est connexe ssi il a **une seule** composante connexe.
 - Le sous-graphe induit par une composante connexe est connexe.
-- `C = {j∈S | il existe une chaîne reliant i à j}`.
+- $C = \{j\in S \mid \text{il existe une chaîne reliant } i \text{ à } j\}$.
 
-**Algorithme de construction de la composante connexe de `i`** :
-1. Marquer `+` le sommet `i`.
-2. Marquer `+` tout sommet adjacent à un sommet marqué `+`, jusqu'à ce qu'on ne puisse plus marquer de sommets.
+**Algorithme de construction de la composante connexe de $i$** :
+1. Marquer $+$ le sommet $i$.
+2. Marquer $+$ tout sommet adjacent à un sommet marqué $+$, jusqu'à ce qu'on ne puisse plus marquer de sommets.
 
-Les sommets marqués sont ceux de `C(i)`.
+Les sommets marqués sont ceux de $C(i)$.
 
-**Graphe fortement connexe** : `∀i,j∈S`, il existe un **chemin** entre `i` et `j`. *(Implique qu'il existe un chemin de `i` à `j` ET un chemin de `j` à `i`.)*
+**Graphe fortement connexe** : $\forall i,j\in S$, il existe un **chemin** entre $i$ et $j$. *(Implique qu'il existe un chemin de $i$ à $j$ ET un chemin de $j$ à $i$.)*
 
 - **Théorème 1** : un graphe orienté fortement connexe est connexe.
-- **Théorème 2** : un graphe est fortement connexe ssi pour tout couple `(i,j)` il existe un **circuit** passant par `i` et `j`.
+- **Théorème 2** : un graphe est fortement connexe ssi pour tout couple $(i,j)$ il existe un **circuit** passant par $i$ et $j$.
 
-**Composante fortement connexe** `Cf` : sous-ensemble maximal de sommets tels que deux quelconques soient reliés par un chemin (dans les deux sens). Les composantes fortement connexes de `G` forment une **partition** de `S`.
+**Composante fortement connexe** $C_f$ : sous-ensemble maximal de sommets tels que deux quelconques soient reliés par un chemin (dans les deux sens). Les composantes fortement connexes de $G$ forment une **partition** de $S$.
 
-**Algorithme de construction de la composante fortement connexe de `i`** :
-1. Marquer `+` **et** `-` le sommet `i`.
-2. Marquer `-` tout sommet précédent d'un sommet marqué `-`, et marquer `+` tout sommet suivant un sommet marqué `+`, jusqu'à ce qu'on ne puisse plus marquer de sommets.
+**Algorithme de construction de la composante fortement connexe de $i$** :
+1. Marquer $+$ **et** $-$ le sommet $i$.
+2. Marquer $-$ tout sommet précédent d'un sommet marqué $-$, et marquer $+$ tout sommet suivant un sommet marqué $+$, jusqu'à ce qu'on ne puisse plus marquer de sommets.
 
-Les sommets marqués **à la fois** `+` et `-` sont ceux de `Cf(i)`.
+Les sommets marqués **à la fois** $+$ et $-$ sont ceux de $C_f(i)$.
 
 ## 4. Isthme et point d'articulation
 
@@ -212,9 +212,9 @@ Si une arête est un isthme, ses extrémités sont des points d'articulation —
 
 ## 5. Rang d'un sommet
 
-Dans un graphe **sans circuit**, il existe toujours un sommet n'ayant aucun précédent, appelé sommet `1`.
+Dans un graphe **sans circuit**, il existe toujours un sommet n'ayant aucun précédent, appelé sommet $1$.
 
-**Définition.** `r(1) = 0`. `r(i)` = nombre d'arcs dans un chemin de `1` à `i` de **cardinalité maximale**.
+**Définition.** $r(1) = 0$. $r(i)$ = nombre d'arcs dans un chemin de $1$ à $i$ de **cardinalité maximale**.
 
 **Algorithme de détermination du rang** dans un graphe sans circuit `G(X,A)` :
 ```

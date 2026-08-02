@@ -17,13 +17,13 @@ import TabItem from '@theme/TabItem';
 
 ## Exercice 1
 
-On considère le réseau de transport `G(X,U,C)`, où les arcs sont munis de capacités et pour lequel un flot initial est donné. Sur chaque arc `u∈U`, le premier nombre est le flot initial `fᵤ`, le second est la capacité `cᵤ` (`0≤fᵤ≤cᵤ`).
+On considère le réseau de transport $G(X,U,C)$, où les arcs sont munis de capacités et pour lequel un flot initial est donné. Sur chaque arc $u\in U$, le premier nombre est le flot initial $f_u$, le second est la capacité $c_u$ ($0\le f_u\le c_u$).
 
 Réseau (notation `(flot,capacité)`) : `s→A(15,25)`, `s→B(5,25)`, `s→C(0,25)`, `A→D(15,25)`, `B→D(0,10)`, `B→E(5,15)`, `C→E(0,5)`, `C→H(0,5)`, `D→E(5,5)`, `D→F(5,30)`, `D→G(5,10)`, `E→H(10,15)`, `F→G(0,10)`, `F→P(5,20)`, `G→P(5,40)`, `G→H(0,15)`, `H→P(10,40)`.
 
-1. Les valeurs de `fᵤ` figurant sur les arcs forment-elles un flot ? Quelle est sa valeur ?
+1. Les valeurs de $f_u$ figurant sur les arcs forment-elles un flot ? Quelle est sa valeur ?
 2. Ce flot est-il complet ? Sinon, le modifier pour le rendre complet.
-3. Ce flot est-il maximal ? Sinon, déterminer un flot de `s` à `p` de valeur maximale.
+3. Ce flot est-il maximal ? Sinon, déterminer un flot de $s$ à $p$ de valeur maximale.
 4. Donner une coupe minimale du réseau et calculer sa capacité.
 
 ## Exercice 2

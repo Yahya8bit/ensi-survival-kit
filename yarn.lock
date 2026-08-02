@@ -9737,6 +9737,7 @@ __metadata:
     autoprefixer: "npm:^10.4.13"
     clsx: "npm:^1.2.1"
     hast-util-is-element: "npm:1.1.0"
+    katex: "npm:^0.16.47"
     postcss: "npm:^8.4.21"
     posthog-js: "npm:^1.255.0"
     prettier: "npm:^2.8.3"
@@ -12480,7 +12481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.16.0, katex@npm:^0.16.45":
+"katex@npm:^0.16.0, katex@npm:^0.16.45, katex@npm:^0.16.47":
   version: 0.16.47
   resolution: "katex@npm:0.16.47"
   dependencies:

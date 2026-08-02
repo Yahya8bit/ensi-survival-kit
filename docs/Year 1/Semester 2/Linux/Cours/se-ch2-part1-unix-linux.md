@@ -71,14 +71,20 @@ Un logiciel libre n'est pas forcément gratuit ! *Exemples :* OpenOffice (suite 
 
 ### Architecture (1)
 
-```
-APPLICATIONS       applications (jeux, outils bureautiques, …)
-─────────────────────────────────────────────────────────────
-SYSTEME             Interpréteur de commandes, compilateur, …
-D'EXPLOITATION      noyau
-─────────────────────────────────────────────────────────────
-MATERIEL            Langage machine
-                    Dispositifs physiques
+```mermaid
+flowchart TD
+    subgraph APP["APPLICATIONS"]
+        A1["applications<br/>(jeux, outils bureautiques, …)"]
+    end
+    subgraph OS["SYSTEME D'EXPLOITATION"]
+        O1["Interpréteur de commandes, compilateur, …"]
+        O2["noyau"]
+    end
+    subgraph HW["MATERIEL"]
+        H1["Langage machine"]
+        H2["Dispositifs physiques"]
+    end
+    APP ~~~ OS ~~~ HW
 ```
 
 ### Architecture (2)
@@ -185,9 +191,11 @@ $ echo hello
 
 ### Caractéristiques (7) — Les canaux standards
 
-```
-Entrée standard (0) ──► P ──► Sortie standard (1)
-                        └───► Erreur standard (2)
+```mermaid
+flowchart LR
+    E["Entrée standard (0)"] --> P((P))
+    P --> S["Sortie standard (1)"]
+    P --> Err["Erreur standard (2)"]
 ```
 
 ### Caractéristiques (8) — Les redirections
@@ -249,12 +257,10 @@ Quelques commandes à tester : `man`, `id`, `who`, `logname`, `groups`, `passwd`
 
 ### Arborescence (1)
 
-```
-                              /
-       ┌──────┬──────┬───────┼──────┬──────┬──────┬──────┐
-     home    usr    bin     lib    var    dev    mnt    etc  tmp
-    ┌──┴──┐
-  user1  user2
+```mermaid
+flowchart TD
+    Root["/"] --- home & usr & bin & lib & var & dev & mnt & etc & tmp
+    home --- user1 & user2
 ```
 
 ### Arborescence (2) — Répertoires standards
@@ -432,12 +438,13 @@ $ ln -s fichier lien_soft
 
 Si on supprime le fichier original, le lien symbolique pointe vers le vide. Cependant, le lien physique pointe toujours vers les données originales et garde sa consistance.
 
-```
-Inode_soft ──► Fichier_soft ──► Fichier_origine
-                                       │
-Inode_origine ──► Données ◄───────────┤
-                                       │
-                                Fichier_hard
+```mermaid
+flowchart TD
+    Donnees["Données"]
+    Inode_soft --> Fichier_soft --> Fichier_origine
+    Inode_origine --> Donnees
+    Inode_origine --> Fichier_origine
+    Inode_origine --> Fichier_hard
 ```
 
 ### Autres commandes sur les fichiers (1)

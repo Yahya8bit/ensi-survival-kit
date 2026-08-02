@@ -16,11 +16,11 @@ import TabItem from '@theme/TabItem';
 ## Exercice 1
 
 1. Pour chacun des graphes ci-dessous (`G₁, G₂, G₃, G₄` — chacun à 4 ou 5 sommets `x₁,...,x₅` avec des poids donnés, certains négatifs), étudier la possibilité de trouver un chemin de longueur minimale, de longueur maximale, et citer les algorithmes qui pourraient être utilisés (sans exécution).
-2. Appliquer l'algorithme le plus adéquat au graphe `G₄` pour trouver un chemin de longueur minimale allant du sommet `x₁` au sommet `x₅`, en précisant les étapes intermédiaires de la résolution. Expliciter ce chemin.
+2. Appliquer l'algorithme le plus adéquat au graphe $G_4$ pour trouver un chemin de longueur minimale allant du sommet $x_1$ au sommet $x_5$, en précisant les étapes intermédiaires de la résolution. Expliciter ce chemin.
 
 ## Exercice 2
 
-Soit `G` un graphe pondéré, défini par la matrice des distances suivante :
+Soit $G$ un graphe pondéré, défini par la matrice des distances suivante :
 
 |   | A | B | C | D | E | F | G |
 |---|---|---|---|---|---|---|---|
@@ -78,7 +78,7 @@ Un village de huit maisons `A,B,C,D,E,F,G,H` est relié par un réseau routier, 
 *(voir le PDF pour les valeurs exactes du tableau de listes de successeurs)*
 
 1. Représenter le graphe correspondant dans le plan (sommets disposés en cercle : `B` en haut, `A,C` sur les côtés, `F,D` en dessous, `G,H,E` complétant le cercle).
-2. Un médecin de campagne habitant en `G` veut déterminer, en cas d'urgence médicale, les itinéraires les plus rapides le reliant à chacun des autres lieux du village.
+2. Un médecin de campagne habitant en $G$ veut déterminer, en cas d'urgence médicale, les itinéraires les plus rapides le reliant à chacun des autres lieux du village.
    a) Définir la nature de ce problème.
    b) Adapter et réécrire l'algorithme de Dijkstra pour résoudre ce problème.
    c) Résoudre ce problème.

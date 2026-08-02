@@ -20,29 +20,29 @@ import TabItem from '@theme/TabItem';
 - **Arbre** : graphe connexe sans cycle.
 - **Forêt** : graphe dont chaque composante connexe est un arbre.
 
-**Théorème (caractérisations équivalentes).** Soit `T(S_T,A_T)` un graphe d'ordre `n≥2` ; les propriétés suivantes sont équivalentes pour caractériser un arbre :
-1. `T` est connexe et sans cycle ;
-2. `T` est sans cycle et admet `n-1` arcs ;
-3. `T` est connexe et admet `n-1` arcs ;
-4. `T` est sans cycle, et en ajoutant un arc, on crée un cycle (et un seul) ;
-5. `T` est connexe, et si on supprime un arc quelconque, il n'est plus connexe ;
+**Théorème (caractérisations équivalentes).** Soit $T(S_T,A_T)$ un graphe d'ordre $n\ge2$ ; les propriétés suivantes sont équivalentes pour caractériser un arbre :
+1. $T$ est connexe et sans cycle ;
+2. $T$ est sans cycle et admet $n-1$ arcs ;
+3. $T$ est connexe et admet $n-1$ arcs ;
+4. $T$ est sans cycle, et en ajoutant un arc, on crée un cycle (et un seul) ;
+5. $T$ est connexe, et si on supprime un arc quelconque, il n'est plus connexe ;
 6. Tout couple de sommets est relié par une chaîne et une seule.
 
 ## Arbre couvrant de poids minimal (ACM)
 
-`G = (S,A,c)` : non orienté, connexe et valué (`c : A → IR`). Étant donné un graphe partiel `G'=(S,A')` de `G` avec `A'⊆A`, on appelle **poids de `G'`** le nombre `c(G') = Σᵤ∈A' c(u)`.
+$G = (S,A,c)$ : non orienté, connexe et valué ($c : A \to IR$). Étant donné un graphe partiel $G'=(S,A')$ de $G$ avec $A'\subseteq A$, on appelle **poids de $G'$** le nombre $c(G') = \sum_{u\in A'} c(u)$.
 
-**Définition.** Un **arbre couvrant** de `G` est un graphe partiel, connexe et acyclique, `T(S_T,A_T)` de `G` où `S_T=S` et `A_T⊆A`.
+**Définition.** Un **arbre couvrant** de $G$ est un graphe partiel, connexe et acyclique, $T(S_T,A_T)$ de $G$ où $S_T=S$ et $A_T\subseteq A$.
 
 **Proposition.** Un graphe admet un arbre couvrant ssi il est connexe.
 
-Le problème de l'**arbre couvrant de poids minimum (ACM)** est de chercher un arbre `T*` de `G` tel que `c(T*) = min{c(T) / T=(S,A_T) est un arbre couvrant de G}`.
+Le problème de l'**arbre couvrant de poids minimum (ACM)** est de chercher un arbre $T^*$ de $G$ tel que $c(T^*) = \min\{c(T) \mid T=(S,A_T) \text{ est un arbre couvrant de } G\}$.
 
 Le problème admet toujours une solution car l'ensemble des arbres couvrants est fini et admet au moins un élément de coût minimum.
 
 :::note Remarques
 - Un ACM est **unique** ssi les poids des arêtes sont deux à deux distincts.
-- On suppose `G` connexe (sinon, on résout le problème sur chaque composante connexe).
+- On suppose $G$ connexe (sinon, on résout le problème sur chaque composante connexe).
 :::
 
 **Propriété (existence d'un ACM).** Tout graphe non orienté, valué et connexe admet un ou plusieurs ACM.
@@ -51,7 +51,7 @@ Le problème admet toujours une solution car l'ensemble des arbres couvrants est
 
 ## Construction d'un ACM
 
-On construit un ACM `T(S_T,A_T)` de manière incrémentale. Au début, `A_T` est vide. À chaque étape, on choisit une nouvelle arête `(x,y)` telle que `A_T∪{(x,y)}` est toujours un sous-ensemble d'un ACM pour `G`. Le problème : comment connecter à moindre coût des sommets non encore reliés à `A_T` ?
+On construit un ACM $T(S_T,A_T)$ de manière incrémentale. Au début, $A_T$ est vide. À chaque étape, on choisit une nouvelle arête $(x,y)$ telle que $A_T\cup\{(x,y)\}$ est toujours un sous-ensemble d'un ACM pour $G$. Le problème : comment connecter à moindre coût des sommets non encore reliés à $A_T$ ?
 
 ### Historique
 
@@ -75,9 +75,9 @@ On construit un ACM `T(S_T,A_T)` de manière incrémentale. Au début, `A_T` est
    Sinon k = k+1, retour à 2
 ```
 
-**Complexité.** Trier les `m` arêtes : `O(m log m)`. À chaque étape, vérification du cycle en `O(1)` (avec une structure union-find). **Complexité totale en `O(m·log(m))`.**
+**Complexité.** Trier les $m$ arêtes : $O(m \log m)$. À chaque étape, vérification du cycle en $O(1)$ (avec une structure union-find). **Complexité totale en $O(m\cdot\log(m))$.**
 
-**Exemple (câblage de trottoirs entre 6 immeubles A-F).** Les arêtes triées : `EF(750), CE(790), BE(835), BD(850), BF(920), BC(1160), BA(1320), AF(2640), CF(2880)`. En appliquant Kruskal : on retient `EF, CE, BE, BD` (4 arêtes, sans cycle), puis `BF` et `BC` forment des cycles (rejetées), puis `BA` est retenue (5ᵉ arête = `n-1` pour `n=6` sommets) → **FIN**. **Poids total de l'ACM : 750+790+835+850+1320 = 4545.**
+**Exemple (câblage de trottoirs entre 6 immeubles A-F).** Les arêtes triées : `EF(750), CE(790), BE(835), BD(850), BF(920), BC(1160), BA(1320), AF(2640), CF(2880)`. En appliquant Kruskal : on retient `EF, CE, BE, BD` (4 arêtes, sans cycle), puis `BF` et `BC` forment des cycles (rejetées), puis `BA` est retenue (5ᵉ arête = $n-1$ pour $n=6$ sommets) → **FIN**. **Poids total de l'ACM : 750+790+835+850+1320 = 4545.**
 
 <KruskalVisualizer />
 
@@ -90,8 +90,8 @@ L'algorithme de Kruskal se généralise directement pour trouver un arbre couvra
 **Principe :** faire grossir un sous-arbre jusqu'au recouvrement du graphe (contrairement à Kruskal, on part toujours d'un sommet donné et l'arbre reste connexe à chaque étape).
 
 - construction incrémentale d'un arbre de poids minimum ;
-- au départ, un sommet `sᵢ` est choisi arbitrairement, il constitue l'ACM initial ;
-- parmi toutes les arêtes incidentes à `sᵢ`, on choisit celle de plus faible poids `(sᵢ,sⱼ)` → le nouvel arbre est constitué des sommets `sᵢ,sⱼ` et de l'arête `(sᵢ,sⱼ)` ;
+- au départ, un sommet $s_i$ est choisi arbitrairement, il constitue l'ACM initial ;
+- parmi toutes les arêtes incidentes à $s_i$, on choisit celle de plus faible poids $(s_i,s_j)$ → le nouvel arbre est constitué des sommets $s_i,s_j$ et de l'arête $(s_i,s_j)$ ;
 - tant qu'il reste des sommets en dehors de l'arbre : parmi l'ensemble des arêtes incidentes aux sommets de l'arbre et ayant une extrémité en dehors de l'arbre, choisir celle dont le poids est le plus faible.
 
 **Algorithme :**
@@ -108,9 +108,11 @@ L'algorithme de Kruskal se généralise directement pour trouver un arbre couvra
    retour à 2
 ```
 
-**Complexité.** La complexité est la même que pour l'algorithme de Dijkstra. Initialisation en `O(n)`. `n-1` itérations, recherche du minimum en `O(n)` chaque fois soit `O(n²)`. Actualisation : examen de toutes les arêtes dans les deux sens (`2m`), en temps constant soit `O(m)`. Puisque typiquement `n<m<n²` : **complexité totale en `O(n²)`** (avec une représentation par tableau des successeurs).
+**Complexité.** La complexité est la même que pour l'algorithme de Dijkstra. Initialisation en $O(n)$. $n-1$ itérations, recherche du minimum en $O(n)$ chaque fois soit $O(n^2)$. Actualisation : examen de toutes les arêtes dans les deux sens ($2m$), en temps constant soit $O(m)$. Puisque typiquement $n<m<n^2$ : **complexité totale en $O(n^2)$** (avec une représentation par tableau des successeurs).
 
-**Exemple (même graphe à 6 sommets a,b,c,d,e,f, sommet initial `b`).** Déroulement : `S_T={b}` → sélection de `a` (π=1) → sélection de `d` (π=3) → sélection de `c` (π=2) → sélection de `e` (π=5) → sélection de `f` (π=3) → **FIN**, `S_T = {a,b,c,d,e,f}`. **ACM obtenu :** arêtes `(b,a)`, `(a,d)`, `(d,c)`, `(a,e)`, `(e,f)`, de poids total `C_T = 1+3+2+5+3 = 14`.
+**Exemple (graphe à 6 sommets a,b,c,d,e,f, sommet initial $b$).** Déroulement : $S_T=\{b\}$ → sélection de $a$ ($\pi=1$) → sélection de $d$ ($\pi=3$) → sélection de $c$ ($\pi=2$) → sélection de $e$ ($\pi=5$) → sélection de $f$ ($\pi=3$) → **FIN**, $S_T = \{a,b,c,d,e,f\}$. **ACM obtenu :** arêtes $(b,a)$, $(a,d)$, $(d,c)$, $(a,e)$, $(e,f)$, de poids total $C_T = 1+3+2+5+3 = 14$.
+
+<PrimVisualizer />
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
