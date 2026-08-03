@@ -1,2 +1,11 @@
 MD013: false
 MD049: false
+
+# The following conflict with conventions used deliberately across nearly
+# every doc in docs/, not real defects:
+MD033: false # inline-html — every doc's <Tabs>/<TabItem>/<PdfViewer> Markdown+PDF toggle pattern needs this
+MD025: false # single-title/single-h1 — frontmatter `title` + a visible `# H1` is intentional with `hide_title: true`
+MD036: false # emphasis-as-heading — used as a stylistic subtitle line under the H1 throughout
+MD040: false # fenced-code-language — many fences are deliberately plain pseudocode/ASCII, no language to tag
+MD029: false # ol-prefix — exercise sub-lists intentionally preserve the source PDF's own numbering, not renumbered to 1/2/3
+MD024: false # no-duplicate-heading — exam/TD docs legitimately reuse headings like "Introduction" per exercise

@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 
 # TD ARCHITECTURE ET MICROPROCESSEUR
 
-### (Application sur les décodeurs d'adresses)
+## (Application sur les décodeurs d'adresses)
 
 *Filière II1 — Responsable : Dr Montassar EZZINE*
 
