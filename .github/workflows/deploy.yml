@@ -5,7 +5,7 @@ on:
     types: [opened, reopened, synchronize]
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 concurrency:
@@ -84,7 +84,7 @@ jobs:
         uses: nwtgck/actions-netlify@v2.0.0
         with:
           publish-dir: "./build"
-          production-branch: master
+          production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
           alias: deploy-preview-${{ github.event.number }}
