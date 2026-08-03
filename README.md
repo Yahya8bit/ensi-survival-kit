@@ -38,6 +38,15 @@ Install your dependencies. This project uses **Yarn Berry** with the `node-modul
 yarn
 ```
 
+## PDF sources
+
+Every doc's "PDF" tab (`<PdfViewer file="/pdfs/...">`) shows the original source PDF the page was transcribed from. Those PDFs are **not stored in this repo** — they live in a Google Drive folder (`ensi-knowledge-pdfs/`, mirroring `docs/`'s folder structure), and `static/pdfs/*.pdf` is gitignored. Two separate mechanisms populate `static/pdfs/` from that same Drive folder — they don't share code, just the source:
+
+- **Production builds** (CI): a step in `.github/workflows/deploy.yml` runs `scripts/fetch-pdfs.mjs` before `yarn build`, downloading every referenced PDF from Drive **via a Google service account** (`GDRIVE_SERVICE_ACCOUNT_KEY` secret + `GDRIVE_PDFS_FOLDER_ID`) into `static/pdfs/`. The step fails the build if any expected PDF is missing or fails to download — it never ships a doc with a silently-broken PDF tab.
+- **Local dev**: run `yarn sync-pdfs` to copy the same files **straight off the GVFS Google Drive mount** (`scripts/sync-pdfs-dev.mjs`) — no service account, no network round-trip, just a local filesystem read via Nautilus/GNOME Online Accounts. If Drive hasn't been mounted yet this session, the script tells you to open the Files app and click into Google Drive once, then re-run it.
+- **Without running the sync**: `static/pdfs/` stays empty and `PdfViewer` shows a "PDF preview only available in production" placeholder per-file instead of a broken embed — this is a genuine existence check (`fetch(...HEAD)`), not an environment check, so it also self-heals the moment a file shows up (e.g. partway through a sync).
+- **Adding a new PDF**: drop it into the matching folder under `ensi-knowledge-pdfs/` in Drive (same relative path as the doc under `docs/`), then add it to `scripts/pdf-manifest.json` (`{ "name": "...", "drivePath": [...] }`) so both CI and `yarn sync-pdfs` pick it up.
+
 ## Local Development
 
 ```bash

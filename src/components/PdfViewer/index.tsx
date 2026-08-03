@@ -171,10 +171,59 @@ function MobilePdfPages({ file }: { file: string }) {
   );
 }
 
+const PLACEHOLDER_STYLE: React.CSSProperties = {
+  border: '1px dashed var(--ifm-color-emphasis-300)',
+  borderRadius: 8,
+  padding: '3rem 1.5rem',
+  textAlign: 'center',
+  color: 'var(--ifm-color-emphasis-700)',
+  background: 'var(--ifm-background-surface-color)',
+};
+
+function PdfUnavailablePlaceholder({ file }: { file: string }) {
+  return (
+    <div style={PLACEHOLDER_STYLE}>
+      <p style={{ fontSize: '1.5rem', margin: 0 }}>📄</p>
+      <p style={{ fontWeight: 'bold', margin: '0.5rem 0' }}>PDF preview only available in production</p>
+      <p style={{ fontSize: '0.85rem', margin: 0 }}>
+        Source PDFs live in Drive and are fetched at CI build time — <code>static/pdfs/</code> isn't populated in local dev.
+        <br />
+        Expected file: <code>{file}</code>
+      </p>
+    </div>
+  );
+}
+
+// checks real availability via fetch rather than an env-var/NODE_ENV branch,
+// so the same code path also degrades gracefully if a file is ever missing
+// in production (e.g. the CI fetch step silently under-delivered).
+function usePdfAvailable(file: string): boolean | null {
+  const [available, setAvailable] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setAvailable(null);
+    fetch(file, { method: 'HEAD' })
+      .then((res) => {
+        if (!cancelled) setAvailable(res.ok);
+      })
+      .catch(() => {
+        if (!cancelled) setAvailable(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [file]);
+
+  return available;
+}
+
 /**
  * Renders a PDF: a native iframe on desktop, or a single-page image with
  * prev/next + jump-to-page controls on mobile (native iframes handle PDFs
- * inconsistently on mobile browsers, notably iOS Safari).
+ * inconsistently on mobile browsers, notably iOS Safari). Shows a placeholder
+ * instead of a broken embed if the file isn't actually reachable (e.g. local
+ * dev, where static/pdfs/ is intentionally not populated).
  */
 export default function PdfViewer({ file }: { file: string }): JSX.Element {
   return (
@@ -188,7 +237,14 @@ export default function PdfViewer({ file }: { file: string }): JSX.Element {
 
 function PdfViewerInner({ file }: { file: string }) {
   const isMobile = useIsMobile();
+  const available = usePdfAvailable(file);
 
+  if (available === null) {
+    return <p>Chargement du PDF…</p>;
+  }
+  if (available === false) {
+    return <PdfUnavailablePlaceholder file={file} />;
+  }
   if (isMobile) {
     return <MobilePdfPages file={file} />;
   }

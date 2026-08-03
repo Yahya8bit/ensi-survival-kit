@@ -60,7 +60,11 @@ jobs:
       - name: show cache
         run: ls -la .yarn || true
 
-
+      - name: Fetch course PDFs from Drive
+        run: node scripts/fetch-pdfs.mjs
+        env:
+          GDRIVE_SERVICE_ACCOUNT_KEY: ${{ secrets.GDRIVE_SERVICE_ACCOUNT_KEY }}
+          GDRIVE_PDFS_FOLDER_ID: "1fVDguYDg5hSfNdn5BRQLUWe-eXYp7YDv"
 
       - name: Build project
         run: yarn build

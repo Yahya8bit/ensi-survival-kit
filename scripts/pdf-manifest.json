@@ -1,0 +1,803 @@
+[
+  {
+    "name": "asd-chapitres123.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "Cours"
+    ]
+  },
+  {
+    "name": "asd-chapitres4-7.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "Cours"
+    ]
+  },
+  {
+    "name": "asd-chapitres8-11.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "Cours"
+    ]
+  },
+  {
+    "name": "asd-ds-2022.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "asd-ds-2024-2025.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "asd-examen-principale-2023.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "asd-examen-principale-2024.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "asd-examen-rattrapage-2024.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "asd-resume-pseudocode.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "Résumé"
+    ]
+  },
+  {
+    "name": "asd-serie3.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "TD"
+    ]
+  },
+  {
+    "name": "cn-ch2-algebre-de-boole-portes-logiques.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Circuits Numeriques",
+      "Cours"
+    ]
+  },
+  {
+    "name": "exercices-arbres-binaires.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 1",
+      "Algo",
+      "TD"
+    ]
+  },
+  {
+    "name": "graphe-ch1-notions-vocabulaire.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "Cours"
+    ]
+  },
+  {
+    "name": "graphe-ch2-pcc-ordonnancement.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "Cours"
+    ]
+  },
+  {
+    "name": "graphe-ch3-acm.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "Cours"
+    ]
+  },
+  {
+    "name": "graphe-ch4-flots.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "Cours"
+    ]
+  },
+  {
+    "name": "graphe-coloration-sommets.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "Cours"
+    ]
+  },
+  {
+    "name": "graphe-ds-2024-2025.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "graphe-examen-2015-2016.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "graphe-td1-generalites.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "TD"
+    ]
+  },
+  {
+    "name": "graphe-td2-partie1-pcc.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "TD"
+    ]
+  },
+  {
+    "name": "graphe-td4-flots.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Graphe",
+      "TD"
+    ]
+  },
+  {
+    "name": "micp-ch1-part1.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "Cours"
+    ]
+  },
+  {
+    "name": "micp-ch1-part2.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "Cours"
+    ]
+  },
+  {
+    "name": "micp-ch2-memoires.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "Cours"
+    ]
+  },
+  {
+    "name": "micp-ch3-microprocesseur-8086.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "Cours"
+    ]
+  },
+  {
+    "name": "micp-ch4-prog-assembleur.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "Cours"
+    ]
+  },
+  {
+    "name": "micp-projet-snake.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "Projet"
+    ]
+  },
+  {
+    "name": "micp-serie-revision.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "TD"
+    ]
+  },
+  {
+    "name": "micp-td-architecture-microprocesseur.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "TD"
+    ]
+  },
+  {
+    "name": "micp-tp1-programmation-assembleur.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "TP"
+    ]
+  },
+  {
+    "name": "micp-tp2-procedure-pile.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "MIPS",
+      "TP"
+    ]
+  },
+  {
+    "name": "mn-ch2-integration-numerique.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "Cours"
+    ]
+  },
+  {
+    "name": "mn-ch3-methodes-de-gauss.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "Cours"
+    ]
+  },
+  {
+    "name": "mn-ch4-rnsl.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "Cours"
+    ]
+  },
+  {
+    "name": "mn-ds-2017-2018.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "mn-ds-2021-2022.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "mn-examen-2023-2024.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "mn-examen-2024-2025.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "mn-plan-de-cours.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "Cours"
+    ]
+  },
+  {
+    "name": "mn-poly-interpolation.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "Cours"
+    ]
+  },
+  {
+    "name": "mn-serie-exercices-interpolation-quadrature.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td1-interpolation-correction.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td1-interpolation.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td2-integration-numerique-correction.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td2-integration-numerique.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td3-equations-non-lineaires-correction.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td3-equations-non-lineaires.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td3-exo-supp1.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td3-exo-supp2.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td4-rnsl-exo-supp.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "mn-td4-rnsl.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Methodes Numeriques",
+      "TD"
+    ]
+  },
+  {
+    "name": "plsql-curseurs.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "SGBD",
+      "Cours"
+    ]
+  },
+  {
+    "name": "plsql-exceptions.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "SGBD",
+      "Cours"
+    ]
+  },
+  {
+    "name": "plsql-exercice-if-boucles.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "SGBD",
+      "TD"
+    ]
+  },
+  {
+    "name": "plsql-partie1-variables-traitement-conditionnel.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "SGBD",
+      "Cours"
+    ]
+  },
+  {
+    "name": "plsql-procedures-fonctions.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "SGBD",
+      "Cours"
+    ]
+  },
+  {
+    "name": "plsql-triggers.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "SGBD",
+      "Cours"
+    ]
+  },
+  {
+    "name": "poo-ch1-du-c-au-cpp.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "poo-ch2-principes-de-base.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "poo-ch3-classes-part1.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "poo-ch3-stl-fichiers.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "poo-ch4-heritage.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "poo-ch5-polymorphisme.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "poo-ds-2024-2025.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "poo-examen-mai-2025-corrige.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "poo-td-java1.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "TD"
+    ]
+  },
+  {
+    "name": "poo-td-java2.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "TD"
+    ]
+  },
+  {
+    "name": "poo-td1-classes-cpp.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "TD"
+    ]
+  },
+  {
+    "name": "poo-td2-heritage.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "TD"
+    ]
+  },
+  {
+    "name": "poo-td3-polymorphisme.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "POO",
+      "TD"
+    ]
+  },
+  {
+    "name": "se-ch1-introduction.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se-ch2-part1-unix-linux.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se-ch2-part2-shell-awk-sed-processus.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se-ch3-programmation-c.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se-ch4-gestion-fichiers.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se-ds-2025.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se-examen-principale-2012-correction.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se-examen-principale-2012.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se-examen-rattrapage-2024-2025.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se-td-sgf1-corrige.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "TD"
+    ]
+  },
+  {
+    "name": "se-tp2-environnement-unix-correction.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "TD"
+    ]
+  },
+  {
+    "name": "se-tp2-environnement-unix.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "TD"
+    ]
+  },
+  {
+    "name": "se-tp3-filtres-correction.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "TD"
+    ]
+  },
+  {
+    "name": "se-tp3-filtres.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "TD"
+    ]
+  },
+  {
+    "name": "se-tp4-awk-sed-correction.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "TD"
+    ]
+  },
+  {
+    "name": "se-tp4-awk-sed.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "Linux",
+      "TD"
+    ]
+  },
+  {
+    "name": "tla-ch1-alphabets-langages.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "TLA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "tla-ch2-automates-finis.pdf",
+    "drivePath": [
+      "Year 1",
+      "Semester 2",
+      "TLA",
+      "Cours"
+    ]
+  }
+]
