@@ -15,7 +15,7 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "sync-pdfs": "node scripts/sync-pdfs-dev.mjs",
-    "format": "prettier -w --prose-wrap never docs"
+    "format": "prettier -w --prose-wrap never src"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",

@@ -10,7 +10,6 @@ import {
 } from "@site/data/contributors";
 import { Contributor } from "@site/data/Contributors.interface";
 
-
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
@@ -67,7 +66,6 @@ const ContributorList: React.FC<ContributorListProps> = ({ contributors }) => {
 const filteredContributors = CONTRIBUTORS.filter(
   (e) => !BLACKLISTED_CONTRIBUTORS.find((x) => x === e.login)
 );
-
 
 export default function Home(): JSX.Element {
   return (

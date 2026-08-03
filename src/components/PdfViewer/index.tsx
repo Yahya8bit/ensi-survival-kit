@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import BrowserOnly from '@docusaurus/BrowserOnly';
+import React, { useEffect, useState } from "react";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
 // ponytail: 768px matches Infima's mobile breakpoint used elsewhere in the theme
-const MOBILE_QUERY = '(max-width: 768px)';
+const MOBILE_QUERY = "(max-width: 768px)";
 
 const IFRAME_STYLE: React.CSSProperties = {
-  border: '1px solid var(--ifm-color-emphasis-300)',
+  border: "1px solid var(--ifm-color-emphasis-300)",
 };
 
 function useIsMobile(): boolean {
@@ -15,58 +15,58 @@ function useIsMobile(): boolean {
     const mql = window.matchMedia(MOBILE_QUERY);
     setIsMobile(mql.matches);
     const listener = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mql.addEventListener('change', listener);
-    return () => mql.removeEventListener('change', listener);
+    mql.addEventListener("change", listener);
+    return () => mql.removeEventListener("change", listener);
   }, []);
 
   return isMobile;
 }
 
 const CONTROLS_STYLE: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '0.75rem',
-  marginTop: '0.75rem',
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "0.75rem",
+  marginTop: "0.75rem",
 };
 
 const BUTTON_STYLE: React.CSSProperties = {
-  padding: '0.4rem 0.9rem',
+  padding: "0.4rem 0.9rem",
   borderRadius: 4,
-  border: '1px solid var(--ifm-color-emphasis-300)',
-  background: 'var(--ifm-background-surface-color)',
-  cursor: 'pointer',
+  border: "1px solid var(--ifm-color-emphasis-300)",
+  background: "var(--ifm-background-surface-color)",
+  cursor: "pointer",
 };
 
 const PAGE_INPUT_STYLE: React.CSSProperties = {
-  width: '3rem',
-  textAlign: 'center',
-  border: '1px solid var(--ifm-color-emphasis-300)',
+  width: "3rem",
+  textAlign: "center",
+  border: "1px solid var(--ifm-color-emphasis-300)",
   borderRadius: 4,
-  padding: '0.3rem',
+  padding: "0.3rem",
 };
 
 const MODE_TOGGLE_STYLE: React.CSSProperties = {
   ...BUTTON_STYLE,
-  display: 'block',
-  margin: '0 0 0.75rem auto',
-  fontSize: '0.85rem',
+  display: "block",
+  margin: "0 0 0.75rem auto",
+  fontSize: "0.85rem",
 };
 
-type Mode = 'paginated' | 'scroll';
+type Mode = "paginated" | "scroll";
 
 function MobilePdfPages({ file }: { file: string }) {
   const [Document, setDocument] = useState<any>(null);
   const [Page, setPage] = useState<any>(null);
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageInput, setPageInput] = useState('1');
+  const [pageInput, setPageInput] = useState("1");
   const [width, setWidth] = useState<number>(360);
-  const [mode, setMode] = useState<Mode>('paginated');
+  const [mode, setMode] = useState<Mode>("paginated");
 
   useEffect(() => {
     let cancelled = false;
-    import('react-pdf').then((reactPdf) => {
+    import("react-pdf").then((reactPdf) => {
       if (cancelled) return;
       reactPdf.pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${reactPdf.pdfjs.version}/pdf.worker.min.mjs`;
       setDocument(() => reactPdf.Document);
@@ -102,17 +102,19 @@ function MobilePdfPages({ file }: { file: string }) {
         <button
           type="button"
           style={MODE_TOGGLE_STYLE}
-          onClick={() => setMode(mode === 'paginated' ? 'scroll' : 'paginated')}
+          onClick={() => setMode(mode === "paginated" ? "scroll" : "paginated")}
         >
-          {mode === 'paginated' ? '☰ Vue défilement' : '▤ Vue par page'}
+          {mode === "paginated" ? "☰ Vue défilement" : "▤ Vue par page"}
         </button>
       )}
       <Document
         file={file}
         loading="Chargement du PDF…"
-        onLoadSuccess={({ numPages: n }: { numPages: number }) => setNumPages(n)}
+        onLoadSuccess={({ numPages: n }: { numPages: number }) =>
+          setNumPages(n)
+        }
       >
-        {mode === 'scroll' ? (
+        {mode === "scroll" ? (
           Array.from({ length: numPages }, (_, i) => (
             <Page
               key={i + 1}
@@ -133,7 +135,7 @@ function MobilePdfPages({ file }: { file: string }) {
           />
         )}
       </Document>
-      {mode === 'paginated' && numPages > 1 && (
+      {mode === "paginated" && numPages > 1 && (
         <div style={CONTROLS_STYLE}>
           <button
             type="button"
@@ -144,7 +146,7 @@ function MobilePdfPages({ file }: { file: string }) {
             ‹ Précédent
           </button>
           <span>
-            Page{' '}
+            Page{" "}
             <input
               style={PAGE_INPUT_STYLE}
               value={pageInput}
@@ -152,9 +154,9 @@ function MobilePdfPages({ file }: { file: string }) {
               onChange={(e) => setPageInput(e.target.value)}
               onBlur={submitPageInput}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') submitPageInput();
+                if (e.key === "Enter") submitPageInput();
               }}
-            />{' '}
+            />{" "}
             / {numPages}
           </span>
           <button
@@ -172,21 +174,24 @@ function MobilePdfPages({ file }: { file: string }) {
 }
 
 const PLACEHOLDER_STYLE: React.CSSProperties = {
-  border: '1px dashed var(--ifm-color-emphasis-300)',
+  border: "1px dashed var(--ifm-color-emphasis-300)",
   borderRadius: 8,
-  padding: '3rem 1.5rem',
-  textAlign: 'center',
-  color: 'var(--ifm-color-emphasis-700)',
-  background: 'var(--ifm-background-surface-color)',
+  padding: "3rem 1.5rem",
+  textAlign: "center",
+  color: "var(--ifm-color-emphasis-700)",
+  background: "var(--ifm-background-surface-color)",
 };
 
 function PdfUnavailablePlaceholder({ file }: { file: string }) {
   return (
     <div style={PLACEHOLDER_STYLE}>
-      <p style={{ fontSize: '1.5rem', margin: 0 }}>📄</p>
-      <p style={{ fontWeight: 'bold', margin: '0.5rem 0' }}>PDF preview only available in production</p>
-      <p style={{ fontSize: '0.85rem', margin: 0 }}>
-        Source PDFs live in Drive and are fetched at CI build time — <code>static/pdfs/</code> isn't populated in local dev.
+      <p style={{ fontSize: "1.5rem", margin: 0 }}>📄</p>
+      <p style={{ fontWeight: "bold", margin: "0.5rem 0" }}>
+        PDF preview only available in production
+      </p>
+      <p style={{ fontSize: "0.85rem", margin: 0 }}>
+        Source PDFs live in Drive and are fetched at CI build time —{" "}
+        <code>static/pdfs/</code> isn't populated in local dev.
         <br />
         Expected file: <code>{file}</code>
       </p>
@@ -203,7 +208,7 @@ function usePdfAvailable(file: string): boolean | null {
   useEffect(() => {
     let cancelled = false;
     setAvailable(null);
-    fetch(file, { method: 'HEAD' })
+    fetch(file, { method: "HEAD" })
       .then((res) => {
         if (!cancelled) setAvailable(res.ok);
       })
@@ -249,7 +254,5 @@ function PdfViewerInner({ file }: { file: string }) {
     return <MobilePdfPages file={file} />;
   }
 
-  return (
-    <iframe src={file} width="100%" height="800px" style={IFRAME_STYLE} />
-  );
+  return <iframe src={file} width="100%" height="800px" style={IFRAME_STYLE} />;
 }

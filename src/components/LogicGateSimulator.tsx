@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-export type GateType = 'AND' | 'OR' | 'NOT' | 'XOR' | 'NAND' | 'NOR';
+export type GateType = "AND" | "OR" | "NOT" | "XOR" | "NAND" | "NOR";
 
 interface GateMeta {
   unary: boolean;
@@ -24,17 +24,17 @@ const BUBBLE_R = 8;
 
 function computeOutput(gate: GateType, a: boolean, b: boolean): boolean {
   switch (gate) {
-    case 'AND':
+    case "AND":
       return a && b;
-    case 'OR':
+    case "OR":
       return a || b;
-    case 'NOT':
+    case "NOT":
       return !a;
-    case 'XOR':
+    case "XOR":
       return a !== b;
-    case 'NAND':
+    case "NAND":
       return !(a && b);
-    case 'NOR':
+    case "NOR":
       return !(a || b);
   }
 }
@@ -45,13 +45,19 @@ function computeOutput(gate: GateType, a: boolean, b: boolean): boolean {
 // than hand-drawing a whole new symbol.
 function GateShape({ gate }: { gate: GateType }): JSX.Element {
   const meta = GATE_META[gate];
-  const stroke = 'var(--ifm-font-color-base)';
-  const fill = 'var(--ifm-background-surface-color)';
+  const stroke = "var(--ifm-font-color-base)";
+  const fill = "var(--ifm-background-surface-color)";
 
   return (
     <>
-      {gate === 'NOT' ? (
-        <path d="M60,20 L60,100 L130,60 Z" fill={fill} stroke={stroke} strokeWidth={2} strokeLinejoin="round" />
+      {gate === "NOT" ? (
+        <path
+          d="M60,20 L60,100 L130,60 Z"
+          fill={fill}
+          stroke={stroke}
+          strokeWidth={2}
+          strokeLinejoin="round"
+        />
       ) : meta.bodyTipX === 130 ? (
         // AND / NAND: rectangle + D-curve (D-shape)
         <path
@@ -70,7 +76,12 @@ function GateShape({ gate }: { gate: GateType }): JSX.Element {
         />
       )}
       {meta.doubleBack && (
-        <path d="M50,20 Q68,60 50,100" fill="none" stroke={stroke} strokeWidth={2} />
+        <path
+          d="M50,20 Q68,60 50,100"
+          fill="none"
+          stroke={stroke}
+          strokeWidth={2}
+        />
       )}
       {meta.bubble && (
         <circle
@@ -87,22 +98,24 @@ function GateShape({ gate }: { gate: GateType }): JSX.Element {
 }
 
 const inputToggleStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '0.5rem',
-  cursor: 'pointer',
-  userSelect: 'none',
+  display: "flex",
+  alignItems: "center",
+  gap: "0.5rem",
+  cursor: "pointer",
+  userSelect: "none",
 };
 
 function wireColor(on: boolean): string {
-  return on ? 'var(--ifm-color-primary)' : 'var(--ifm-color-emphasis-400)';
+  return on ? "var(--ifm-color-primary)" : "var(--ifm-color-emphasis-400)";
 }
 
 interface Props {
   gate?: GateType;
 }
 
-export default function LogicGateSimulator({ gate = 'AND' }: Props): JSX.Element {
+export default function LogicGateSimulator({
+  gate = "AND",
+}: Props): JSX.Element {
   const [inputA, setInputA] = useState(false);
   const [inputB, setInputB] = useState(false);
 
@@ -110,7 +123,9 @@ export default function LogicGateSimulator({ gate = 'AND' }: Props): JSX.Element
   const b = meta.unary ? false : inputB;
   const output = computeOutput(gate, inputA, b);
 
-  const outputWireStartX = meta.bubble ? meta.bodyTipX + BUBBLE_R * 2 : meta.bodyTipX;
+  const outputWireStartX = meta.bubble
+    ? meta.bodyTipX + BUBBLE_R * 2
+    : meta.bodyTipX;
   const inputYs = meta.unary ? [60] : [35, 85];
 
   const rows: { a: boolean; b: boolean | null; out: boolean }[] = meta.unary
@@ -128,21 +143,40 @@ export default function LogicGateSimulator({ gate = 'AND' }: Props): JSX.Element
   const isActiveRow = (row: { a: boolean; b: boolean | null }) =>
     row.a === inputA && (meta.unary || row.b === inputB);
 
-  const cardClass =
-    'not-prose my-4 rounded-lg border p-4';
+  const cardClass = "not-prose my-4 rounded-lg border p-4";
   const cardStyle: React.CSSProperties = {
-    border: '1px solid var(--ifm-color-emphasis-300)',
-    background: 'var(--ifm-background-surface-color)',
+    border: "1px solid var(--ifm-color-emphasis-300)",
+    background: "var(--ifm-background-surface-color)",
   };
 
   return (
     <div className={cardClass} style={cardStyle}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'center' }}>
-        <svg viewBox="0 0 200 120" style={{ width: '100%', maxWidth: 260, display: 'block' }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "2rem",
+          alignItems: "center",
+        }}
+      >
+        <svg
+          viewBox="0 0 200 120"
+          style={{ width: "100%", maxWidth: 260, display: "block" }}
+        >
           {/* input wires */}
           {inputYs.map((y, i) => {
             const on = i === 0 ? inputA : inputB;
-            return <line key={y} x1={10} y1={y} x2={60} y2={y} stroke={wireColor(on)} strokeWidth={3} />;
+            return (
+              <line
+                key={y}
+                x1={10}
+                y1={y}
+                x2={60}
+                y2={y}
+                stroke={wireColor(on)}
+                strokeWidth={3}
+              />
+            );
           })}
           {/* output wire */}
           <line
@@ -154,43 +188,72 @@ export default function LogicGateSimulator({ gate = 'AND' }: Props): JSX.Element
             strokeWidth={3}
           />
           <GateShape gate={gate} />
-          <text x={4} y={inputYs[0] - 8} fontSize={12} fill="var(--ifm-font-color-base)">
+          <text
+            x={4}
+            y={inputYs[0] - 8}
+            fontSize={12}
+            fill="var(--ifm-font-color-base)"
+          >
             A
           </text>
           {!meta.unary && (
-            <text x={4} y={inputYs[1] - 8} fontSize={12} fill="var(--ifm-font-color-base)">
+            <text
+              x={4}
+              y={inputYs[1] - 8}
+              fontSize={12}
+              fill="var(--ifm-font-color-base)"
+            >
               B
             </text>
           )}
-          <text x={70} y={16} fontSize={13} fontWeight="bold" fill="var(--ifm-font-color-base)" textAnchor="middle">
+          <text
+            x={70}
+            y={16}
+            fontSize={13}
+            fontWeight="bold"
+            fill="var(--ifm-font-color-base)"
+            textAnchor="middle"
+          >
             {gate}
           </text>
         </svg>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
+        >
           <label style={inputToggleStyle}>
-            <input type="checkbox" checked={inputA} onChange={(e) => setInputA(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={inputA}
+              onChange={(e) => setInputA(e.target.checked)}
+            />
             <span>Entrée A = {inputA ? 1 : 0}</span>
           </label>
           {!meta.unary && (
             <label style={inputToggleStyle}>
-              <input type="checkbox" checked={inputB} onChange={(e) => setInputB(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={inputB}
+                onChange={(e) => setInputB(e.target.checked)}
+              />
               <span>Entrée B = {inputB ? 1 : 0}</span>
             </label>
           )}
           <div
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginTop: '0.25rem',
-              padding: '0.35rem 0.75rem',
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              marginTop: "0.25rem",
+              padding: "0.35rem 0.75rem",
               borderRadius: 6,
-              border: '1px solid var(--ifm-color-emphasis-300)',
-              background: output ? 'var(--ifm-color-primary)' : 'var(--ifm-background-color)',
-              color: output ? 'white' : 'var(--ifm-font-color-base)',
-              fontWeight: 'bold',
-              width: 'fit-content',
+              border: "1px solid var(--ifm-color-emphasis-300)",
+              background: output
+                ? "var(--ifm-color-primary)"
+                : "var(--ifm-background-color)",
+              color: output ? "white" : "var(--ifm-font-color-base)",
+              fontWeight: "bold",
+              width: "fit-content",
             }}
           >
             Sortie = {output ? 1 : 0}
@@ -198,14 +261,41 @@ export default function LogicGateSimulator({ gate = 'AND' }: Props): JSX.Element
         </div>
       </div>
 
-      <table style={{ marginTop: '1.25rem', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
+      <table
+        style={{
+          marginTop: "1.25rem",
+          borderCollapse: "collapse",
+          fontSize: "0.9rem",
+        }}
+      >
         <thead>
           <tr>
-            <th style={{ padding: '0.3rem 0.75rem', borderBottom: '1px solid var(--ifm-color-emphasis-300)' }}>A</th>
+            <th
+              style={{
+                padding: "0.3rem 0.75rem",
+                borderBottom: "1px solid var(--ifm-color-emphasis-300)",
+              }}
+            >
+              A
+            </th>
             {!meta.unary && (
-              <th style={{ padding: '0.3rem 0.75rem', borderBottom: '1px solid var(--ifm-color-emphasis-300)' }}>B</th>
+              <th
+                style={{
+                  padding: "0.3rem 0.75rem",
+                  borderBottom: "1px solid var(--ifm-color-emphasis-300)",
+                }}
+              >
+                B
+              </th>
             )}
-            <th style={{ padding: '0.3rem 0.75rem', borderBottom: '1px solid var(--ifm-color-emphasis-300)' }}>{gate}</th>
+            <th
+              style={{
+                padding: "0.3rem 0.75rem",
+                borderBottom: "1px solid var(--ifm-color-emphasis-300)",
+              }}
+            >
+              {gate}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -215,13 +305,25 @@ export default function LogicGateSimulator({ gate = 'AND' }: Props): JSX.Element
               <tr
                 key={i}
                 style={{
-                  fontWeight: active ? 'bold' : 'normal',
-                  background: active ? 'var(--ifm-color-emphasis-100)' : 'transparent',
+                  fontWeight: active ? "bold" : "normal",
+                  background: active
+                    ? "var(--ifm-color-emphasis-100)"
+                    : "transparent",
                 }}
               >
-                <td style={{ padding: '0.3rem 0.75rem', textAlign: 'center' }}>{row.a ? 1 : 0}</td>
-                {!meta.unary && <td style={{ padding: '0.3rem 0.75rem', textAlign: 'center' }}>{row.b ? 1 : 0}</td>}
-                <td style={{ padding: '0.3rem 0.75rem', textAlign: 'center' }}>{row.out ? 1 : 0}</td>
+                <td style={{ padding: "0.3rem 0.75rem", textAlign: "center" }}>
+                  {row.a ? 1 : 0}
+                </td>
+                {!meta.unary && (
+                  <td
+                    style={{ padding: "0.3rem 0.75rem", textAlign: "center" }}
+                  >
+                    {row.b ? 1 : 0}
+                  </td>
+                )}
+                <td style={{ padding: "0.3rem 0.75rem", textAlign: "center" }}>
+                  {row.out ? 1 : 0}
+                </td>
               </tr>
             );
           })}

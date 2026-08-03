@@ -1,8 +1,14 @@
-import React, { useEffect, useMemo, useRef } from 'react';
-import ErrorBoundary from '@docusaurus/ErrorBoundary';
-import { ErrorBoundaryErrorMessageFallback, useColorMode } from '@docusaurus/theme-common';
-import { MermaidContainerClassName, useMermaidRenderResult } from '@docusaurus/theme-mermaid/client';
-import styles from './styles.module.css';
+import React, { useEffect, useMemo, useRef } from "react";
+import ErrorBoundary from "@docusaurus/ErrorBoundary";
+import {
+  ErrorBoundaryErrorMessageFallback,
+  useColorMode,
+} from "@docusaurus/theme-common";
+import {
+  MermaidContainerClassName,
+  useMermaidRenderResult,
+} from "@docusaurus/theme-mermaid/client";
+import styles from "./styles.module.css";
 
 // ponytail: mermaid.options.themeVariables is a single object shared across
 // light/dark (only the theme *name* is picked per-mode by docusaurus), and
@@ -17,47 +23,47 @@ import styles from './styles.module.css';
 // else is a literal resolved --ifm-* value (mermaid parses colors
 // synchronously, so var() strings aren't usable here).
 const LIGHT_VARS = {
-  background: '#ffffff',
-  primaryColor: 'rgba(53,120,229,0.10)',
-  primaryTextColor: '#1c1e21',
-  primaryBorderColor: '#dadde1',
-  secondaryColor: '#f5f6f7',
-  secondaryTextColor: '#1c1e21',
-  secondaryBorderColor: '#dadde1',
-  tertiaryColor: '#f5f6f7',
-  tertiaryTextColor: '#1c1e21',
-  tertiaryBorderColor: '#dadde1',
-  lineColor: '#8d949e',
-  textColor: '#1c1e21',
-  nodeTextColor: '#1c1e21',
-  mainBkg: 'rgba(53,120,229,0.10)',
-  nodeBorder: '#dadde1',
-  clusterBkg: '#f5f6f7',
-  clusterBorder: '#dadde1',
-  edgeLabelBackground: '#f5f6f7',
-  titleColor: '#1c1e21',
+  background: "#ffffff",
+  primaryColor: "rgba(53,120,229,0.10)",
+  primaryTextColor: "#1c1e21",
+  primaryBorderColor: "#dadde1",
+  secondaryColor: "#f5f6f7",
+  secondaryTextColor: "#1c1e21",
+  secondaryBorderColor: "#dadde1",
+  tertiaryColor: "#f5f6f7",
+  tertiaryTextColor: "#1c1e21",
+  tertiaryBorderColor: "#dadde1",
+  lineColor: "#8d949e",
+  textColor: "#1c1e21",
+  nodeTextColor: "#1c1e21",
+  mainBkg: "rgba(53,120,229,0.10)",
+  nodeBorder: "#dadde1",
+  clusterBkg: "#f5f6f7",
+  clusterBorder: "#dadde1",
+  edgeLabelBackground: "#f5f6f7",
+  titleColor: "#1c1e21",
 };
 
 const DARK_VARS = {
-  background: '#1e2125',
-  primaryColor: 'rgba(53,120,229,0.18)',
-  primaryTextColor: '#e3e3e3',
-  primaryBorderColor: '#606770',
-  secondaryColor: '#1c1e21',
-  secondaryTextColor: '#e3e3e3',
-  secondaryBorderColor: '#606770',
-  tertiaryColor: '#121212',
-  tertiaryTextColor: '#e3e3e3',
-  tertiaryBorderColor: '#606770',
-  lineColor: '#ccd0d5',
-  textColor: '#e3e3e3',
-  nodeTextColor: '#e3e3e3',
-  mainBkg: 'rgba(53,120,229,0.18)',
-  nodeBorder: '#606770',
-  clusterBkg: '#121212',
-  clusterBorder: '#606770',
-  edgeLabelBackground: '#1c1e21',
-  titleColor: '#e3e3e3',
+  background: "#1e2125",
+  primaryColor: "rgba(53,120,229,0.18)",
+  primaryTextColor: "#e3e3e3",
+  primaryBorderColor: "#606770",
+  secondaryColor: "#1c1e21",
+  secondaryTextColor: "#e3e3e3",
+  secondaryBorderColor: "#606770",
+  tertiaryColor: "#121212",
+  tertiaryTextColor: "#e3e3e3",
+  tertiaryBorderColor: "#606770",
+  lineColor: "#ccd0d5",
+  textColor: "#e3e3e3",
+  nodeTextColor: "#e3e3e3",
+  mainBkg: "rgba(53,120,229,0.18)",
+  nodeBorder: "#606770",
+  clusterBkg: "#121212",
+  clusterBorder: "#606770",
+  edgeLabelBackground: "#1c1e21",
+  titleColor: "#e3e3e3",
 };
 
 function MermaidRenderResult({ renderResult }) {
@@ -84,10 +90,10 @@ function MermaidRenderer({ value }: { value: string }) {
   const config = useMemo(
     () => ({
       startOnLoad: false,
-      theme: 'base' as const,
-      themeVariables: colorMode === 'dark' ? DARK_VARS : LIGHT_VARS,
+      theme: "base" as const,
+      themeVariables: colorMode === "dark" ? DARK_VARS : LIGHT_VARS,
     }),
-    [colorMode],
+    [colorMode]
   );
   const renderResult = useMermaidRenderResult({ text: value, config });
   if (renderResult === null) {
@@ -102,7 +108,9 @@ export interface Props {
 
 export default function Mermaid({ value }: Props): JSX.Element {
   return (
-    <ErrorBoundary fallback={(params) => <ErrorBoundaryErrorMessageFallback {...params} />}>
+    <ErrorBoundary
+      fallback={(params) => <ErrorBoundaryErrorMessageFallback {...params} />}
+    >
       <MermaidRenderer value={value} />
     </ErrorBoundary>
   );

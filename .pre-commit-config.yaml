@@ -16,6 +16,13 @@ repos:
         entry: markdownlint --fix -c .markdownlint.yaml
         language: node
         types: [markdown]
+        # docs/ is hand-transcribed course content (Docusaurus MDX with
+        # :::admonition::: directives, embedded JSX/SVG, KaTeX) verified
+        # against source PDFs — a generic markdown fixer doesn't understand
+        # any of that and can silently alter content (e.g. stripping `$`
+        # shell-prompt prefixes from code blocks). Exclude it; only lint
+        # non-doc markdown (READMEs, etc.).
+        exclude: ^docs/
         minimum_pre_commit_version: 0.15.0
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
