@@ -40,20 +40,15 @@ repos:
         types: [file, javascript]
         pass_filenames: false
 
-  - repo: local
-    hooks:
-      - id: generate_slugs
-        name: generate_slugs
-        entry: python scripts/generate_slugs.py
-        language: system
-        types: [file, python]
-        pass_filenames: false
-
-  - repo: local
-    hooks:
-      - id: generate_contributors
-        name: generate_contributors
-        entry: bash -c "gh api repos/YOUR_GITHUB_USERNAME/ensi-knowledge/contributors > data/contributors.json"
-        language: system
-        types: [file, python]
-        pass_filenames: false
+  # generate_slugs and generate_contributors were removed from the active
+  # hook set: both are mutating generator scripts, not linters, and don't
+  # belong in a blocking CI gate.
+  #   - generate_slugs writes a `slug:` frontmatter field to every doc based
+  #     on its file path — a real site-structure/URL decision that needs a
+  #     deliberate one-time run + review, not silent CI auto-fix.
+  #   - generate_contributors needs a GH_TOKEN (not configured anywhere in
+  #     this workflow) and still has an unfixed "YOUR_GITHUB_USERNAME"
+  #     placeholder in its command — it has never been able to succeed in CI.
+  # Run either manually (`python scripts/generate_slugs.py`, or fix+export
+  # GH_TOKEN for the contributors command) if/when you actually want their
+  # output, then commit the result deliberately.
