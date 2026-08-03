@@ -80,7 +80,7 @@ jobs:
           REACT_APP_POSTHOG_KEY: ${{ secrets.POSTHOG_KEY }}
 
       - name: Move Webpack cache
-        run: mv .yarn/.cache .cache
+        run: \[ -d ".yarn/.cache" \] && mv .yarn/.cache .cache || echo "cache not found."
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0.0
