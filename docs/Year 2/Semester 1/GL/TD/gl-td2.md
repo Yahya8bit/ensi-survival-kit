@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: TD2 : Processus Logiciels (avec corrigé)
+title: "TD2 : Processus Logiciels (avec corrigé)"
 sidebar_label: TD2 - Processus Logiciels
 hide_title: true
 ---

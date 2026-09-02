@@ -1,6 +1,6 @@
 ---
 sidebar_position: 6
-title: TD6 : Patrons de conception (avec corrigé)
+title: "TD6 : Patrons de conception (avec corrigé)"
 sidebar_label: TD6 - Patrons de conception
 hide_title: true
 ---

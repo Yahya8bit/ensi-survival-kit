@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-title: TD3 : Analyse des besoins (avec corrigé)
+title: "TD3 : Analyse des besoins (avec corrigé)"
 sidebar_label: TD3 - Analyse des besoins
 hide_title: true
 ---

@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: TD5 : Conception architecturale
+title: "TD5 : Conception architecturale"
 sidebar_label: TD5 - Conception architecturale
 hide_title: true
 ---

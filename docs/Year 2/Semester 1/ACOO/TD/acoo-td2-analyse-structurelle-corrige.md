@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: TD2 : Analyse — Modélisation structurelle UML (avec corrigé)
+title: "TD2 : Analyse — Modélisation structurelle UML (avec corrigé)"
 sidebar_label: TD2 - Modélisation structurelle
 hide_title: true
 ---

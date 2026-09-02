@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-title: TD4 : Principes de conception (avec corrigé)
+title: "TD4 : Principes de conception (avec corrigé)"
 sidebar_label: TD4 - Principes de conception
 hide_title: true
 ---

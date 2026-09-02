@@ -1,6 +1,6 @@
 ---
 sidebar_position: 6
-title: TD6 : Test du logiciel (avec corrigé)
+title: "TD6 : Test du logiciel (avec corrigé)"
 sidebar_label: TD6 - Test du logiciel
 hide_title: true
 ---

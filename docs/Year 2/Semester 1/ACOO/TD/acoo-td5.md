@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: TD5 : Conception détaillée (avec corrigé)
+title: "TD5 : Conception détaillée (avec corrigé)"
 sidebar_label: TD5 - Conception détaillée
 hide_title: true
 ---

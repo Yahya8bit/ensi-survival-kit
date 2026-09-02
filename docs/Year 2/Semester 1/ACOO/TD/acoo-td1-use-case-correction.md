@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: TD1 : Diagramme de cas d'utilisation (corrigé)
+title: "TD1 : Diagramme de cas d'utilisation (corrigé)"
 sidebar_label: TD1 - Cas d'utilisation
 hide_title: true
 ---

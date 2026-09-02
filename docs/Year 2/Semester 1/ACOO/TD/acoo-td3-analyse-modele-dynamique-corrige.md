@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-title: TD3 : Analyse — Modélisation dynamique UML (avec corrigé)
+title: "TD3 : Analyse — Modélisation dynamique UML (avec corrigé)"
 sidebar_label: TD3 - Modélisation dynamique
 hide_title: true
 ---

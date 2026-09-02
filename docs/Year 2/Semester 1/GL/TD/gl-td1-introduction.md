@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: TD1 : Introduction au génie logiciel (avec corrigé)
+title: "TD1 : Introduction au génie logiciel (avec corrigé)"
 sidebar_label: TD1 - Introduction
 hide_title: true
 ---

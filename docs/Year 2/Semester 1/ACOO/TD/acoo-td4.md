@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-title: TD4 : Conception — Modélisation UML de l'architecture
+title: "TD4 : Conception — Modélisation UML de l'architecture"
 sidebar_label: TD4 - Modélisation de l'architecture
 hide_title: true
 ---
