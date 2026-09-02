@@ -1,5 +1,95 @@
 [
   {
+    "name": "gl-ch1-introduction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "gl-ds-2018-2019-corrige.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "gl-ds-2011-2012-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "gl-ds-2016-2017-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "gl-ds-2017-2018.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "gl1-ds-2012-2013-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "gl1-ds-2015-2016.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "gl1-ds-2014-2015.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "gl1-ds-2013-2014.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "gl1-ds-2019-2020.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "DS&EX"
+    ]
+  },
+  {
     "name": "asd-chapitres123.pdf",
     "drivePath": [
       "Year 1",
@@ -798,6 +888,311 @@
       "Semester 2",
       "TLA",
       "Cours"
+    ]
+  },
+  {
+    "name": "gl-ch2.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "gl-ch3.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "gl-ch4-conception-partie1.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "gl-ch4-conception-partie2.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "gl-ch-test.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "gl-corrige-td1.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "TD"
+    ]
+  },
+  {
+    "name": "gl-corrige-td2.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "TD"
+    ]
+  },
+  {
+    "name": "gl-corrige-td3.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "TD"
+    ]
+  },
+  {
+    "name": "gl-correction-td4.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "TD"
+    ]
+  },
+  {
+    "name": "gl-td5.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "TD"
+    ]
+  },
+  {
+    "name": "gl-correction-td6.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "TD"
+    ]
+  },
+  {
+    "name": "gl-quiz.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL",
+      "TD"
+    ]
+  },
+  {
+    "name": "gl-td-revision-acoo-corrige.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "GL"
+    ]
+  },
+  {
+    "name": "acoo-introduction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "acoo-use-case.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "acoo-analyse-modele-structurel.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "acoo-analyse-modele-dynamique.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "acoo-patrons-de-conception.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "acoo-diag-conception-architecturale.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "acoo-diag-conception-detaillee.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "Cours"
+    ]
+  },
+  {
+    "name": "acoo-correction-td1-use-case.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "TD"
+    ]
+  },
+  {
+    "name": "acoo-td2-analyse-structurelle-corrige.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "TD"
+    ]
+  },
+  {
+    "name": "acoo-td3-analyse-modele-dynamique-corrige.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "TD"
+    ]
+  },
+  {
+    "name": "acoo-td4.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "TD"
+    ]
+  },
+  {
+    "name": "acoo-correction-td5.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "TD"
+    ]
+  },
+  {
+    "name": "acoo-corrige-td6.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "TD"
+    ]
+  },
+  {
+    "name": "acoo-exercice-a-rendre.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "TD"
+    ]
+  },
+  {
+    "name": "acoo-exemple.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "TD"
+    ]
+  },
+  {
+    "name": "acoo-ds-2010-2011-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "acoo-ds-corrige.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "acoo-ds-2018-2019-corrige.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "acoo-ds-aac-2017-2.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "acoo-examen-2011-2012-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "acoo-bareme-ds-2017-2018.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
     ]
   }
 ]

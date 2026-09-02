@@ -1,0 +1,8 @@
+{
+  "label": "ACOO",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Course materials for analyse et conception orientées objet."
+  }
+}
