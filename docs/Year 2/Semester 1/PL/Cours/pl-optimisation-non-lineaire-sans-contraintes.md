@@ -108,13 +108,13 @@ $$\nabla f(x) = \begin{pmatrix} \partial f/\partial x_1(x) \\ \partial f/\partia
 
 Soit $x^*$ un minimum local de $f$. Le développement de Taylor au voisinage de $x^*$ donne :
 
-$$(DT) \quad f(x) = f(x^*) + \nabla f(x^*)(x-x^*) + \frac{1}{2}(x-x^*)^t \nabla^2 f(x^*)(x-x^*) + \|x-x^*\|^2\,\theta(x-x^*)$$
+$$(DT) \quad f(x) = f(x^*) + \nabla f(x^*)(x-x^*) + \frac{1}{2}(x-x^*)^t \nabla^2 f(x^*)(x-x^*) + \lVert x-x^*\rVert^2\,\theta(x-x^*)$$
 
 avec $\theta(x-x^*) \to 0$ quand $x \to x^*$.
 
 - Si $\nabla f(x^*) \ne 0 \Rightarrow$ on choisit $x = x^* - \theta\,\nabla f(x^*)$ et on remplace dans (DT). Pour $\theta > 0$ assez petit on aura $f(x) < f(x^*)$ ce qui contredit le fait que $x^*$ est le minimum $\Rightarrow$ nécessairement $\nabla f(x^*) = 0$.
 
-  $\Rightarrow$ (DT) devient : $f(x) = f(x^*) + \frac{1}{2}(x-x^*)^t \nabla^2 f(x^*)(x-x^*) + \|x-x^*\|^2\,\theta(x-x^*)$
+  $\Rightarrow$ (DT) devient : $f(x) = f(x^*) + \frac{1}{2}(x-x^*)^t \nabla^2 f(x^*)(x-x^*) + \lVert x-x^*\rVert^2\,\theta(x-x^*)$
 
 - Si $\nabla^2 f(x^*)$ n'est pas semi-définie positive c-à-d $\exists\ d \in \mathbb{R}^n$ ($d \ne 0$) $/\ d^t \nabla^2 f(x^*)\,d < 0$. On choisit $x = x^* + \theta d$ et on remplace dans (DT), pour $\theta$ assez petit on aura $f(x) < f(x^*)$ ce qui contredit l'optimalité de $x^*$
 
@@ -144,9 +144,9 @@ Par contre $f$ peut prendre une valeur négative dans un voisinage de $(0,0)$.
 
 **Démonstration** : Développement de Taylor au voisinage de $x^*$ :
 
-$$f(x) = f(x^*) + \frac{1}{2}(x-x^*)^t\nabla^2f(x^*)(x-x^*) + \|x-x^*\|^2\theta(x-x^*)$$
+$$f(x) = f(x^*) + \frac{1}{2}(x-x^*)^t\nabla^2f(x^*)(x-x^*) + \lVert x-x^*\rVert^2\theta(x-x^*)$$
 
-$\forall$ le déplacement $d \in \mathbb{R}^n$ ($\|d\|=1$) on a ($x = x^* + \theta d$) :
+$\forall$ le déplacement $d \in \mathbb{R}^n$ ($\lVert d\rVert=1$) on a ($x = x^* + \theta d$) :
 
 $$f(x^*+\theta d) = f(x^*) + \frac{\theta^2}{2}d^t\nabla^2f(x^*)d + \theta^2\,\theta(\theta), \qquad \theta(\theta) \xrightarrow[\theta\to0]{} 0$$
 
@@ -202,11 +202,11 @@ Il s'agit d'une famille de méthodes qui procèdent de la façon suivante :
 2. On calcule $\nabla f(x_0)$.
 3. Comme $\nabla f(x_0)$ indique la direction de plus grande augmentation de $f$, on se déplace d'une quantité $\lambda_0 > 0$ dans la direction opposée au gradient :
 
-$$x_1 = x_0 - \lambda_0 \frac{\nabla f(x_0)}{\|\nabla f(x_0)\|}$$
+$$x_1 = x_0 - \lambda_0 \frac{\nabla f(x_0)}{\lVert \nabla f(x_0)\rVert}$$
 
 4. Cette procédure est répétée à partir de la relation de récurrence :
 
-$$x_{k+1} = x_k - \lambda_k \frac{\nabla f(x_k)}{\|\nabla f(x_k)\|} \qquad \forall k,\ \lambda_k > 0$$
+$$x_{k+1} = x_k - \lambda_k \frac{\nabla f(x_k)}{\lVert \nabla f(x_k)\rVert} \qquad \forall k,\ \lambda_k > 0$$
 
 **a) Méthode de gradient à pas déterminé** : Dans les méthodes de gradient à pas déterminé on choisit à priori les valeurs de déplacement $\lambda_k$.
 
@@ -215,7 +215,7 @@ $$x_{k+1} = x_k - \lambda_k \frac{\nabla f(x_k)}{\|\nabla f(x_k)\|} \qquad \fora
 - **Méthode 1** : Méthode à pas constant. $\lambda_k = \lambda = $ constante.
 - **Méthode 2** : Méthode de la série divergente (Polyak, 1966). $\lambda_k = \dfrac{1}{k}$, ici $\lambda_k \xrightarrow[k\to+\infty]{} 0$ et $\sum_{k=0}^{+\infty}\lambda_k = +\infty$.
 - **Méthode 3** : Méthode de la série convergente (Shor 1968, Coffin 1977). $\lambda_k = \lambda_0\alpha^k$, $0<\alpha<1$.
-- **Méthode 4** : Méthode de relaxation (Held, Wolfe, Crowder 1974). $\lambda_k = \rho\,\dfrac{f(x_k)-\bar f}{\|\gamma_k\|}$ où $\bar f$ = estimation de la valeur optimale $f(x_0)$ ; $\rho$ : coefficient de relaxation strictement positif ($0<\rho\le2$) ; $\gamma_k$ : le sous-gradient de $f$ au point $x_k$.
+- **Méthode 4** : Méthode de relaxation (Held, Wolfe, Crowder 1974). $\lambda_k = \rho\,\dfrac{f(x_k)-\bar f}{\lVert \gamma_k\rVert}$ où $\bar f$ = estimation de la valeur optimale $f(x_0)$ ; $\rho$ : coefficient de relaxation strictement positif ($0<\rho\le2$) ; $\gamma_k$ : le sous-gradient de $f$ au point $x_k$.
 
 ### II.2 Interprétation géométrique du gradient — Courbes de niveau
 
@@ -233,17 +233,17 @@ Les courbes de niveau d'une fonction $f$ sont les lieux où $f$ est constante, i
 
 La formule de Taylor à l'ordre 1 : $f(x_a) = f(x_0+\Delta x) = f(x_0) + \nabla f(x_0)\,\Delta x + O(\Delta x)$
 
-$$\Rightarrow 0 = \nabla f(x_0)\cdot\frac{\Delta x}{\|\Delta x\|} + \frac{O(\Delta x)}{\|\Delta x\|}$$
+$$\Rightarrow 0 = \nabla f(x_0)\cdot\frac{\Delta x}{\lVert \Delta x\rVert} + \frac{O(\Delta x)}{\lVert \Delta x\rVert}$$
 
-$$\Rightarrow \lim_{\Delta x\to0} \nabla f(x_0)\cdot\frac{\Delta x}{\|\Delta x\|} + \frac{O(\Delta x)}{\|\Delta x\|} = \nabla f(x_0)\cdot u = 0$$
+$$\Rightarrow \lim_{\Delta x\to0} \nabla f(x_0)\cdot\frac{\Delta x}{\lVert \Delta x\rVert} + \frac{O(\Delta x)}{\lVert \Delta x\rVert} = \nabla f(x_0)\cdot u = 0$$
 
-où $\dfrac{\Delta x}{\|\Delta x\|}\xrightarrow[\Delta x\to0]{} u$ : vecteur unité qui est tangent à la courbe au pt $x_0$.
+où $\dfrac{\Delta x}{\lVert \Delta x\rVert}\xrightarrow[\Delta x\to0]{} u$ : vecteur unité qui est tangent à la courbe au pt $x_0$.
 
 **Exemple** : $f:\mathbb{R}^2\to\mathbb{R}$, $x \mapsto x_1^2+x_2$. Soit $X=(0,0)$. La courbe qui passe par $X$ a pour équation $x_1^2+x_2 = f(X) = 0$ soit $x_2 = -x_1^2$. La tangente en $X=(0,0)$ est la droite de pente $-2x_1 = 0$. D'un autre côté $\nabla f(X) = (2x_1,1) \Rightarrow \nabla f(0,0)=(0,1)$.
 
-**Théorème** : La dérivée directionnelle est maximale lorsque $\vec v$ a la même direction et le même sens que $\nabla f(x_0,y_0)$. De plus, le taux de variation maximal de $f(x,y)$ en $(x_0,y_0)$ est $\|\nabla f(x_0,y_0)\|$.
+**Théorème** : La dérivée directionnelle est maximale lorsque $\vec v$ a la même direction et le même sens que $\nabla f(x_0,y_0)$. De plus, le taux de variation maximal de $f(x,y)$ en $(x_0,y_0)$ est $\lVert \nabla f(x_0,y_0)\rVert$.
 
-*Démo* : La dérivée directionnelle s'écrit : $f_{\vec u}(x_0,y_0) = \nabla f(x_0,y_0)\cdot\vec u = \|\nabla f(x_0,y_0)\|\,\|\vec u\|\cos\theta = \|\nabla f(x_0,y_0)\|\cos\theta$ (comme $\|\vec v\|=1$, $\theta$ = angle entre les 2 vecteurs).
+*Démo* : La dérivée directionnelle s'écrit : $f_{\vec u}(x_0,y_0) = \nabla f(x_0,y_0)\cdot\vec u = \lVert \nabla f(x_0,y_0)\rVert\,\lVert \vec u\rVert\cos\theta = \lVert \nabla f(x_0,y_0)\rVert\cos\theta$ (comme $\lVert \vec v\rVert=1$, $\theta$ = angle entre les 2 vecteurs).
 
 Pour que cette dérivée directionnelle soit maximale il faut que $\cos\theta=1$, soit $\theta=0$.
 
@@ -261,14 +261,14 @@ Dans cette méthode $\lambda_k$ est choisi de façon à minimiser la fonction $g
 4. Faire $x_{k+1} = x_k + \lambda_k d_k$.
 5. **Test d'arrêt** :
    - $\max_{1\le i\le n}\left|\dfrac{\partial f}{\partial x_i}\right| < \varepsilon$ ($\varepsilon$ donné) (ici on assure que $\nabla f(\bar x)=0$)
-   - $\|\nabla f\|^2 = \sum_{i=1}^n\left(\dfrac{\partial f}{\partial x_i}\right)^2 < \varepsilon$ ($\varepsilon$ donné)
+   - $\lVert \nabla f\rVert^2 = \sum_{i=1}^n\left(\dfrac{\partial f}{\partial x_i}\right)^2 < \varepsilon$ ($\varepsilon$ donné)
    - $|f(x_{k+1})-f(x_k)| < \varepsilon$ ($\varepsilon$ donné) — à partir d'un certain rang $f(x_k)$ se rapproche de sa limite, c-à-d atteint le min.
 
 **Remarque** : à titre de précaution, on peut fixer à priori le nombre d'itérations maximal.
 
 ### Détermination de $\lambda_k$
 
-À l'itération $k$ on a : $x_{k+1} = x_k + \Delta x_k = x_k + \lambda_k \hat S_k$, avec $\hat S_k = -\dfrac{\nabla f(x_k)}{\|\nabla f(x_k)\|}$ est le vecteur unité $\Delta x_k$ dans la direction de $\Delta x_k$.
+À l'itération $k$ on a : $x_{k+1} = x_k + \Delta x_k = x_k + \lambda_k \hat S_k$, avec $\hat S_k = -\dfrac{\nabla f(x_k)}{\lVert \nabla f(x_k)\rVert}$ est le vecteur unité $\Delta x_k$ dans la direction de $\Delta x_k$.
 
 Pour calculer $x_{k+1}$, il faut déterminer $\lambda_k$ tel que $f(x_k+\lambda_k\hat S_k) = \min_{\lambda\ge0} f(x_k+\lambda\hat S_k)$.
 
@@ -282,11 +282,11 @@ $$g(\lambda) = f(x_k+\lambda\hat S_k), \qquad \frac{dg(\lambda)}{d\lambda} = 0 =
 
 $\Rightarrow$ la relation que vérifie $\lambda$ est : $\lambda_k = -\dfrac{\nabla f(x_k)^t\hat S_k}{\hat S_k^t H \hat S_k}$
 
-**Remarque** : Dans la méthode de la plus forte pente, deux directions de déplacement consécutifs sont orthogonales. En effet : $g(\lambda)=f(x_k+\lambda\hat S_k)$, $\dfrac{dg(\lambda)}{d\lambda} = \hat S_k^t\nabla f(x_k+\lambda_k\hat S_k)=0 \Leftrightarrow \hat S_k^t\left(-\dfrac{\nabla f(x_{k+1})}{\|\nabla f(x_{k+1})\|}\right)=0 \Leftrightarrow \hat S_k^t\hat S_{k+1}=0$.
+**Remarque** : Dans la méthode de la plus forte pente, deux directions de déplacement consécutifs sont orthogonales. En effet : $g(\lambda)=f(x_k+\lambda\hat S_k)$, $\dfrac{dg(\lambda)}{d\lambda} = \hat S_k^t\nabla f(x_k+\lambda_k\hat S_k)=0 \Leftrightarrow \hat S_k^t\left(-\dfrac{\nabla f(x_{k+1})}{\lVert \nabla f(x_{k+1})\rVert}\right)=0 \Leftrightarrow \hat S_k^t\hat S_{k+1}=0$.
 
 <!-- TODO: page 16 has a hand-drawn illustration of nested elliptical level curves with a zig-zag steepest-descent path from x0 toward the minimum — genuine sketch, described in prose here rather than re-rendered; see PDF tab. -->
 
-**Convergence de la méthode de la plus forte pente. Théorème** : Si $f$ est continûment différentiable avec la propriété [$f$ est coercive : $f(x) \to +\infty$ quand $\|x\| \to +\infty$], alors, pour tout point de départ $x_0$, la méthode de la plus forte pente converge vers un point stationnaire de $f$.
+**Convergence de la méthode de la plus forte pente. Théorème** : Si $f$ est continûment différentiable avec la propriété [$f$ est coercive : $f(x) \to +\infty$ quand $\lVert x\rVert \to +\infty$], alors, pour tout point de départ $x_0$, la méthode de la plus forte pente converge vers un point stationnaire de $f$.
 
 **Remarque** : Le principal défaut de la méthode de la plus forte pente est que la vitesse de la convergence varie d'une fonction à une autre et la convergence peut être très lente pour certains types de fonctions.
 
@@ -377,7 +377,7 @@ $$\nabla f(x) = [2x_1, 2x_2], \qquad H(x) = \nabla^2f(x) = \begin{pmatrix}2&0\\0
 
 $f(x) = \frac12 x^tAx+b^tx+c$ avec $A=H(x)$, $b=0$, $c=-4$.
 
-Considérons une direction de départ $\hat d_0 = \dfrac{d_0}{\|d_0\|}$. $\hat d_0 = [1/2, \sqrt3/2]$ ; $\hat d_0^t\hat d_0 = [1/2,\sqrt3/2]\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix} = \frac14+\frac34 = 1$.
+Considérons une direction de départ $\hat d_0 = \dfrac{d_0}{\lVert d_0\rVert}$. $\hat d_0 = [1/2, \sqrt3/2]$ ; $\hat d_0^t\hat d_0 = [1/2,\sqrt3/2]\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix} = \frac14+\frac34 = 1$.
 
 Calcul de $x_1$ : $x_1 = x_0+\lambda_0\hat d_0$ avec $\lambda_0 = -\dfrac{\nabla f(x_0)^t\hat d_0}{\hat d_0^tA\hat d_0} = -\dfrac{[8,8]\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix}}{[8,8]\begin{bmatrix}2&0\\0&2\end{bmatrix}\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix}} = -5,46$
 

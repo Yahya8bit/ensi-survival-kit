@@ -388,21 +388,21 @@ $\exists$ plusieurs méthodes d'approximation, c-à-d de façon avec laquelle on
 
 La vitesse de convergence d'un algorithme mesure la décroissance vers 0 de la distance entre les valeurs engendrées et leur limite.
 
-Par exemple, dans $\mathbb{R}^n$, notons $x^*$ le vecteur vers lequel converge la suite $(x_k)_{k\ge0}$ (engendrée par l'application $F$, c-à-d $x_{k+1} = F(x_k)$ : c'est l'algorithme) et $\|.\|$ la norme euclidienne :
+Par exemple, dans $\mathbb{R}^n$, notons $x^*$ le vecteur vers lequel converge la suite $(x_k)_{k\ge0}$ (engendrée par l'application $F$, c-à-d $x_{k+1} = F(x_k)$ : c'est l'algorithme) et $\lVert .\rVert$ la norme euclidienne :
 
 **Définition** :
 
-- Si $\displaystyle\limsup_{k\to\infty} \dfrac{\|x_{k+1}-x^*\|}{\|x_k-x^*\|} = \alpha < 1$, on dit que la convergence est **linéaire** et $\alpha$ est le taux de convergence associé.
-- Si $\displaystyle\limsup_{k\to\infty} \dfrac{\|x_{k+1}-x^*\|}{\|x_k-x^*\|} = 0$, on dit que la convergence est **superlinéaire**.
-- Si $\exists\ \gamma>1$, $\displaystyle\limsup_{k\to\infty} \dfrac{\|x_{k+1}-x^*\|}{\|x_k-x^*\|^{\gamma}} = M < +\infty$, la convergence est dite superlinéaire d'ordre $\gamma$. En particulier si $\gamma=2$, on parle de vitesse de convergence **quadratique**.
+- Si $\displaystyle\limsup_{k\to\infty} \dfrac{\lVert x_{k+1}-x^*\rVert}{\lVert x_k-x^*\rVert} = \alpha < 1$, on dit que la convergence est **linéaire** et $\alpha$ est le taux de convergence associé.
+- Si $\displaystyle\limsup_{k\to\infty} \dfrac{\lVert x_{k+1}-x^*\rVert}{\lVert x_k-x^*\rVert} = 0$, on dit que la convergence est **superlinéaire**.
+- Si $\exists\ \gamma>1$, $\displaystyle\limsup_{k\to\infty} \dfrac{\lVert x_{k+1}-x^*\rVert}{\lVert x_k-x^*\rVert^{\gamma}} = M < +\infty$, la convergence est dite superlinéaire d'ordre $\gamma$. En particulier si $\gamma=2$, on parle de vitesse de convergence **quadratique**.
 
 **Remarques**
 
 1. On peut parler de la vitesse de convergence pure dans un voisinage de la limite $x^*$ recherchée. Loin de $x^*$, il se peut que l'algorithme concerné converge lentement, on pas du tout, bien que théoriquement la vitesse de convergence soit quadratique.
 
-2. Cette définition est très utile pour mesurer la qualité de la limite obtenue par un algorithme. En effet supposons que la convergence asymptotique d'un algorithme soit quadratique dans un voisinage de $x^*$, avec $M=100$. C-à-d $\exists$ un rang $k$ tq $\dfrac{\|x_{k+p+1}-x^*\|}{\|x_{k+p}-x^*\|^2} < 100\ \forall p = 0,1,2,...$
+2. Cette définition est très utile pour mesurer la qualité de la limite obtenue par un algorithme. En effet supposons que la convergence asymptotique d'un algorithme soit quadratique dans un voisinage de $x^*$, avec $M=100$. C-à-d $\exists$ un rang $k$ tq $\dfrac{\lVert x_{k+p+1}-x^*\rVert}{\lVert x_{k+p}-x^*\rVert^2} < 100\ \forall p = 0,1,2,...$
 
-Si pour le rang $k$ on a $\|x_k-x^*\| < 10^{-3}$ (pour assurer qu'on est dans un voisinage de la solution) $\Rightarrow \|x_{k+1}-x^*\| < 10^{-4}$, $\|x_{k+2}-x^*\| < 10^{-6}$, $\|x_{k+3}-x^*\| \le 10^{-10}$...
+Si pour le rang $k$ on a $\lVert x_k-x^*\rVert < 10^{-3}$ (pour assurer qu'on est dans un voisinage de la solution) $\Rightarrow \lVert x_{k+1}-x^*\rVert < 10^{-4}$, $\lVert x_{k+2}-x^*\rVert < 10^{-6}$, $\lVert x_{k+3}-x^*\rVert \le 10^{-10}$...
 
 $\Rightarrow$ l'erreur d'approximation passe donc, en trois itérations, de $10^{-3}$ à $10^{-10}$.
 

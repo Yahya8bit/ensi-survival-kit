@@ -233,7 +233,7 @@ Our goal is to use the gradient method of steepest descent to build a sequence $
 $$
 \begin{cases}
 d_n = b-Ax_n \\
-t_n = \dfrac{\|d_n\|^2}{\langle Ad_n,d_n\rangle} \\
+t_n = \dfrac{\lVert d_n\rVert^2}{\langle Ad_n,d_n\rangle} \\
 x_{n+1} = x_n+t_nd_n
 \end{cases}
 $$

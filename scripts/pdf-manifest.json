@@ -1572,5 +1572,239 @@
       "PL",
       "DS&EX"
     ]
+  },
+  {
+    "name": "se2-ch1.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se2-ch2-processus.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se2-ch2-threads.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se2-ch3-ordonnancement.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se2-ch4-synchronisation.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se2-ch5-gestion-memoire.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "Cours"
+    ]
+  },
+  {
+    "name": "se2-td1-processus-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "TD"
+    ]
+  },
+  {
+    "name": "se2-td4-pipes-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "TD"
+    ]
+  },
+  {
+    "name": "se2-td-ipc-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "TD"
+    ]
+  },
+  {
+    "name": "se2-td-gestion-memoire-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "TD"
+    ]
+  },
+  {
+    "name": "se2-td-scheduling-2022.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "TD"
+    ]
+  },
+  {
+    "name": "se2-ds-sepc-2021.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-ds-sepc-2020.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-ds-sepc-2017.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-ds-sepc-2018-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-ds-sepc-2015.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-ds-2014-corrige.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-ds-2010-2011.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-ds-2009-2010.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-ds-2008-2009.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-exam-2016-2017.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-exam-2018-2019.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-exam-rattrapage-2013-2014.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-exam-rattrapage-2016-2017.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-exam-sepc-2018-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "se2-exam-rattrapage-2022-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "SE",
+      "DS&EX"
+    ]
   }
 ]
