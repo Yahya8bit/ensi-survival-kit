@@ -1,5 +1,104 @@
 [
   {
+    "name": "compilation-ch1-introduction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "Cours"
+    ]
+  },
+  {
+    "name": "compilation-ch2-1-analyse-lexicale.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "Cours"
+    ]
+  },
+  {
+    "name": "compilation-ch2-2-compilateur-une-passe.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "Cours"
+    ]
+  },
+  {
+    "name": "compilation-ch3-analyse-syntaxique.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "Cours"
+    ]
+  },
+  {
+    "name": "compilation-ch4-analyse-semantique.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "Cours"
+    ]
+  },
+  {
+    "name": "compilation-ch5-traduction-machine-a-pile.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "Cours"
+    ]
+  },
+  {
+    "name": "compilation-td1-tc.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "TD"
+    ]
+  },
+  {
+    "name": "compilation-td2-tc.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "TD"
+    ]
+  },
+  {
+    "name": "compilation-td-revision-2017-corrige.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "TD"
+    ]
+  },
+  {
+    "name": "compilation-corrige-td-tc-2023.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "TD"
+    ]
+  },
+  {
+    "name": "compilation-corrige-td-tc-2023-ex2.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Compilation",
+      "TD"
+    ]
+  },
+  {
     "name": "gl-ch1-introduction.pdf",
     "drivePath": [
       "Year 2",
@@ -1192,6 +1291,285 @@
       "Year 2",
       "Semester 1",
       "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "ia-ch1-introduction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "IA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "ia-inference.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "IA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "ia-ch2.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "IA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "ia-perceptron-2.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "IA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "ia-mlp.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "IA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "ia-carte-som.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "IA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "ia-apprentissage-non-supervise.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "IA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "ia-apprentissage-par-renforcement.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "IA",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-introduction-generale.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-ch1-formulation-resolution-graphique.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-ch2-notions-de-base.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-ch3-algo-simplexe.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-ch4-algo-dual.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-coupes-de-gomory.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-plne-introduction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-plne-branch-and-bound.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-exemple-branch-and-bound.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-optimisation-unidimensionnelle.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-optimisation-non-lineaire-sans-contraintes.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "Cours"
+    ]
+  },
+  {
+    "name": "pl-td1-plnl.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-correction-serie1-plnl.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-td1-optimisation-non-lineaire.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-td2-optimisation-non-lineaire.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-exo7-8-serie2.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-td2-branch-and-bound.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-td3-gomory.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-exo9-serie1.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-correction-serie-plne-exo1-9.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "TD"
+    ]
+  },
+  {
+    "name": "pl-ds-ro-2021-2022.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "pl-ds-ro-2023-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "pl-correction-tests.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "PL",
       "DS&EX"
     ]
   }
