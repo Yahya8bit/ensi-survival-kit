@@ -162,9 +162,9 @@ Sem ingred[3] = ([3] 1);
 
 - **Initialisation**
 - **P(S) — semwait(S)** : décrémenter S et se bloquer si `S<0`
-- **V(S) — semsignal(S)** : incrémenter S et réveiller un processus si S<=0 (vers FA des processus prêts selon la discipline FIFO)
+- **V(S) — semsignal(S)** : incrémenter S et réveiller un processus si `S<=0` (vers FA des processus prêts selon la discipline FIFO)
 
-`S1=3` indique le nombre de processus qui peuvent exécuter `P(S)` et continuer (sans se bloquer). Lorsque S1 devient négatif, cela indique le nombre de processus bloqués qui attendent d'être débloqués => chaque signal débloque un seul processus quand S<=0.
+`S1=3` indique le nombre de processus qui peuvent exécuter `P(S)` et continuer (sans se bloquer). Lorsque S1 devient négatif, cela indique le nombre de processus bloqués qui attendent d'être débloqués => chaque signal débloque un seul processus quand `S<=0`.
 
 ### Utilisation des sémaphores
 
@@ -290,7 +290,7 @@ La synchronisation est décrite de façon explicite à l'aide de variables condi
 
 Similitudes/différences entre P/C.wait et V/C.signal :
 
-- `Cwait(C)` suspend toujours le processus qui l'appelle ; `P(S)` ne suspend le processus que si (S<=0)
+- `Cwait(C)` suspend toujours le processus qui l'appelle ; `P(S)` ne suspend le processus que si `(S<=0)`
 - `Csignal(C)` est sans effet s'il n'y a pas de processus bloqués ; `V(S)` incrémente toujours S
 - Pour assurer l'exclusion mutuelle : P en entrée et V en sortie
 - A chaque variable condition est assigné un sémaphore et un compteur

@@ -140,7 +140,7 @@ Processus client() {
 
 </details>
 
-**2.** Supposons maintenant que les clients arrivent en familles de M personnes chacune (M<N, M peut prendre une valeur aléatoire entre 1 et 3) et qu'une famille ne peut accéder au magasin que si tous ses membres sont autorisés à y accéder. On peut assimiler les familles à des processus concurrents et les droits d'accès (au magasin) à des ressources partagées.
+**2.** Supposons maintenant que les clients arrivent en familles de M personnes chacune `(M<N,` M peut prendre une valeur aléatoire entre 1 et 3) et qu'une famille ne peut accéder au magasin que si tous ses membres sont autorisés à y accéder. On peut assimiler les familles à des processus concurrents et les droits d'accès (au magasin) à des ressources partagées.
 
 **a)** Un programmeur a proposé la solution suivante pour la synchronisation des processus "familles". Montrez, à l'aide d'un exemple, que cette solution est incorrecte.
 
