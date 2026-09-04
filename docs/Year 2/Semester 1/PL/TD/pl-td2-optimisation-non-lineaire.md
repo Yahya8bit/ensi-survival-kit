@@ -56,15 +56,7 @@ $$f(tx_1+(1-t)x_2) \le tf(x_1)+(1-t)f(x_2),\ \forall t\in[0,1],\ \forall x_1,x_2
 
 **Exercice 3.** On considère le problème d'optimisation :
 
-$$
-(P_2)
-\left\{
-\begin{aligned}
-&\min\ f(x,y) = 10-2x^2+x^4-6y+y^2 \\
-&(x,y)\in\mathbb{R}^2
-\end{aligned}
-\right.
-$$
+$$(P_2) \qquad \min\ f(x,y) = 10-2x^2+x^4-6y+y^2, \qquad (x,y)\in\mathbb{R}^2$$
 
 1. Comment classer $(P_2)$ ?
 2. Calculer $\nabla f(0,3)$ et $\nabla^2 f(0,3)$.
@@ -73,29 +65,13 @@ $$
 
 **Exercice 4.** On considère le problème d'optimisation :
 
-$$
-(P_1)
-\left\{
-\begin{aligned}
-&\min\ f(x,y) = 3x-x^3-2y^2+y^4 \\
-&(x,y)\in\mathbb{R}^2
-\end{aligned}
-\right.
-$$
+$$(P_1) \qquad \min\ f(x,y) = 3x-x^3-2y^2+y^4, \qquad (x,y)\in\mathbb{R}^2$$
 
 1. Déterminer l'ensemble des points qui satisfont la condition d'optimalité de premier ordre. Comment s'appelle l'ensemble de ces points ?
 2. Appliquer la condition suffisante d'optimalité du second ordre pour extraire les solutions locales de $(P_1)$.
 3. Soit $(P_2)$ le problème d'optimisation :
 
-$$
-(P_2)
-\left\{
-\begin{aligned}
-&\max\ f(x,y) = 3x-x^3-2y^2+y^4 \\
-&(x,y)\in\mathbb{R}^2
-\end{aligned}
-\right.
-$$
+$$(P_2) \qquad \max\ f(x,y) = 3x-x^3-2y^2+y^4, \qquad (x,y)\in\mathbb{R}^2$$
 
   (a) Comment se ramener à un problème de minimisation ?
   (b) Déterminer les solutions locales de $(P_2)$.
@@ -131,29 +107,20 @@ $$\varphi(a,b) = \sum_{i=1}^n (y_i-ax_i-b)^2$$
 
    Trouver l'équation de la régression linéaire de ces données au sens des moindres carrés.
 
+<!-- TODO: this correction is transcribed from a separate handwritten source file ("Exo 7 et 8 serie 2.pdf") that was checked against this TD's Exercice 7 and Exercice 8 and matches their content exactly (same least-squares derivation and same quadratic-problem numbers) — merged in here per the repo's TD+correction pattern; see that file's PdfViewer tab below for the original scan. -->
+
 <details>
 <summary>Correction</summary>
 
-<!-- TODO: this correction is transcribed from a separate handwritten source file ("Exo 7 et 8 serie 2.pdf") that was checked against this TD's Exercice 7 and Exercice 8 and matches their content exactly (same least-squares derivation and same quadratic-problem numbers) — merged in here per the repo's TD+correction pattern; see that file's PdfViewer tab below for the original scan. -->
-
 **1)** Le problème d'optimisation sans contraintes :
 
-$$
-\left\{
-\begin{aligned}
-&Min\ \left[\varphi(a,b) = \sum_{i=1}^n(y_i-ax_i-b)^2\right] \\
-&(a,b)\in\mathbb{R}^2
-\end{aligned}
-\right.
-$$
+$$Min\ \left[\varphi(a,b) = \sum_{i=1}^n(y_i-ax_i-b)^2\right], \qquad (a,b)\in\mathbb{R}^2$$
 
 Calculons $\nabla\varphi(a,b)$ et $\nabla^2\varphi(a,b)$.
 
-$$\nabla\varphi(a,b) = \left(\frac{\partial\varphi}{\partial a},\frac{\partial\varphi}{\partial b}\right)^T \text{ avec }
-\begin{cases}
-\dfrac{\partial\varphi}{\partial a} = \sum_{i=1}^n -2x_i(y_i-ax_i-b) \\
-\dfrac{\partial\varphi}{\partial b} = \sum_{i=1}^n -2(y_i-ax_i-b)
-\end{cases}$$
+$$\nabla\varphi(a,b) = \left(\frac{\partial\varphi}{\partial a},\frac{\partial\varphi}{\partial b}\right)^T \text{ avec :}$$
+
+$$\dfrac{\partial\varphi}{\partial a} = \sum_{i=1}^n -2x_i(y_i-ax_i-b) \qquad \dfrac{\partial\varphi}{\partial b} = \sum_{i=1}^n -2(y_i-ax_i-b)$$
 
 $$\Rightarrow \nabla\varphi(a,b) = \begin{pmatrix}-2\sum_{i=1}^n x_i(y_i-ax_i-b) \\ -2\sum_{i=1}^n(y_i-ax_i-b)\end{pmatrix}$$
 
@@ -166,15 +133,7 @@ Soit $v\in\mathbb{R}^2$, on a : $v^T\nabla^2\varphi(a,b)v = v^t\times2A^TAv = 2v
 
 Par conséquent la condition nécessaire d'optimalité est une condition suffisante. Il faut donc chercher $(\bar a,\bar b)$ où $\nabla\varphi(a,b)=0_{\mathbb{R}^2}$. Le minimum de $\varphi$ est donc atteint par $(\bar a,\bar b)$ solution du système suivant :
 
-$$
-(S)
-\left\{
-\begin{aligned}
-&\sum_{i=1}^n x_i(y_i-a x_i-b) = 0 \qquad (1) \\
-&\sum_{i=1}^n (y_i-a x_i-b) = 0 \qquad (2)
-\end{aligned}
-\right.
-$$
+$$(S) \qquad \sum_{i=1}^n x_i(y_i-a x_i-b) = 0 \quad (1), \qquad \sum_{i=1}^n (y_i-a x_i-b) = 0 \quad (2)$$
 
 On note $\bar x = \dfrac1n\sum_{i=1}^n x_i$ et $\bar y = \dfrac1n\sum_{i=1}^n y_i$.
 
@@ -230,13 +189,11 @@ Our goal is to use the gradient method of steepest descent to build a sequence $
 
 1. Prove that $x_n$ is defined by
 
-$$
-\begin{cases}
-d_n = b-Ax_n \\
-t_n = \dfrac{\lVert d_n\rVert^2}{\langle Ad_n,d_n\rangle} \\
-x_{n+1} = x_n+t_nd_n
-\end{cases}
-$$
+$$d_n = b-Ax_n$$
+
+$$t_n = \dfrac{\lVert d_n\rVert^2}{\langle Ad_n,d_n\rangle}$$
+
+$$x_{n+1} = x_n+t_nd_n$$
 
 2. Perform three iterations starting from $x_0=\begin{pmatrix}1\\1\end{pmatrix}$ if $A=\begin{pmatrix}2&0\\0&1\end{pmatrix}$ ; $b=\begin{pmatrix}-1\\2\end{pmatrix}$
 
@@ -245,10 +202,10 @@ $$
    (a) Deduce a numerical method to solve $Ax=b$.
    (b) Test this method with the system $Ax=b$, $A=\begin{pmatrix}2&1\\0&1\end{pmatrix}$ ; $b=\begin{pmatrix}1\\2\end{pmatrix}$
 
+<!-- TODO: this correction is transcribed from a separate handwritten source file ("Exo 7 et 8 serie 2.pdf") that was checked against this TD's Exercice 8 and matches its content (same A, b, and x0) — merged in here per the repo's TD+correction pattern; see that file's PdfViewer tab below for the original scan. Part 3(b)'s numeric test with the second system (A=[[2,1],[0,1]], b=[1,2]) is not present in the source correction and is left unanswered here rather than guessed. -->
+
 <details>
 <summary>Correction</summary>
-
-<!-- TODO: this correction is transcribed from a separate handwritten source file ("Exo 7 et 8 serie 2.pdf") that was checked against this TD's Exercice 8 and matches its content (same A, b, and x0) — merged in here per the repo's TD+correction pattern; see that file's PdfViewer tab below for the original scan. Part 3(b)'s numeric test with the second system (A=[[2,1],[0,1]], b=[1,2]) is not present in the source correction and is left unanswered here rather than guessed. -->
 
 **1)** Voir cours.
 
@@ -283,16 +240,9 @@ Si $\bar x$ réalise un minimum de $f$ alors $\bar x$ est un point critique qui 
 
 Dans ce cas la méthode steepest descent peut générer une suite $(x_n)_n$ qui converge vers $\bar x$ :
 
-$$
-\begin{cases}
-x_0 \text{ donné} \\
-d_n = b-Ax_n \\
-t_n = \dfrac{{}^t\!d_n\,d_n}{{}^t\!d_n\,A\,d_n} \\
-x_{n+1} = x_n+t_nd_n
-\end{cases}
-\qquad
-\text{Test d'arrêt : } \|x_{n+1}-x_n\|<\varepsilon=10^{-10}
-$$
+$$x_0 \text{ donné}, \qquad d_n = b-Ax_n, \qquad t_n = \dfrac{{}^t\!d_n\,d_n}{{}^t\!d_n\,A\,d_n}, \qquad x_{n+1} = x_n+t_nd_n$$
+
+$$\text{Test d'arrêt : } \lVert x_{n+1}-x_n\rVert<\varepsilon=10^{-10}$$
 
 **(a)** La solution exacte de $A\bar x=b$ est $\bar x=\begin{pmatrix}-1/2\\2\end{pmatrix}$. Application de l'algorithme steepest descent :
 
