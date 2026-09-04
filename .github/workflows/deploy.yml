@@ -44,23 +44,8 @@ jobs:
           path: ".yarn"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: cache webpack modules
-        uses: actions/cache@v3
-        with:
-          path: ".cache"
-          key: ${{ runner.os }}-webpack-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-webpack
-
       - name: Install deps
         run: yarn install --immutable
-
-      - name: Move back Webpack cache
-
-        run: \[ -d ".cache" \] &&  mv .cache .yarn/.cache || echo "cache not found."
-
-      - name: show cache
-        run: ls -la .yarn || true
 
       - name: Fetch course PDFs from Drive
         run: node scripts/fetch-pdfs.mjs
@@ -78,9 +63,6 @@ jobs:
           TYPESENSE_SEARCH_API_KEY: ${{ secrets.TYPESENSE_SEARCH_API_KEY }}
           REACT_APP_POSTHOG_HOST: ${{ secrets.POSTHOG_HOST }}
           REACT_APP_POSTHOG_KEY: ${{ secrets.POSTHOG_KEY }}
-
-      - name: Move Webpack cache
-        run: \[ -d ".yarn/.cache" \] && mv .yarn/.cache .cache || echo "cache not found."
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0.0
