@@ -363,7 +363,7 @@ OxyReady() {
 
 </details>
 
-**3)** Déroulez l'exécution du scénario suivant : deux H arrivent l'un après l'autre puis deux O arrivent en même temps (c-à-d H1(1); H2(2); O1(3); O2(3); … avec Xi(t) signifiant l'atome X (dans {H, O}) de numéro i, arrivé au temps t). Conclure.
+**3)** Déroulez l'exécution du scénario suivant : deux H arrivent l'un après l'autre puis deux O arrivent en même temps (c-à-d H1(1); H2(2); O1(3); O2(3); … avec Xi(t) signifiant l'atome X (dans \{H, O\}) de numéro i, arrivé au temps t). Conclure.
 
 <details>
 <summary>Correction (1 pt)</summary>
