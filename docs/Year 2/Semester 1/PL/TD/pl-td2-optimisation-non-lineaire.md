@@ -124,8 +124,7 @@ $$\dfrac{\partial\varphi}{\partial a} = \sum_{i=1}^n -2x_i(y_i-ax_i-b) \qquad \d
 
 $$\Rightarrow \nabla\varphi(a,b) = \begin{pmatrix}-2\sum_{i=1}^n x_i(y_i-ax_i-b) \\ -2\sum_{i=1}^n(y_i-ax_i-b)\end{pmatrix}$$
 
-$$\nabla^2\varphi(a,b) = \begin{pmatrix}\dfrac{\partial^2\varphi}{\partial a^2} & \dfrac{\partial^2\varphi}{\partial a\partial b} \\ \dfrac{\partial^2\varphi}{\partial b\partial a} & \dfrac{\partial^2\varphi}{\partial b^2}\end{pmatrix}
-\qquad \frac{\partial^2\varphi}{\partial a^2}=\sum_{i=1}^n 2x_i^2 \quad \frac{\partial^2\varphi}{\partial a\partial b}=\frac{\partial^2\varphi}{\partial b\partial a}=\sum_{i=1}^n 2x_i \quad \frac{\partial^2\varphi}{\partial b^2}=\sum_{i=1}^n 2 = 2n$$
+$$\nabla^2\varphi(a,b) = \begin{pmatrix}\dfrac{\partial^2\varphi}{\partial a^2} & \dfrac{\partial^2\varphi}{\partial a\partial b} \\ \dfrac{\partial^2\varphi}{\partial b\partial a} & \dfrac{\partial^2\varphi}{\partial b^2}\end{pmatrix} \qquad \frac{\partial^2\varphi}{\partial a^2}=\sum_{i=1}^n 2x_i^2 \quad \frac{\partial^2\varphi}{\partial a\partial b}=\frac{\partial^2\varphi}{\partial b\partial a}=\sum_{i=1}^n 2x_i \quad \frac{\partial^2\varphi}{\partial b^2}=\sum_{i=1}^n 2 = 2n$$
 
 $$\Rightarrow \nabla^2\varphi(a,b) = 2\begin{pmatrix}\sum x_i^2 & \sum x_i \\ \sum x_i & n\end{pmatrix} = 2A^TA \qquad \text{avec } A^T=\begin{pmatrix}x_1&x_2&\cdots&x_n\\1&1&\cdots&1\end{pmatrix}$$
 
@@ -242,7 +241,7 @@ Dans ce cas la méthode steepest descent peut générer une suite $(x_n)_n$ qui 
 
 $$x_0 \text{ donné}, \qquad d_n = b-Ax_n, \qquad t_n = \dfrac{{}^t\!d_n\,d_n}{{}^t\!d_n\,A\,d_n}, \qquad x_{n+1} = x_n+t_nd_n$$
 
-$$\text{Test d'arrêt : } \lVert x_{n+1}-x_n\rVert<\varepsilon=10^{-10}$$
+$$\text{Test d'arrêt : } \lVert x_{n+1}-x_n\rVert\lt\varepsilon=10^{-10}$$
 
 **(a)** La solution exacte de $A\bar x=b$ est $\bar x=\begin{pmatrix}-1/2\\2\end{pmatrix}$. Application de l'algorithme steepest descent :
 
@@ -260,7 +259,7 @@ $$\text{Test d'arrêt : } \lVert x_{n+1}-x_n\rVert<\varepsilon=10^{-10}$$
 | 9 | -0,5000 | 2,0000 |
 | 10 | -0,5000 | 2,0000 |
 
-Test d'arrêt : $|x_{n+1}-x_n|<10^{-10}$.
+Test d'arrêt : $|x_{n+1}-x_n|\lt10^{-10}$.
 
 </details>
 
