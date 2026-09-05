@@ -1806,5 +1806,113 @@
       "SE",
       "DS&EX"
     ]
+  },
+  {
+    "name": "complexite-ch1-complexite-algorithmes.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "Cours"
+    ]
+  },
+  {
+    "name": "complexite-ch2-complexite-problemes.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "Cours"
+    ]
+  },
+  {
+    "name": "complexite-ch3-1-diviser-pour-regner.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "Cours"
+    ]
+  },
+  {
+    "name": "complexite-ch3-2-glouton.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "Cours"
+    ]
+  },
+  {
+    "name": "complexite-ch4-arbres-equilibres.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "Cours"
+    ]
+  },
+  {
+    "name": "complexite-ds-2014-2015.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "complexite-exam-2018-statement.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "complexite-exam-2018-correction.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "complexite-exam-2014-2015.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "complexite-ds-2021.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "complexite-resume.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
+      "Resume"
+    ]
+  },
+  {
+    "name": "acoo-ds-2020-2021.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
+    ]
   }
 ]

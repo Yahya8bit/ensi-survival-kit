@@ -1,0 +1,8 @@
+{
+  "label": "Résumé",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Student summary notes for la conception et l'analyse des algorithmes."
+  }
+}
