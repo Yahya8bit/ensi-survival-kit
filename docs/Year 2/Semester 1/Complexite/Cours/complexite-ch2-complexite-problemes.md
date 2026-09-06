@@ -33,11 +33,12 @@ polynomiales fournissent un langage commun pour comparer ces problèmes.
 ## Du coût d'un algorithme à la difficulté d'un problème
 
 Un **problème** pose une question générale. Une **instance** est une donnée
-particulière fournie en entrée, de taille $n$. Un **algorithme** donne une
-procédure pour répondre à cette question sur les instances qu'il accepte. La
-complexité d'un algorithme mesure les ressources consommées par cette
-procédure; la complexité d'un problème compare ce qui reste possible quand on
-choisit le meilleur algorithme connu dans un modèle de calcul fixé.
+particulière fournie en entrée, de taille $n$ ; lorsqu'elle est représentée par
+un mot $x$, on prend $n=|x|$. Un **algorithme** donne une procédure pour
+répondre à cette question sur les instances qu'il accepte. La complexité d'un
+algorithme mesure les ressources consommées par cette procédure; la complexité
+d'un problème compare ce qui reste possible quand on choisit le meilleur
+algorithme connu dans un modèle de calcul fixé.
 
 Le support se limite d'abord aux problèmes décidables : une solution
 algorithmique existe. Il reste à savoir si elle utilise une quantité de temps
@@ -50,6 +51,10 @@ $n \to \infty$, à un facteur constant près et, dans ce chapitre, au pire cas.
 La machine utilisée ne change l'estimation qu'à une constante près. Les
 valeurs des données déterminent les cas meilleur, moyen et pire, tandis que
 leur taille est le paramètre principal.
+
+Pour un entier positif $N$ encodé en binaire, cette taille est
+$\lfloor \log_2 N \rfloor + 1$, et non la valeur $N$. Cette dernière ne sert
+de taille que sous une convention explicite, comme l'encodage unaire.
 
 :::
 

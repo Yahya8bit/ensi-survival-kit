@@ -66,13 +66,19 @@ pour comparer des algorithmes sur le même problème.
 
 ### Taille des données
 
-La taille retenue est la dimension la plus significative de l'instance :
+La taille retenue dépend de la représentation choisie pour l'instance :
 
-- pour des nombres, les nombres eux-mêmes ;
-- pour des mots, leur longueur ;
-- pour des listes et des tableaux, le nombre de cases ou d'éléments ;
+- pour un mot $x$, sa longueur $|x|$ ;
+- pour un entier positif $N$ encodé en binaire,
+  $\lfloor \log_2 N \rfloor + 1$ ;
+- pour des listes et des tableaux de $n$ éléments, le nombre de cases ou
+  d'éléments $n$ ;
 - pour une matrice $m \times n$, $\max(m,n)$, $m \cdot n$ ou $m+n$ selon le
   problème.
+
+La valeur $N$ ne mesure elle-même la taille que si une convention particulière,
+comme un encodage unaire, est annoncée. Ainsi, une complexité polynomiale en
+$N$ peut être exponentielle en la longueur de son encodage binaire.
 
 Le choix d'une structure de données n'est donc pas neutre : il modifie les
 opérations disponibles et leur coût.
@@ -245,6 +251,11 @@ grand.
 Lorsque les valeurs sont comprises entre 0 et `max`, avec `max` pas trop grand,
 on peut compter le nombre de `0`, de `1`, de `2`, jusqu'à `max`, puis parcourir
 le tableau pour écrire chaque valeur selon son nombre d'occurrences.
+
+Ici, `max` est une valeur numérique : parcourir toutes ses valeurs est adapté
+seulement s'il est suffisamment borné par rapport au nombre d'éléments et à sa
+représentation. Si `max` est un entier binaire $N$, un parcours proportionnel à
+$N$ peut être exponentiel en $\lfloor \log_2 N \rfloor + 1$.
 
 1. Écrire cet algorithme en utilisant un tableau annexe `count`, où `count[i]`
    indique le nombre de `i` dans le tableau initial.
