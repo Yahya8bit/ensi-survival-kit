@@ -141,7 +141,7 @@ si p < q alors
     r ← (p+q) div 2
     Tri-fusion(T, p, r)
     Tri-fusion(T, r+1, q)
-    fusionner(T, p, q, r)
+    Fusionner(T, p, r+1, q)
 fin si
 ```
 
@@ -159,23 +159,41 @@ FinSi
 Fin TriFusion
 ```
 
-```text title="Fusionner"
-Procédure Fusionner(Var T:Tab; deb_gauche, deb_droit, fin: entier)
-i ← deb_droit
-Tantque (T[i] < T[i-1]) et (i <= fin) Faire
-    j ← i
-    aux ← T[j]
-    Tantque (aux < T[j-1]) et (j > deb_gauche) Faire
-        T[j] ← T[j-1]
-        j ← j-1
-    Fin Tantque
-    T[j] ← aux
-    i ← i+1
-Fin Tantque
+```text title="Fusionner - version pédagogique corrigée"
+Procédure Fusionner(T, deb_gauche, deb_droit, fin)
+gauche ← copie de T[deb_gauche .. deb_droit-1]
+droite ← copie de T[deb_droit .. fin]
+i ← 0 ; j ← 0 ; k ← deb_gauche
+
+Tant que i < taille(gauche) et j < taille(droite) faire
+    si gauche[i] ≤ droite[j] alors
+        T[k] ← gauche[i] ; i ← i + 1
+    sinon
+        T[k] ← droite[j] ; j ← j + 1
+    fin si
+    k ← k + 1
+fin tant que
+
+Tant que i < taille(gauche) faire
+    T[k] ← gauche[i] ; i ← i + 1 ; k ← k + 1
+fin tant que
+
+Tant que j < taille(droite) faire
+    T[k] ← droite[j] ; j ← j + 1 ; k ← k + 1
+fin tant que
 Fin Fusionner
 ```
 
 </details>
+
+:::note Précision sur le support
+
+Le pseudocode de fusion du support ressemble à une insertion locale : ses
+décalages successifs ne suffisent pas à établir un coût linéaire. La version
+ci-dessus est une version pédagogique corrigée, et non une transcription
+littérale du support.
+
+:::
 
 :::tip Exemple
 
@@ -188,16 +206,22 @@ Soit $H(n)$ le nombre de comparaisons effectuées par l'algorithme :
 
 $$H(0) = 0,\quad H(1) = 0,\quad H(n) \cong 2H(n/2) + (n-1).$$
 
-Pour le temps d'exécution, $n_0 = 1$, $a = c = 2$, $D(n) = O(1)$ et
-$C(n) = O(n)$ :
+Pendant la fusion, les indices $i$ et $j$ ne reculent jamais. À chaque
+itération, un élément est copié dans le résultat et l'un des deux indices
+avance ; lorsque l'un des sous-tableaux est épuisé, les éléments restants de
+l'autre sont copiés une fois. La fusion de $n$ éléments coûte donc
+$\Theta(n)$.
+
+Pour le temps d'exécution, $n_0 = 1$, $a = c = 2$, $D(n) = \Theta(1)$ et
+$C(n) = \Theta(n)$ :
 
 $$
 T(n) =
 \begin{cases}
-O(1) & \text{si } n = 1, \\
-2T(n/2) + O(n) & \text{sinon,}
+\Theta(1) & \text{si } n = 1, \\
+2T(n/2) + \Theta(n) & \text{sinon,}
 \end{cases}
-\qquad \text{donc} \qquad T(n) = O(n\log_2 n).
+\qquad \text{donc} \qquad T(n) = \Theta(n\log_2 n).
 $$
 
 Le terme de combinaison est ici linéaire. C'est ce qui place le tri par
