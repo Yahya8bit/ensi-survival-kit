@@ -13,272 +13,641 @@ import TabItem from '@theme/TabItem';
 
 # Chapitre 2 : Complexité des problèmes
 
-*Conception et analyse d'algorithmes*
+_Conception et analyse d'algorithmes_
 
-## Introduction
+Au chapitre précédent, la complexité décrivait le coût d'un algorithme donné.
+Ici, la question change : parmi tous les algorithmes possibles, quelle est la
+difficulté du problème lui-même ? Les machines de Turing et les réductions
+polynomiales fournissent un langage commun pour comparer ces problèmes.
 
-- Problèmes décidables : la solution algorithmique existe.
-- Est-ce que cette solution est efficace ?
-- Est-ce qu'elle utilise une quantité de ressources « raisonnable » (temps et espace) ?
+:::info Vous allez apprendre
 
-### Principaux facteurs
+- distinguer un problème de décision, une instance et l'algorithme qui la traite ;
+- définir le temps de calcul d'une machine de Turing déterministe ou non déterministe ;
+- reconnaître les classes $P$, $NP$, $NP$-dur et $NP$-complet ;
+- utiliser une transformation polynomiale pour comparer deux problèmes ;
+- relier les classes de temps aux classes d'espace du support.
 
-1. Machine (matériel et logiciel), à une constante près.
-2. Données :
-   - Taille : paramètre principal $n$, à une constante près
-   - Type : pas d'influence
-   - Valeurs : meilleur, moyenne et pire des cas
-   - Organisation : —
+:::
 
-La complexité en temps est calculée en fonction de la taille des données $n$ quand $n$ est grand ($n \to \infty$), à un facteur près, au pire des cas.
+## Du coût d'un algorithme à la difficulté d'un problème
 
-### Exemple : temps estimé en secondes
+Un **problème** pose une question générale. Une **instance** est une donnée
+particulière fournie en entrée, de taille $n$. Un **algorithme** donne une
+procédure pour répondre à cette question sur les instances qu'il accepte. La
+complexité d'un algorithme mesure les ressources consommées par cette
+procédure; la complexité d'un problème compare ce qui reste possible quand on
+choisit le meilleur algorithme connu dans un modèle de calcul fixé.
 
-| Taille des données | $O(\log n)$ | $O(n)$ | $O(n^2)$ | $O(2^n)$ |
-| --- | --- | --- | --- | --- |
-| 10 | $3 \times 10^{-6}$ | $10^{-5}$ | $10^{-4}$ | $10^{-3}$ |
-| 100 | $7 \times 10^{-6}$ | $10^{-4}$ | $10^{-2}$ | $10^{14}$ siècles |
-| 1000 | $10^{-5}$ | $10^{-3}$ | 1 sec | astronomique |
-| 10000 | $13 \times 10^{-6}$ | $10^{-2}$ | 1,7 min | ... |
-| 100000 | $17 \times 10^{-6}$ | $10^{-1}$ | 2,8 heures | ... |
+Le support se limite d'abord aux problèmes décidables : une solution
+algorithmique existe. Il reste à savoir si elle utilise une quantité de temps
+ou d'espace raisonnable.
 
-## Complexité d'une machine de Turing déterministe
+:::info Repères pour l'analyse en temps
 
-**Définition** — soit $M$ une machine de Turing déterministe. La complexité en temps de $M$ est la fonction $T_M(n) = \max\{m,\ x \in \Sigma^* /|x|=n \text{ et } M \text{ s'exécute sur } x \text{ en } m \text{ étapes}\}$.
+La complexité est étudiée en fonction de la taille $n$ des données lorsque
+$n \to \infty$, à un facteur constant près et, dans ce chapitre, au pire cas.
+La machine utilisée ne change l'estimation qu'à une constante près. Les
+valeurs des données déterminent les cas meilleur, moyen et pire, tandis que
+leur taille est le paramètre principal.
 
-## Complexité d'une machine de Turing non déterministe
+:::
 
-**Définition** — le temps de calcul d'une machine de Turing non déterministe pour un mot $w$, noté $TC_M(w)$, est donné par :
+Le tableau du support donne un ordre de grandeur parlant pour le temps
+d'exécution estimé en secondes.
 
-- la longueur de la plus courte exécution acceptant le mot si $w \in L(M)$,
-- 1 sinon.
+| Taille des données | $O(\log n)$         | $O(n)$    | $O(n^2)$   | $O(2^n)$          |
+| ------------------ | ------------------- | --------- | ---------- | ----------------- |
+| 10                 | $3 \times 10^{-6}$  | $10^{-5}$ | $10^{-4}$  | $10^{-3}$         |
+| 100                | $7 \times 10^{-6}$  | $10^{-4}$ | $10^{-2}$  | $10^{14}$ siècles |
+| 1 000              | $10^{-5}$           | $10^{-3}$ | 1 sec      | astronomique      |
+| 10 000             | $13 \times 10^{-6}$ | $10^{-2}$ | 1,7 min    | ...               |
+| 100 000            | $17 \times 10^{-6}$ | $10^{-1}$ | 2,8 heures | ...               |
 
-**Définition** — soit $M$ une machine de Turing non déterministe. La complexité en temps de $M$ est la fonction $T_M(n) = \max\{m,\ x \in \Sigma^* /|x|=n \text{ et } m = TC_M(x)\}$.
+Pour comparer des problèmes sans dépendre d'un langage de programmation, le
+support utilise maintenant les machines de Turing.
 
-### Notation asymptotique $O$
+## Mesurer le temps sur une machine de Turing
 
-Une fonction $g(n)$ est dite en $O(f(n))$ : $g = O(f)$ s'il existe une constante $c$, $n_0$ / pour tout $n > n_0$, $0 \leq g(n) \leq c \cdot f(n)$.
+### Machine déterministe
 
-**Proposition** — si la fonction $f$ est calculée par une machine de Turing non déterministe $M$ avec la complexité $T_M(n)$, alors il existe une machine de Turing non déterministe calculant $f$ avec la complexité $O(C \cdot T_M(n))$ où $C$ est une constante.
+:::info Définition
 
-## Complexité polynomiale en temps d'une machine de Turing
+Soit $M$ une machine de Turing déterministe. Sa complexité en temps est la
+fonction :
 
-**Définition** — une machine de Turing $M$ est dite polynomiale en temps s'il existe un polynôme $p(n)$ tel que $T_M(n) \leq p(n)$ pour tout $n \geq 0$.
+$$
+T_M(n) = \max\{m \mid x \in \Sigma^*,\ |x| = n,\ M
+\text{ s'exécute sur } x \text{ en } m \text{ étapes}\}.
+$$
 
-**Définition (Classe P)** — la classe P est la classe des langages décidés par une machine de Turing déterministe polynomiale.
+:::
 
-**Définition (Classe NP)** — la classe NP est la classe des langages acceptés par une machine de Turing non déterministe polynomiale.
+Cette borne prend donc l'instance de taille $n$ qui demande le plus grand
+nombre d'étapes à $M$.
 
-**Théorème** — soit $L \in NP$. Il existe une MTD $M$ et un polynôme $p(n)$ / $M$ décide $L$ avec la complexité $T_M(n) = O(2^{p(n)})$.
+### Machine non déterministe
 
-### Exercice : MT
+:::info Définition
 
-$L = \{a^n b^n c^n,\ n \geq 0\}$
+Pour une machine de Turing non déterministe $M$ et un mot $w$, le temps de
+calcul $TC_M(w)$ est :
 
-- Écrire la MT de $L$.
-- Calculer le nombre de déplacements pour estimer $T_M(n)$.
+- la longueur de la plus courte exécution qui accepte $w$ si $w \in L(M)$ ;
+- $1$ sinon.
+
+La complexité en temps de $M$ est alors :
+
+$$
+T_M(n) = \max\{m \mid x \in \Sigma^*,\ |x| = n,\ m = TC_M(x)\}.
+$$
+
+:::
+
+:::info Définition : notation asymptotique $O$
+
+Une fonction $g(n)$ est en $O(f(n))$, noté $g = O(f)$, s'il existe des
+constantes $c$ et $n_0$ telles que, pour tout $n > n_0$ :
+
+$$
+0 \leq g(n) \leq c \cdot f(n).
+$$
+
+:::
+
+:::note Proposition
+
+Si la fonction $f$ est calculée par une machine de Turing non déterministe
+$M$ avec la complexité $T_M(n)$, alors il existe une machine de Turing non
+déterministe calculant $f$ avec la complexité $O(C \cdot T_M(n))$, où $C$ est
+une constante.
+
+:::
+
+Le support utilise ensuite les fonctions polynomiales comme frontière de
+classification, ce qui mène directement aux classes $P$ et $NP$.
+
+## Calcul polynomial et classes $P$ et $NP$
+
+:::info Définition
+
+Une machine de Turing $M$ est polynomiale en temps s'il existe un polynôme
+$p(n)$ tel que :
+
+$$
+T_M(n) \leq p(n) \qquad \text{pour tout } n \geq 0.
+$$
+
+:::
+
+:::info Définition : classe $P$
+
+La classe $P$ est la classe des langages décidés par une machine de Turing
+déterministe polynomiale.
+
+:::
+
+:::info Définition : classe $NP$
+
+La classe $NP$ est la classe des langages acceptés par une machine de Turing
+non déterministe polynomiale.
+
+:::
+
+:::note Théorème
+
+Soit $L \in NP$. Il existe une machine de Turing déterministe $M$ et un
+polynôme $p(n)$ tels que $M$ décide $L$ avec la complexité :
+
+$$
+T_M(n) = O\left(2^{p(n)}\right).
+$$
+
+:::
+
+:::tip Exercice
+
+Pour le langage $L = \{a^n b^n,\ n \geq 0\}$, écrire une machine de Turing et
+calculer son nombre de déplacements afin d'estimer $T_M(n)$.
+
+:::
 
 ## Problèmes de décision
 
-- Un problème est dit de décision si pour tout input, l'unique output possible est de type booléen.
-- La plupart des problèmes d'optimisation peuvent être convertis en problèmes de décision.
-- Il suffit d'ajouter une borne $k$ sur la valeur à optimiser et de changer la question :
-  - existe-t-il une solution dont la valeur est au plus $k$ (en cas de minimisation) ;
-  - existe-t-il une solution dont la valeur est au moins $k$ (en cas de maximisation).
+Pour passer d'une notion de calcul à une comparaison de problèmes, on formule
+la question avec une réponse booléenne.
 
-### Exemples
+:::info Définition
 
-**Circuit hamiltonien** — étant donné un graphe $G$, existe-t-il un chemin de longueur au plus $k$ ?
+Un problème est un **problème de décision** si, pour toute entrée, son unique
+sortie possible est booléenne.
 
-**Voyageur de commerce (TSP)** — étant donné un ensemble de villes $V = \{v_1,\ldots,v_n\}$, une fonction distance $d(v_i,v_j)$ entre les villes, et soit un nombre $k$. Existe-t-il un tour de toutes les villes dont la longueur est au plus $k$ ?
+La plupart des problèmes d'optimisation peuvent être convertis en problèmes de
+décision en ajoutant une borne $k$ :
 
-## Transformation polynomiale
+- « existe-t-il une solution de valeur au plus $k$ ? » pour une minimisation ;
+- « existe-t-il une solution de valeur au moins $k$ ? » pour une maximisation.
 
-**Définition** — soient $L_1 \subseteq \Sigma_1^*$ et $L_2 \subseteq \Sigma_2^*$. Une transformation polynomiale de $L_1$ vers $L_2$, notée $L_1 \propto L_2$, est une fonction $f$ définie par $f : \Sigma_1^* \to \Sigma_2^*$ telle que :
+:::
 
-1. $f$ est calculable en un temps polynomial,
-2. $f(x) \in L_2$ ssi $x \in L_1$.
+:::tip Exemple : voyageur de commerce
 
-Autre nom : transformation polynomiale = projection = réduction.
+Étant donné un ensemble de villes
+$V = \{v_1, \ldots, v_m\}$, une fonction de distance $d(v_i, v_j)$ et un
+nombre $k$, la version décisionnelle demande s'il existe un tour de toutes les
+villes de longueur au plus $k$.
 
-### Propriétés des transformations polynomiales
+:::
 
-**Lemme 1** — si $L_1 \propto L_2$ alors :
+Un circuit hamiltonien est aussi formulé comme une question d'existence : pour
+un graphe donné, existe-t-il un parcours fermé qui passe une seule fois par
+tous les sommets ? Cette forme binaire permet de relier les problèmes entre
+eux.
 
-1. si $L_2 \in P$ alors $L_1 \in P$,
-2. si $L_1 \notin P$ alors $L_2 \notin P$.
+## Transformations polynomiales
 
-**Lemme 2 (transitivité)** — si $L_1 \propto L_2$ et $L_2 \propto L_3$ alors $L_1 \propto L_3$.
+Une réduction ne donne pas nécessairement la réponse au problème de départ.
+Elle transforme ses instances en instances d'un autre problème, sans changer
+la réponse oui/non, et suffisamment vite pour préserver la comparaison de
+complexité.
 
-**Définition** — une classe d'équivalence polynomiale $C_1$ est inférieure à une classe d'équivalence $C_2$, notée $C_1 \preceq_p C_2$, s'il existe une transformation polynomiale de tout langage de $C_1$ vers tout langage de $C_2$ (i.e. $\forall L_1 \in C_1$ et $\forall L_2 \in C_2$ on a $L_1 \propto L_2$).
+:::info Définition
 
-**Définition (équivalence polynomiale)** — deux langages $L_1$ et $L_2$ sont équivalents polynomialement, notée $\equiv_P$ : $L_1 \equiv_P L_2$ ssi $L_1 \propto L_2$ et $L_2 \propto L_1$.
+Soient $L_1 \subseteq \Sigma_1^*$ et $L_2 \subseteq \Sigma_2^*$. Une
+transformation polynomiale de $L_1$ vers $L_2$, notée $L_1 \alpha L_2$, est une
+fonction $f : \Sigma_1^* \to \Sigma_2^*$ telle que :
 
-**Lemme 3** — la classe P est une classe d'équivalence polynomiale.
+1. $f$ est calculable en temps polynomial ;
+2. $f(x) \in L_2$ si et seulement si $x \in L_1$.
 
-**Lemme 4** — pour tout $L_1 \in P$ et $\forall L_2 \in NP$ on a $L_1 \propto L_2$, donc $P \preceq_p c$ pour toute classe d'équivalence $c$ de NP.
+Le support appelle aussi cette transformation une projection ou une réduction.
 
-**Définition** — $L$ est NP-dur si $\exists\, L' \in NPC$ tel que $L' \propto L$.
+:::
 
-Exemple : le problème d'équivalence d'automates à état fini non déterministes est NP-dur.
+:::note Lemmes
 
-**Définition (NP-complet)** — $L$ est dit NP-complet (NPC) si :
+Si $L_1 \alpha L_2$, alors :
 
-1. $L \in NP$,
-2. $\forall L' \in NP$ on a $L' \propto L$ (équivalent : $\exists\, L' \in NPC$ tel que $L' \propto L$).
+1. si $L_2 \in P$, alors $L_1 \in P$ ;
+2. si $L_1 \notin P$, alors $L_2 \notin P$.
 
-### Premier problème NP-complet — théorème de Cook
+La transformation est transitive : si $L_1 \alpha L_2$ et $L_2 \alpha L_3$,
+alors $L_1 \alpha L_3$.
 
-$SAT \in NPC$
+:::
 
-Pour montrer que $SAT \in NP$ :
+<details>
+  <summary>Démonstration</summary>
 
-a. soit une interprétation $I$ choisie de façon non déterministe ;
-b. vérifier que $[A_i]_I = V\ \forall\, 1 \leq i \leq m$.
+Si $L_2 \in P$, on calcule d'abord $f(x)$ en temps polynomial, puis on décide
+$f(x)$ avec l'algorithme polynomial de $L_2$. La composition reste
+polynomiale; comme $f(x) \in L_2$ si et seulement si $x \in L_1$, elle décide
+$L_1$. La seconde propriété est sa contraposée.
 
-Démonstration :
+Pour la transitivité, la transformation de $L_1$ vers $L_3$ est la composition
+des transformations de $L_1$ vers $L_2$ et de $L_2$ vers $L_3$. La composition
+de deux calculs polynomiaux est polynomiale et conserve l'équivalence des
+réponses.
 
-1. $SAT \in NP$,
-2. $\forall L' \in NP$ alors $L' \propto SAT$.
+</details>
 
-Algorithme ND : $p = \max(n,m,k) \Rightarrow O(p^3)$ polynomial : $SAT \in NP$.
+:::info Définition : équivalence polynomiale
 
-## SAT
+Deux langages $L_1$ et $L_2$ sont équivalents polynomialement, noté
+$L_1 \equiv_P L_2$, si et seulement si $L_1 \alpha L_2$ et $L_2 \alpha L_1$.
 
-- Un problème fondamental en théorie de la complexité,
-- satisfiabilité booléenne des formules de la logique propositionnelle,
-- c'est le premier problème NP-découvert (théorème de Cook, 1971),
-- solveur SAT (exemple : logictools.org).
+Une classe d'équivalence polynomiale $C_1$ est inférieure à une classe
+d'équivalence $C_2$, notée $C_1 \preceq_p C_2$, lorsque tout langage de $C_1$
+se transforme polynomialement vers tout langage de $C_2$.
 
-### Description du problème
+:::
 
-- Valeurs booléennes Vrai et Faux : $\top, \bot$
-- Variables booléennes : par exemple $a, b, c, d$
-- Formule : $F = F(a,b,c,d)$
-- Si affectation possible telle que $\text{eval}(F) = \top$, $F$ est SATisfiable, sinon inSATisfiable.
+:::note Propriétés
 
-### Nature de la formule
+La classe $P$ est une classe d'équivalence polynomiale. Pour tout $L_1 \in P$
+et tout $L_2 \in NP$, le support énonce $L_1 \alpha L_2$; ainsi
+$P \preceq_p c$ pour toute classe d'équivalence $c$ de $NP$.
 
-$$F = (a \vee \neg b \vee c) \wedge (\neg a \vee \neg c) \wedge (\neg b \vee \neg d) \wedge (a \vee \neg d) \wedge (a \vee c \vee d)$$
+:::
 
-- $F$ est sous forme normale conjonctive (CNF) : $F = C_1 \wedge C_2 \wedge \cdots \wedge C_m$
-- chaque $C_i$ est une clause : disjonction de littéraux $l_1 \vee l_2 \vee \cdots \vee l_k$
-- chaque littéral $l_i$ est de la forme variable propositionnelle ou sa négation ($v$ ou $\neg v$)
-- affectation qui rend $F$ satisfiable (chaque clause s'évalue à Vrai)
-- interprétation : assignation d'une valeur de vérité à chaque variable, ex. $I: \{a=\text{faux}, b=\text{vrai}, c=\text{vrai}, d=\text{vrai}\}$
-- modèle d'une formule $F$ : interprétation pour laquelle $F$ a la valeur Vrai
-- formule $F$ cohérente : $F$ admet au moins un modèle
+:::tip Exemple : $CH \alpha TSP$
 
-### Exemple
+Pour une instance $G = (S, A)$ de circuit hamiltonien, la transformation
+produit le graphe complet pondéré $G' = (V, E)$ avec :
 
-Instance de SAT : $I = (a \vee b \vee c) \wedge (\neg a \vee b) \wedge \neg c$. Certificat : $S = \{a=\text{Vrai}, b=\text{Vrai}, c=\text{Faux}\}$.
+$$
+V = S, \qquad
+d(v_i, v_j) =
+\begin{cases}
+1 & \text{si } (v_i, v_j) \in A, \\
+2 & \text{sinon},
+\end{cases}
+\qquad b = |V| = n.
+$$
 
-### Exemples de problèmes NP
+Le support demande de montrer que $f(x) \in TSP$ si et seulement si
+$x \in CH$, puis d'estimer le temps de cette transformation.
 
-SAT, 3-SAT, Clique, Stable (Independent Set), 2-SAT, HC (Hamiltonien Cycle), 2-coloriage, k-coloriage, Coloriage, TS.
+:::
 
-## 3-SAT : description d'un problème
+## Dureté et complétude
 
-Soit $F = C_1 \wedge C_2 \wedge \cdots \wedge C_k$ une formule en 3-CNF, avec $k$ clauses, contenant chacune 3 littéraux distincts. Pour chaque clause on crée 3 sommets, un pour chaque littéral dans la clause.
+Les réductions servent maintenant à exprimer qu'un problème concentre la
+difficulté d'une classe entière.
 
-**Problème** : existe-t-il une interprétation $I$ / $[A_i]_I = V\ \forall\, 1 \leq i \leq k$ ?
+:::info Définition : $NP$-dur
 
-## Circuit hamiltonien : description d'un problème
+Un langage $L$ est $NP$-dur s'il existe $L' \in NPC$ tel que $L' \alpha L$.
 
-**Données** : soit un graphe $G = (S,A)$ et $|S| = n$ sommets.
+Le support cite comme exemple le problème d'équivalence d'automates à états
+finis non déterministes.
 
-**Problème** : existe-t-il un parcours fermé qui passe par tous les sommets une seule fois ? Trouver une permutation $s_1,\ldots,s_n$ telle que $(s_i, s_{i+1}) \in A\ \forall\, 1 \leq i \leq n-1$ et $(s_n, s_1) \in A$.
+:::
 
-## Voyageur de commerce (TS) : description d'un problème
+:::info Définition : $NP$-complet
 
-**Données** : soit un graphe $G = (V,E)$ complet et pondéré, avec $V$ l'ensemble de villes, $d(v_i,v_j)$ la distance entre ville $i$ et ville $j$, et un entier $k$.
+Un langage $L$ est $NP$-complet, noté $NPC$, si :
 
-**Problème** : existe-t-il un parcours fermé qui passe par toutes les villes une seule fois dont la longueur $\leq k$ ? Trouver une permutation $v_{i_1},\ldots,v_{i_n}$ telle que $\sum_{j=1}^{n-1} d(v_{i_j}, v_{i_{j+1}}) + d(v_{i_n}, v_{i_1}) \leq k$.
+1. $L \in NP$ ;
+2. pour tout $L' \in NP$, on a $L' \alpha L$.
 
-### Exemple de transformation : CH $\propto$ TSP
+Le support donne aussi la caractérisation équivalente : il existe
+$L' \in NPC$ tel que $L' \alpha L$.
 
-Montrer que $CH \propto TSP$. Trouver l'algorithme de transformation et estimer son temps : $f(x) \in TSP$ ssi $x \in HC$.
+:::
 
-Définition de $F$ : $V = S$, $n = |V|$, $d(v_i,v_j) = 1$ si $(v_i,v_j) \in A$, $2$ sinon.
+:::note Théorème de Cook
 
-## Cliques maximales : description d'un problème
+$$
+SAT \in NPC.
+$$
 
-**Données** : graphe $G = (S,A)$ et un entier $k \leq |S|$.
+:::
 
-**Problème** : $G$ contient-il une clique de taille $k$ ? Existe-t-il un sous-graphe complet dont le nombre de sommets $\geq k$ ? $\exists\, S' \subseteq S$ tel que $|S'| \geq k\ \forall\, s_1 \in S'$ et $s_2 \in S'$ on a $(s_1,s_2) \in A$.
+Le théorème introduit SAT comme point de départ des réductions vers de nombreux
+problèmes de décision.
 
-## Couverture par sommets (Vertex Cover) : description d'un problème
+<details>
+  <summary>Démonstration</summary>
 
-**Données** : graphe $G = (S,A)$ et un entier $k \leq |S|$.
+Le support détaille l'appartenance de $SAT$ à $NP$ : choisir une interprétation
+$I$ de manière non déterministe, puis vérifier que
 
-**Problème** : existe-t-il une couverture par sommets de $G$ de taille $k$ ? $\exists\, S' \subseteq S$ tel que $|S'| \leq k\ \forall\, (s_1,s_2) \in A$ on a $s_1 \in S'$ ou $s_2 \in S'$.
+$$
+[A_i]_I = V \qquad \text{pour tout } 1 \leq i \leq m.
+$$
 
-## Coloration de graphe : description d'un problème
+Pour $n$ variables, $m$ clauses et au plus $k$ littéraux par clause, il pose
+$p = \max(n,m,k)$ et donne un coût $O(p^3)$, donc polynomial. Le second point
+du théorème est la réduction de tout $L' \in NP$ vers $SAT$.
 
-**Données** : un graphe $G = (S,A)$ et un entier $k \leq |S|$.
+</details>
 
-**Problème** : existe-t-il une coloration des sommets de $G$ avec $k$ couleurs, telle que deux sommets adjacents soient coloriés avec deux couleurs différentes ?
+## SAT et problèmes de référence
 
-### Exemple de transformation polynomiale : Coloration de graphe $\propto$ SAT
+### Satisfiabilité booléenne
 
-- Données (Coloration) : un graphe $G$ non orienté et un entier $k$. Problème : coloration d'un graphe avec au moins $k$ couleurs.
-- Données (SAT) : les formules propositionnelles au format CNF. Problème : trouver les formules CNF cohérentes.
+:::info Définition
 
-## Le plus long cycle (PLC) : description d'un problème
+SAT demande si une formule propositionnelle $F = F(a,b,c,d)$ possède une
+affectation qui lui donne la valeur $\top$. Les valeurs booléennes sont
+$\top$ et $\bot$. Une formule sans telle affectation est insatisfiable.
 
-**Données** : soit un graphe $G = (S,A)$ et un entier $k$.
+Pour une formule en forme normale conjonctive :
 
-**Problème** : déterminer si $G$ possède un cycle de longueur $\geq k$.
+$$
+F = C_1 \wedge C_2 \wedge \cdots \wedge C_k,
+$$
 
-### Exercice : CH $\propto$ PLC
+chaque clause $C_i$ est une disjonction de littéraux
+$l_1 \vee l_2 \vee \cdots \vee l_p$, et chaque littéral est une variable
+propositionnelle ou sa négation.
 
-Montrer que $CH \propto PLC$.
+:::
 
-## Somme de sous-ensemble : description d'un problème
+:::tip Exemple
 
-**Données** : $S \subseteq \mathbb{N}$ et $t \in \mathbb{N}$.
+Le support considère :
 
-**Problème** : existe-t-il $S' \subseteq S$ / $\sum_{s' \in S'} s' = t$ ? Exemple : $S = \{1,3,5,45,65,98,45658,45458,1235,785,659\}$, $t = 1590$.
+$$
+F = (a \vee \neg c \vee d) \wedge (\neg a \vee \neg b)
+\wedge (\neg a \vee \neg c) \wedge (b \vee \neg d)
+\wedge (b \vee c \vee d).
+$$
 
-## Exercices de réduction
+L'interprétation $I = \{a=\text{faux}, b=\text{vrai}, c=\text{vrai},
+d=\text{vrai}\}$ rend chaque clause vraie. C'est donc un modèle de $F$, et
+$F$ est cohérente.
 
-### Exercice 1
+:::
 
-Prouver que $SAT \propto$ Circuit Hamiltonien et Circuit Hamiltonien $\propto SAT$.
+Une instance de SAT est une formule; un certificat peut être une affectation.
+Pour
 
-### Exercice 2
+$$
+I = (a \vee b \vee c) \wedge (\neg a \vee b) \wedge \neg c,
+$$
 
-Prouver que Clique Maximale $\propto$ Couverture de Sommet.
+le support donne le certificat
+$S = \{a=\text{Vrai}, b=\text{Vrai}, c=\text{Faux}\}$.
 
-**Correction** :
+### 3-SAT
 
-- Données (Clique) : graphe $G_1 = (S_1,A_1)$, $|S_1|=n$, et un entier $k_1 \leq |S_1|$. Problème : $G$ contient-il une clique de taille $k_1$ ? Existe-t-il un sous-graphe complet dont le nombre de sommets $\geq k_1$ ? $\exists\, S_1' \subseteq S_1$ tel que $|S_1'| \geq k_1\ \forall\, (s_1,s_2) \in A_1$ on a $s_1 \in S_1'$ et $s_2 \in S_1'$.
-- Données (Couverture) : graphe $G_2 = (S_2,A_2)$ et un entier $k_2 \leq |S_2|$. Problème : existe-t-il une couverture par sommets de $G$ de taille $k_2$ ?
+:::info Définition
 
-Montrer que $f$ est calculable en un temps polynomial (algorithme de transformation), puis les deux sens de l'équivalence :
+Une formule en 3-CNF s'écrit :
 
-- « $\Rightarrow$ » : soit $f(x) \in CS$, montrer que $x \in$ Clique.
-- « $\Leftarrow$ » : soit $x \in$ Clique, montrer que $f(x) \in CS$.
+$$
+F = C_1 \wedge C_2 \wedge \cdots \wedge C_k,
+$$
 
-### Exercice 3
+avec $k$ clauses contenant chacune trois littéraux distincts. La question est
+de savoir s'il existe une interprétation $I$ telle que :
 
-Prouver que $3SAT \propto$ Couverture de Sommet.
+$$
+[A_i]_I = V \qquad \text{pour tout } 1 \leq i \leq n.
+$$
 
-**Indications** :
+:::
 
-1. Toute variable propositionnelle se voit associer 2 sommets (variable et sa négation). Exemple : $p \to p$ et $\neg p$.
-2. Toute clause est représentée par un triangle étiqueté par les 3 littéraux de la clause.
-3. Une arête est couverte par 1 sommet, et un triangle est couvert par 2 sommets.
+### Quelques problèmes de graphes
 
-**Exemple** : $F = (p_1 \vee p_2 \vee p_3) \wedge (\neg p_1 \vee \neg p_2 \vee p_4) \wedge (p_2 \vee p_3 \vee p_4)$, avec $p_1{=}V, p_2{=}V, p_4{=}V$ et $p_3{=}F$. Avec $n$ variables et $m$ clauses, l'algorithme de transformation est polynomial $\cong O(n^2)$, car la taille du graphe est $2n+3m$, d'où pour parcourir les sommets on a $[2n+3m]^2 \cong O(n^2)$.
+Le support présente plusieurs problèmes de décision qui serviront aux
+réductions.
 
-La taille de la couverture $CS$ : $k = 2m+n$ (nombre de sommets couverts). On prend comme couverture : tous les sommets, plus un triangle non recouvert.
+- **Circuit hamiltonien (CH)** : pour $G = (S,A)$ avec $|S|=n$, existe-t-il un
+  parcours fermé qui passe une seule fois par tous les sommets ?
+- **Voyageur de commerce (TS)** : pour un graphe complet pondéré et une borne
+  $b$, existe-t-il un parcours fermé visitant chaque ville une seule fois, de
+  longueur au plus $b$ ?
+- **Clique** : pour $G = (S,A)$ et $k \leq |S|$, $G$ contient-il une clique de
+  taille au moins $k$ ?
+- **Couverture par sommets** : existe-t-il $S' \subseteq S$ de taille au plus
+  $k$ tel que toute arête de $A$ ait une extrémité dans $S'$ ?
+- **Coloration** : pour $G = (S,A)$ et $k \leq |S|$, existe-t-il une coloration
+  des sommets avec $k$ couleurs où deux sommets adjacents ont des couleurs
+  différentes ?
+- **Plus long cycle (PLC)** : pour $G = (S,A)$ et $k$, le graphe possède-t-il
+  un cycle de longueur au moins $k$ ?
+- **Somme de sous-ensemble** : pour $S \subseteq \mathbb{N}$ et
+  $t \in \mathbb{N}$, existe-t-il $S' \subseteq S$ tel que
+  $\sum_{s' \in S'} s' = t$ ?
 
-### Exercice 4
+:::warning
+
+Le sens d'une réduction compte : $L_1 \alpha L_2$ montre que résoudre $L_2$
+permet de résoudre $L_1$. Il ne permet pas de conclure que les deux problèmes
+ont la même difficulté sans une réduction dans l'autre sens.
+
+:::
+
+## Exercices de réductions
+
+Les exercices suivants sont le lieu où l'on utilise la définition complète
+d'une transformation : construire $f$, montrer qu'elle est polynomiale, puis
+établir l'équivalence des réponses.
+
+### Circuits hamiltoniens et voyageur de commerce
+
+:::tip Exercice
+
+Prouver :
+
+$$
+TSP \alpha CH \qquad \text{et} \qquad CH \alpha TSP.
+$$
+
+:::
+
+### Clique et couverture par sommets
+
+:::tip Exercice
+
+Prouver :
+
+$$
+Clique \alpha \text{Couverture par sommets}.
+$$
+
+:::
+
+### De 3-SAT à la couverture par sommets
+
+:::tip Exercice
+
+Prouver :
+
+$$
+3SAT \alpha \text{Couverture par sommets}.
+$$
+
+Le support indique la construction suivante : associer deux sommets à toute
+variable, un triangle étiqueté par les trois littéraux à toute clause, puis
+utiliser le fait qu'une arête est couverte par un sommet et un triangle par
+deux sommets. Pour $n$ variables et $m$ clauses, le graphe a
+$2n + 3m$ sommets et la taille indiquée de la couverture est :
+
+$$
+k = 2m + n.
+$$
+
+:::
+
+### De SAT à 3-SAT
+
+:::tip Exercice
 
 Prouver que $3SAT \in NPC$, sachant que $SAT \in NPC$.
 
-**Correction** : $3SAT$ est un cas particulier de $SAT \in NP$ (avec $k=3$).
+:::
+
+<details>
+  <summary>Démonstration</summary>
+
+Le support commence par remarquer que $3SAT$ est un cas particulier de $SAT$,
+donc $3SAT \in NP$. Il transforme ensuite chaque clause $A_i$ de SAT en clauses
+à trois littéraux.
+
+Pour $k_i = 3$, on garde $A'_i = A_i$. Pour une clause de deux littéraux :
+
+$$
+A_i = x_1 \vee x_2
+\quad \Longrightarrow \quad
+A'_i = (x_1 \vee x_2 \vee y_1)
+\wedge (x_1 \vee x_2 \vee \neg y_1).
+$$
+
+Pour une clause d'un littéral :
+
+$$
+\begin{aligned}
+A_i = x_1 \quad \Longrightarrow \quad A'_i ={}&
+(x_1 \vee y_1 \vee y_2) \wedge (x_1 \vee y_1 \vee \neg y_2) \\
+&\wedge (x_1 \vee \neg y_1 \vee y_2)
+\wedge (x_1 \vee \neg y_1 \vee \neg y_2).
+\end{aligned}
+$$
+
+Pour $k_i > 3$ et $A_i = (x_1 \vee \cdots \vee x_p)$, le support construit :
+
+$$
+\begin{aligned}
+&(x_1 \vee x_2 \vee y_1) \wedge (\neg y_1 \vee x_3 \vee y_2)
+\wedge (\neg y_2 \vee x_4 \vee y_3) \wedge \cdots \\
+&\qquad \wedge (\neg y_{p-3} \vee x_{p-1} \vee x_p).
+\end{aligned}
+$$
+
+Cette construction introduit $p-3$ nouvelles variables et $p-2$ clauses de
+trois littéraux. Il reste à établir que la formule initiale est satisfiable si
+et seulement si la formule obtenue l'est, et que $f$ est polynomiale.
+
+</details>
+
+:::tip Exercices complémentaires
+
+- Prouver que la couverture par sommets est dans $NPC$ à partir de
+  $3SAT \in NPC$.
+- Prouver que $TS \in NP$, $Clique \in NP$ et $HC \in NP$.
+
+:::
+
+## Complexité en espace
+
+Le temps n'est pas la seule ressource. Le support termine en comptant les
+cases visitées par une machine de Turing offline.
+
+:::info Définition
+
+Soit $M$ une machine de Turing offline déterministe. Sa complexité en espace
+est :
+
+$$
+E_M(n) = \max\{m \mid |x| = n,\ m \text{ est le nombre de cases visitées lors
+de l'exécution de } M \text{ sur } x\}.
+$$
+
+:::
+
+:::info Définition
+
+Pour une machine de Turing offline déterministe $M$, l'espace de calcul sur un
+mot $w$ est donné par le nombre de cases visitées pour la plus courte exécution
+de $M$ sur $w$ qui accepte $w$.
+
+Pour une machine de Turing offline non déterministe $M$ :
+
+$$
+E_M(n) = \max\{EC_N(x) \mid |x| = n\}.
+$$
+
+:::
+
+:::info Définition
+
+Une machine de Turing $M$ est polynomiale en espace s'il existe un polynôme
+$P(n)$ tel que :
+
+$$
+E_M(n) \leq P(n) \qquad \text{pour tout } n.
+$$
+
+La classe $P$-space est celle des langages décidés par une machine de Turing
+déterministe polynomiale en espace. La classe $NP$-space est celle des langages
+acceptés par une machine de Turing non déterministe polynomiale en espace.
+
+:::
+
+:::note Théorème
+
+$$
+P\text{-space} = NP\text{-space}
+\qquad \text{et} \qquad
+P \subset NP \subset P\text{-space}.
+$$
+
+:::
+
+<details>
+  <summary>Démonstration</summary>
+
+Pour $L \in NP\text{-space}$, le support considère une machine de Turing
+déterministe $M'$ qui reconnaît $L$ et écrit :
+
+$$
+E_{M'}(n) \leq 3p(n) = p'(n).
+$$
+
+Il en déduit $L \in P\text{-space}$, donc
+$NP\text{-space} \subset P\text{-space}$. L'inclusion réciproque donne :
+
+$$
+P\text{-space} = NP\text{-space}.
+$$
+
+Enfin, si $L \in NP$, il existe une machine de Turing non déterministe
+polynomiale en temps telle que :
+
+$$
+E_M(n) \leq T_M(n) \leq P(n).
+$$
+
+Le support conclut alors que $L \in NP\text{-space} = P\text{-space}$.
+
+</details>
+
+:::tip Exercice
+
+Étant donné $3SAT \in NPC$, montrer que $Clique \in NPC$.
+
+:::
+
+## Étapes suivantes
+
+- [Complexité des algorithmes](./complexite-ch1-complexite-algorithmes) pose les
+  outils de comptage utilisés pour analyser un algorithme donné.
+- [Diviser pour régner](./complexite-ch3-1-diviser-pour-regner) applique les
+  récurrences à une stratégie algorithmique concrète.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
