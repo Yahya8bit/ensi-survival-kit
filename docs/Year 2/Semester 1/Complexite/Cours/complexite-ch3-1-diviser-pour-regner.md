@@ -13,101 +13,129 @@ import TabItem from '@theme/TabItem';
 
 # Chapitre 3 : Paradigmes de programmation — 3.1 Diviser pour Régner
 
-*Conception et analyse d'algorithmes*
+_Conception et analyse d'algorithmes_
 
-## Plan du chapitre 3
+Un problème paraît parfois trop grand pour être résolu d'un seul bloc. L'idée
+de Diviser pour Régner est de le **diviser**, de **résoudre** récursivement les
+sous-problèmes obtenus, puis de **combiner** leurs solutions. Ce chapitre
+montre comment cette stratégie conduit à une récurrence et comment l'utiliser
+sur des exemples de tri.
 
-1. Diviser pour Régner
-2. Algorithme Glouton
-3. Méthode Branch and Bound
-4. Programmation Dynamique
+:::info Vous allez apprendre
+
+- le principe du paradigme Diviser pour Régner (DpR) et ses trois étapes ;
+- comment poser une équation de récurrence pour un algorithme DpR ;
+- comment lire le résultat de récurrence donné dans le support ;
+- les applications au tri par fusion, à QuickSort et à l'exponentiation rapide.
+  :::
 
 ## Paradigmes algorithmiques
 
-- **Diviser pour Régner** : divise un problème en sous-problèmes indépendants (qui ne se chevauchent pas), résout chaque sous-problème, et combine les solutions des sous-problèmes pour former une solution du problème initial.
-- **Algorithme Glouton** : construit une solution de manière incrémentale, en optimisant un critère de manière locale.
+:::info Définition
+
+- **Diviser pour Régner** : divise un problème en sous-problèmes indépendants
+  qui ne se chevauchent pas, résout chacun d'eux, puis combine leurs solutions
+  pour former une solution au problème initial.
+- **Algorithme glouton** : construit une solution de manière incrémentale en
+  optimisant localement un critère.
 - **Branch & Bound** : séparation et évaluation.
-- **Programmation Dynamique** : divise un problème en sous-problèmes qui sont non indépendants (qui se chevauchent), et cherche (et sauvegarde) des solutions de sous-problèmes de plus en plus grands.
+- **Programmation dynamique** : divise un problème en sous-problèmes non
+  indépendants qui se chevauchent, et conserve des solutions de sous-problèmes
+  de plus en plus grands.
+  :::
 
-## Approche Diviser pour Régner
+Nous étudions ici le premier paradigme. La différence importante avec la
+programmation dynamique est l'indépendance des sous-problèmes : une même
+solution intermédiaire n'a pas à être réutilisée par plusieurs branches.
 
-Diviser pour régner (Divide-and-Conquer) :
+## Stratégie Diviser pour Régner
 
-- est une stratégie militaire ;
-- est une méthode de conception d'algorithmes qui a mené à la création d'algorithmes efficaces pour de nombreux problèmes :
-  - la recherche d'un élément dans un tableau trié (recherche dichotomique),
-  - le tri (tri par fusion, tri rapide),
-  - le produit de polynômes (algorithme de Karatsuba),
-  - la transformation de Fourier discrète (transformation de Fourier rapide),
-  - l'exponentiation rapide,
-  - la multiplication naïve de matrices (matrices carrées de taille $n$), etc.
+Diviser pour Régner (_Divide-and-Conquer_) est une méthode de conception
+d'algorithmes utilisée, entre autres, pour la recherche dichotomique, le tri,
+le produit de polynômes, la transformation de Fourier rapide,
+l'exponentiation rapide et la multiplication de matrices.
 
-### Introduction
+:::info Définition
 
-Construire un algorithme pour résoudre le problème avec la complexité optimale en temps, converger vers la complexité minimale. L'approche DpR est une approche classique permettant l'optimisation du temps dans le cas d'un problème polynomial.
+L'approche sépare un problème en plusieurs sous-problèmes similaires au
+problème initial, les résout récursivement, puis combine les sous-solutions
+pour construire la solution initiale. Elle comporte trois étapes :
 
-### Principe de Diviser pour Régner
+1. **Diviser** : décomposer le problème en sous-problèmes similaires.
+2. **Régner** : résoudre les sous-problèmes de façon récursive.
+3. **Combiner** : réunir leurs solutions en une solution générale.
+   :::
 
-L'approche diviser pour régner sépare le problème en plusieurs sous-problèmes similaires au problème initial, résout les sous-problèmes de façon récursive, puis combine ces sous-solutions pour construire la solution du problème initial (algorithme récursif).
+Cette description donne la méthode. Pour comparer les algorithmes qui
+l'emploient, il faut ensuite compter le travail effectué à chaque appel
+récursif.
 
-### Schéma général d'un algorithme DpR
+## Poser la récurrence
 
-Cette approche est basée sur 3 étapes :
+Soit $T(n)$ le temps d'exécution d'un algorithme DpR sur une instance de taille
+$n$. Lorsque l'instance est suffisamment petite, $n \leq n_0$, la résolution
+est directe et coûte $O(1)$. Sinon, le problème est partagé en $a$
+sous-problèmes de taille $n/c$, avec $a \geq 1$ et $c > 1$ :
 
-- **Étape 1 — Diviser** : diviser le problème (les données du problème) en sous-problèmes similaires au problème initial,
-- **Étape 2 — Régner** : régner sur les sous-problèmes en les résolvant de façon récursive,
-- **Étape 3 — Combiner** : combiner les solutions des sous-problèmes en une solution générale du problème initial.
+$$
+T(n) =
+\begin{cases}
+O(1) & \text{si } n \leq n_0, \\
+aT(n/c) + D(n) + C(n) & \text{sinon.}
+\end{cases}
+$$
 
-Elle permet d'obtenir des algorithmes de meilleure complexité.
+Ici, $D(n)$ mesure la division, $aT(n/c)$ la résolution récursive des
+$a$ sous-problèmes et $C(n)$ leur combinaison. En regroupant la division et
+la combinaison, on obtient :
 
-### Analyse des algorithmes DpR
+$$T(n) = aT(n/c) + f(n),$$
 
-Un algo récursif : la complexité en temps est décrite par une équation de récurrence.
+où $f(n) = D(n) + C(n)$. La forme de $f(n)$ détermine donc le résultat de
+l'analyse.
 
-$T(n)$ : complexité du problème initial, temps d'exécution du problème de taille $n$.
+## Théorème : forme particulière des récurrences DpR
 
-La récurrence est fondée sur les 3 étapes diviser, régner et combiner :
+:::note Théorème
 
-1. Si la taille du problème est suffisamment réduite, $n \leq n_0$ pour une certaine constante $n_0$, la résolution est directe et consomme un temps constant $O(1)$.
-2. Sinon, on divise le problème en $a$ sous-problèmes chacun de taille $1/c$ de la taille du problème initial. Le temps d'exécution total se décompose alors en trois parties :
-   - $D(n)$ : le temps nécessaire à la division du problème en sous-problèmes,
-   - $aT(n/c)$ : le temps de résolution des $a$ sous-problèmes,
-   - $C(n)$ : le temps nécessaire pour construire la solution finale à partir des solutions aux sous-problèmes.
+Le support donne le résultat suivant pour la forme particulière, avec
+$a \geq 1$, $c > 1$, $k \geq 0$, $b$ constante et $n_0$ une puissance de
+$c$ :
 
-**Formule de récurrence** :
+$$
+T(n) = aT(n/c) + b n^k \qquad \text{pour tout } n > n_0.
+$$
 
-$$T(n) = \begin{cases} O(1) & \text{si } n \leq n_0 \\ aT(n/c) + D(n) + C(n) & \text{sinon} \end{cases}$$
-(Diviser = $D(n)$, Régner = $aT(n/c)$, Combiner = $C(n)$)
+Alors :
 
-### Théorème et forme générale
+- si $a > c^k$, $T(n) = \Theta(n^{\log_c a})$ ;
+- si $a = c^k$, $T(n) = \Theta(n^k \log(n))$ ;
+- si $a < c^k$, $T(n) = \Theta(n^k)$.
+  :::
 
-- **Diviser** : on découpe le problème en sous-problèmes de taille $n/c$, qui sont de même nature, avec $a \geq 1$ et $c > 1$.
-- **Régner** : les sous-problèmes sont résolus récursivement.
-- **Combiner** : on utilise les solutions aux sous-problèmes pour reconstruire la solution au problème initial en temps $D(n)$, avec $D \geq 0$.
+:::warning Attention
 
-On a : $T(1) = \Theta(1)$, $T(n) \cong aT(n/c) + D(n)$.
+Savoir seulement que $f(n) \in O(n^k)$ donne une borne supérieure sur le
+coût de division et de combinaison. Cela ne permet pas, à lui seul, de
+remplacer $f(n)$ par $\Theta(n^k)$ ni par $b n^k$. Les trois conclusions
+ci-dessus s'appliquent à la forme particulière explicitement écrite dans le
+support ; une autre récurrence demande une justification adaptée.
+:::
 
-Soit $T(n)$ une fonction définie par l'équation de récurrence. La complexité en temps d'exécution d'un algorithme DpR sur une instance de taille $n$ peut s'écrire :
+Le tri par fusion fournit maintenant une instance concrète : le travail de
+combinaison est linéaire, tandis que les deux appels récursifs travaillent sur
+des moitiés du tableau.
 
-$$T(n) = aT(n/c) + f(n)$$
+## Exemple : tri par fusion
 
-où $f(n)$ est le temps nécessaire pour Diviser et Combiner. Si on peut montrer que $f(n) \in O(n^k)$ pour un certain $k$, alors :
+Pour une séquence de $n$ éléments :
 
-$$T(n) = aT(n/c) + \Theta(n^k)\ \forall\, n > n_0$$
+- **Diviser** : former deux sous-séquences de $n/2$ éléments ;
+- **Régner** : trier récursivement ces deux sous-séquences, jusqu'aux
+  séquences de longueur $1$ ;
+- **Combiner** : fusionner les deux sous-séquences triées.
 
-où $n_0$ est une puissance de $c$. Alors :
-
-- si $a > c^k$ alors $T(n) = \Theta(n^{\log_c a})$
-- si $a = c^k$ alors $T(n) = \Theta(n^k \log(n))$
-- si $a < c^k$ alors $T(n) = \Theta(n^k)$
-
-### Exemple : tri par fusion
-
-- **Diviser** : la séquence de $n$ éléments à trier en deux sous-séquences de $n/2$ éléments.
-- **Régner** : en triant les 2 sous-séquences récursivement ; la récursivité prend fin quand la séquence triée a une longueur 1.
-- **Combiner** : en fusionnant les 2 sous-séquences triées pour produire le résultat final.
-
-```
+```text title="Tri-fusion"
 Tri-fusion(T, p, q)
 si p < q alors
     r ← (p+q) div 2
@@ -117,9 +145,10 @@ si p < q alors
 fin si
 ```
 
-**Algorithme Tri par fusion** :
+<details>
+<summary>Pseudocode complet</summary>
 
-```
+```text title="TriFusion"
 Procédure TriFusion(Var T:Tab; deb, fin: entier)
 si deb < fin alors
     milieu ← (deb+fin) div 2
@@ -130,9 +159,7 @@ FinSi
 Fin TriFusion
 ```
 
-**Algorithme Fusionner** :
-
-```
+```text title="Fusionner"
 Procédure Fusionner(Var T:Tab; deb_gauche, deb_droit, fin: entier)
 i ← deb_droit
 Tantque (T[i] < T[i-1]) et (i <= fin) Faire
@@ -148,71 +175,117 @@ Fin Tantque
 Fin Fusionner
 ```
 
-**Complexité** : pour trier un tableau de taille $n$, on le découpe en deux tableaux de taille $n/2$, et l'étape de fusion permet de recombiner les deux solutions en $n-1$ opérations.
+</details>
+
+:::tip Exemple
+
+La fusion de deux tableaux triés de taille $n/2$ demande $n-1$ comparaisons
+au plus. Le déroulé visuel des découpes et des fusions est disponible dans
+l'onglet PDF.
+:::
 
 Soit $H(n)$ le nombre de comparaisons effectuées par l'algorithme :
 
-$$H(0) = 0,\quad H(1) = 0,\quad H(n) \cong 2H(n/2) + (n-1)$$
+$$H(0) = 0,\quad H(1) = 0,\quad H(n) \cong 2H(n/2) + (n-1).$$
 
-**Analyse tri par fusion** : $n_0=1$, $a=c=2$, $D(n)=O(1)$, $C(n)=O(n)$
+Pour le temps d'exécution, $n_0 = 1$, $a = c = 2$, $D(n) = O(1)$ et
+$C(n) = O(n)$ :
 
-$$T(n) = \begin{cases} O(1) & \text{si } n = 1 \\ 2T(n/2) + O(n) & \text{sinon} \end{cases} \implies T(n) = O(n\log_2 n)$$
+$$
+T(n) =
+\begin{cases}
+O(1) & \text{si } n = 1, \\
+2T(n/2) + O(n) & \text{sinon,}
+\end{cases}
+\qquad \text{donc} \qquad T(n) = O(n\log_2 n).
+$$
 
-### Exercice 1 : matrice carrée
+Le terme de combinaison est ici linéaire. C'est ce qui place le tri par
+fusion dans le cas $a = c^k$, avec $a = 2$, $c = 2$ et $k = 1$.
 
-Soient $A$ et $B$ deux matrices carrées ($n \times n$).
+## Exemple : tri rapide (QuickSort)
 
-1. Écrire un algorithme qui calcule $C = A \times B$.
-2. Calculer sa complexité : en nombre d'additions + nombre de multiplications.
+QuickSort choisit un élément comme pivot, place les éléments plus petits à sa
+gauche et les autres à sa droite, puis trie récursivement les deux côtés.
 
-### Exercice 2 : recherche
-
-Soit un tableau $T$ d'entiers, et on veut chercher un élément $x$ dans $T$.
-
-1. Recherche séquentielle : écrire l'algorithme et déterminer sa complexité.
-2. Recherche dichotomique : écrire l'algorithme et déterminer sa complexité, sachant que $T$ est trié.
-
-### Exercice : exponentiation rapide
-
-L'exponentiation rapide peut être utilisée pour des « multiplications » plus compliquées, comme la multiplication de matrices. Le principe de l'algorithme récursif est le suivant, pour le calcul de $x^n$ :
-
-$$x^0 = 1,\quad \text{si } n \text{ pair alors } x^n = (x^{n/2})^2,\quad \text{sinon } x^n = x \times (x^{(n-1)/2})^2$$
-
-Calculer la complexité de l'algorithme récursif de l'exponentiation rapide.
-
-### Exercice 3 : algorithme de tri rapide (QuickSort)
-
-**Principe** : choisir un élément du tableau $T$ comme pivot, puis mettre les éléments plus grands que ce pivot à sa droite et les autres éléments à sa gauche. Par appels récursifs, on ordonne les éléments de chaque côté du pivot.
-
-- Deux pointeurs : $k$ initialisé à 1, $l$ initialisé à taille(L).
-- Bouger $k$ vers la droite jusqu'à un élément > pivot.
-- Bouger $l$ vers la gauche jusqu'à un élément ≤ pivot.
-- Échanger $L[k]$ et $L[l]$ et répéter tant que $k < l$.
-- Échanger pivot et $L[l]$.
-
-**Étapes de l'algorithme** :
-
-1. **Diviser** : si la séquence $S$ a plus d'un élément, sélectionner un élément $x$ de $S$ comme pivot. Retirer tous les éléments de $S$ et les diviser en 3 séquences :
-   - $L$, contient les éléments de $S$ plus petits que $x$,
-   - $E$, contient les éléments de $S$ égaux à $x$,
-   - $G$, contient les éléments de $S$ plus grands que $x$.
+1. **Diviser** : sélectionner un pivot $x$ dans $S$, puis répartir les
+   éléments en trois séquences : $L$ (plus petits que $x$), $E$ (égaux à
+   $x$) et $G$ (plus grands que $x$).
 2. **Régner** : trier récursivement $L$ et $G$.
-3. **Combiner** : afin de remettre les éléments de $S$ en ordre : insérer les éléments de $L$, suivis de ceux de $E$, et enfin de ceux de $G$.
+3. **Combiner** : concaténer $L$, puis $E$, puis $G$.
 
-**Analyse du temps d'exécution** — un arbre QuickSort $T$ : $S_i(n)$ indique la somme des tailles d'entrée des nœuds à la profondeur $i$ dans $T$.
+<details>
+<summary>Détails d'implémentation</summary>
 
-- $S_0(n)=n$ car la racine de $T$ est associée à l'ensemble des entrées tout entier.
-- $S_1(n)=n-1$ car le pivot n'est pas propagé.
-- $S_2(n)=n-3$ ou $n-2$ (si l'un des nœuds a une taille d'entrée nulle).
+- Deux pointeurs : $k$ initialisé à $1$, $l$ initialisé à taille($L$).
+- Bouger $k$ vers la droite jusqu'à un élément strictement supérieur au pivot.
+- Bouger $l$ vers la gauche jusqu'à un élément inférieur ou égal au pivot.
+- Échanger $L[k]$ et $L[l]$, puis répéter tant que $k < l$.
+- Échanger le pivot et $L[l]$.
 
-**Meilleur des cas** — QuickSort se comporte de façon optimale si la séquence $S$ est divisée en sous-séquences $L$ et $G$ de tailles égales :
+</details>
 
-$$S_0(n) = n,\quad S_1(n) = n-1,\quad S_2(n) = n-1+2 = n-3,\quad S_3(n) = n-1+2+2^2 = n-7,\quad \ldots$$
-$$S_i(n) = n - (1+2+2^2+\cdots+2^i-1) = n - 2^i + 1,\quad \ldots$$
+L'analyse du support mesure, à chaque profondeur $i$ de l'arbre QuickSort,
+$S_i(n)$, la somme des tailles d'entrée des nœuds. Ainsi,
+$S_0(n) = n$ car la racine reçoit toute l'entrée, et $S_1(n) = n - 1$ car le
+pivot n'est pas propagé.
 
-$T$ a une hauteur $O(\log n)$. Complexité temporelle dans le meilleur des cas : $O(n\log n)$.
+Dans le meilleur des cas, le pivot partage toujours la séquence en deux
+sous-séquences de tailles égales :
 
-**QuickSort aléatoire** — la sélection d'un élément de la séquence au hasard comme pivot. Le temps d'exécution attendu d'un tel tri sur une séquence de taille $n$ est $O(n\log n)$. Le temps de parcours d'un arbre QuickSort est $O(n)$. La hauteur escomptée d'un arbre QuickSort est $O(\log n)$.
+$$
+\begin{aligned}
+S_0(n) &= n, \\
+S_1(n) &= n - 1, \\
+S_2(n) &= n - 1 + 2 = n - 3, \\
+S_3(n) &= n - 1 + 2 + 2^2 = n - 7, \\
+S_i(n) &= n - (1 + 2 + 2^2 + \cdots + 2^i - 1) = n - 2^i + 1.
+\end{aligned}
+$$
+
+L'arbre a alors une hauteur $O(\log n)$, d'où une complexité temporelle de
+$O(n \log n)$ dans le meilleur des cas. Le PDF ne développe pas le pire cas
+ni une borne de cas moyen pour une règle de pivot déterministe ; ils ne sont
+donc pas déduits ici.
+
+:::tip Exemple
+
+Dans la version aléatoire de QuickSort, le pivot est choisi au hasard. Le
+support indique un temps d'exécution **attendu** de $O(n \log n)$, un temps de
+parcours de l'arbre de $O(n)$ et une hauteur attendue de $O(\log n)$. Une
+valeur attendue ne garantit pas ce temps pour chaque exécution.
+:::
+
+Les exercices suivants te donnent l'occasion de reconnaître cette même idée
+de réduction de taille sur des problèmes différents.
+
+## Exercice guidé : exponentiation rapide
+
+L'exponentiation rapide s'applique aussi à des « multiplications » plus
+générales, comme la multiplication de matrices. Pour calculer $x^n$ :
+
+$$
+x^0 = 1,\qquad
+\text{si } n \text{ est pair, } x^n = (x^{n/2})^2,\qquad
+\text{sinon, } x^n = x \times (x^{(n-1)/2})^2.
+$$
+
+**À faire :** calculer la complexité de l'algorithme récursif d'exponentiation
+rapide en posant sa récurrence.
+
+## Exercices
+
+1. **Matrice carrée.** Soient $A$ et $B$ deux matrices carrées
+   ($n \times n$). Écrire un algorithme qui calcule $C = A \times B$, puis
+   calculer sa complexité en nombre d'additions et de multiplications.
+2. **Recherche.** Soit un tableau $T$ d'entiers. Écrire et calculer la
+   complexité d'une recherche séquentielle, puis d'une recherche dichotomique
+   en supposant $T$ trié.
+
+## Étapes suivantes
+
+- [Chapitre 3.2 — Algorithme de Glouton](./complexite-ch3-2-glouton)
+- [Chapitre 4 — Arbres équilibrés](./complexite-ch4-arbres-equilibres)
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
