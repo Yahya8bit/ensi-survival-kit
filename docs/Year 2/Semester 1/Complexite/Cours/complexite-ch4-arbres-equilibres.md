@@ -5,160 +5,254 @@ sidebar_label: Ch4 - Arbres équilibrés
 hide_title: true
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem';
 
 <Tabs>
 <TabItem value="markdown" label="Markdown" default>
 
 # Chapitre 4 : Arbres équilibrés
 
-*Conception et analyse d'algorithmes*
+_Conception et analyse d'algorithmes_
 
-<!-- TODO: this chapter's source slides contain many small hand-drawn/rendered tree diagrams illustrating step-by-step rotations (AVL insertion/deletion walkthroughs, Rouge-Noir insertion cases). Per the conversion guidelines, a diagram is only redrawn here when it can be read unambiguously from the source; these worked examples chain many small trees together and are best verified against the PDF viewer tab rather than redrawn from OCR coordinates. The definitions, algorithms and complexity results below are transcribed in full. -->
+Un arbre binaire de recherche permet de retrouver une clé en suivant une seule branche. Cette promesse n'est utile que si la branche reste courte : un arbre qui se déforme en liste perd le bénéfice de la recherche. Ce chapitre étudie deux façons de conserver cette hauteur sous contrôle : les arbres AVL et les arbres Rouge-Noir.
 
-## Plan
+:::info Vous allez apprendre
 
-1. Les arbres ABR
-2. Les arbres AVL (recherche, insertion, suppression)
-3. Les arbres Rouge-Noir
+- pourquoi la hauteur d'un ABR gouverne le coût de ses opérations ;
+- l'invariant d'équilibre des arbres AVL et les rotations qui le restaurent ;
+- comment l'insertion et la suppression diffèrent dans un AVL ;
+- les propriétés des arbres Rouge-Noir et la borne de hauteur qu'elles impliquent.
 
-## Définitions et terminologie
+:::
 
-- Un arbre est un ensemble organisé de nœuds dans lequel chaque nœud a un père et un seul, sauf un nœud que l'on appelle la racine.
-- Si le nœud $p$ est le père du nœud $f$, on dit que $f$ est un fils de $p$ ; si le nœud $p$ n'a pas de fils, on dit que c'est une feuille.
-- Chaque nœud porte une étiquette ou valeur ou clé. On a l'habitude, lorsqu'on dessine un arbre, de le représenter avec la tête en bas : la racine est tout en haut, et les nœuds fils sont représentés en-dessous du nœud père.
-- Terminologie inspirée des liens de parenté :
-  - les descendants d'un nœud $p$ sont les nœuds qui apparaissent dans ses sous-arbres,
-  - un ancêtre d'un nœud $p$ est soit son père, soit un ancêtre de son père,
-  - le chemin qui relie un nœud à la racine est constitué de tous ses ancêtres,
-  - un frère d'un nœud $p$ est un fils du père de $p$, et qui n'est pas $p$.
-- Les nœuds d'un arbre se répartissent par niveaux : le premier niveau (niveau 0) contient la racine seulement, le deuxième niveau contient les deux fils de la racine, ..., les nœuds du niveau $k$ sont les fils des nœuds du niveau $k-1$, ...
-- La hauteur d'un arbre est le nombre de niveaux de ses nœuds — c'est aussi le nombre de nœuds qui jalonnent la branche la plus longue.
+## Vocabulaire et limite des ABR
 
-### Arbres binaires : hauteur, nombre de nœuds et nombre de feuilles
+Un arbre organise des nœuds reliés par des relations père-fils. La racine est le seul nœud sans père ; une feuille n'a pas de fils. Un nœud est un descendant d'un autre s'il apparaît dans l'un de ses sous-arbres, et un ancêtre s'il se trouve sur le chemin qui remonte vers la racine.
 
-Un arbre binaire est **complet** si toutes ses branches ont la même longueur et tous ses nœuds qui ne sont pas des feuilles ont deux fils. Soit $A$ un arbre binaire complet : le nombre de nœuds de $A$ au niveau 0 est 1, au niveau 1 est 2, ..., et le nombre de nœuds au niveau $p$ est $2^p$. En particulier, le nombre de feuilles est $2^h$, où $h$ est la hauteur.
+:::info Convention de hauteur
 
-## Arbres binaires de recherche (ABR)
+Le support numérote le niveau de la racine par $0$ et appelle **hauteur** le nombre de niveaux, ou de nœuds, de la branche la plus longue. Cette convention est conservée dans tout le chapitre : ne mélangez pas hauteur, profondeur et niveau.
 
-**Définition** : un arbre binaire est de recherche si, pour $r$ un nœud de l'arbre, $x$ un nœud du sous-arbre gauche de $r$, et $y$ un nœud du sous-arbre droit de $r$, on a $x < r < y$.
+Pour un arbre binaire complet, il y a $2^p$ nœuds au niveau $p$ ; le support note $2^h$ le nombre de feuilles, où $h$ est la hauteur.
 
-- Chaque nœud a au plus 2 fils.
-- Ordonné : fils gauche < nœud < fils droit — optimise la recherche (équivalent à la recherche dichotomique).
-- Le nombre de comparaisons dans un ABR = la hauteur de l'arbre. Au pire des cas (arbre dégénéré en une liste), la hauteur est en $O(n)$ ; pour un arbre équilibré, elle est en $O(\log n)$.
+:::
 
-### ABR : recherche d'une valeur
+### Arbre binaire de recherche
 
-La recherche d'une valeur dans un ABR consiste à parcourir une branche en partant de la racine, en descendant chaque fois sur le fils gauche ou sur le fils droit suivant que la valeur portée par le nœud est plus grande ou plus petite que la valeur cherchée. La recherche s'arrête dès que la valeur est rencontrée, ou que la valeur recherchée n'existe pas (on a atteint l'extrémité d'une branche).
+:::info Définition
+
+Un arbre binaire est un **arbre binaire de recherche** (ABR) si, pour tout nœud $r$, toute clé $x$ de son sous-arbre gauche et toute clé $y$ de son sous-arbre droit vérifient :
+
+$$
+x < r < y.
+$$
+
+Chaque nœud possède donc au plus deux fils.
+
+:::
+
+Pour chercher une valeur, on compare la clé courante à la clé recherchée et l'on descend à gauche ou à droite. L'ordre de recherche est ce qui rend cette décision possible ; le nombre de comparaisons dépend de la hauteur de l'arbre.
+
+:::warning Un ABR n'est pas forcément équilibré
+
+Une suite d'insertions peut produire une chaîne de nœuds. Dans ce pire cas, la hauteur et le coût de recherche sont en $O(n)$, comme pour une liste. Un arbre équilibré vise au contraire une hauteur en $O(\log n)$.
+
+:::
+
+L'équilibrage ajoute des invariants à l'ordre de recherche. Les AVL imposent un écart de hauteur local très strict ; les arbres Rouge-Noir utilisent des couleurs pour garantir une hauteur logarithmique avec des corrections d'insertion différentes.
 
 ## Arbres AVL
 
-- Arbres de recherche équilibrés.
-- Principe : pour chaque nœud, les hauteurs du sous-arbre gauche et du sous-arbre droit diffèrent au plus de 1.
-- Modèle proposé par G.M. Adelson-Velsky et E.M. Landis.
-- Notion de **facteur d'équilibre** d'un nœud : différence entre les hauteurs du sous-arbre gauche et du sous-arbre droit.
-- Un arbre est AVL si tous les nœuds ont un facteur d'équilibre dans $\{-1, 0, 1\}$.
+Un arbre AVL est un ABR dont chaque nœud respecte une contrainte sur la hauteur de ses deux sous-arbres.
 
-Complexité de la recherche dans un AVL : $O(\log_2 n)$ — la hauteur d'un AVL est en $O(\log_2 n)$.
+:::info Définition et invariant AVL
 
-### Problématique de l'ajout
+Pour un nœud, le **facteur d'équilibre** est la différence entre la hauteur du sous-arbre gauche et celle du sous-arbre droit :
 
-En ajoutant un élément, l'arbre (ou un de ses sous-arbres) peut devenir déséquilibré.
+$$
+fq = h_{\text{gauche}} - h_{\text{droite}}.
+$$
 
-**Principe** :
+Un arbre est AVL si, pour chaque nœud,
 
-- on fait l'ajout normal, puis
-- on remonte en mettant les facteurs d'équilibre à jour jusqu'à rencontrer un arbre déséquilibré ;
-- si on ne rencontre aucun arbre déséquilibré, c'est terminé ;
-- sinon, on rééquilibre le premier arbre qui devient déséquilibré lors de la remontée.
+$$
+\left|h_{\text{gauche}} - h_{\text{droite}}\right| \leq 1,
+\qquad fq \in \{-1, 0, 1\}.
+$$
 
-### Le rééquilibrage
+:::
 
-Principe : la rotation. Selon le facteur d'équilibre de l'arbre et de ses sous-arbres, dans le cas de déséquilibre, on réalise une ou deux rotations : rotation à gauche ou rotation à droite.
+:::note Propriété de hauteur
 
-Notation : on traverse l'arbre vers la racine à partir du nœud $D$ qui vient d'être inséré, jusqu'à trouver le premier nœud déséquilibré $A$. Soit $B$ l'enfant de $A$ ayant la plus grande hauteur, et $C$ l'enfant de $B$ ayant la plus grande hauteur ($A$, $B$, $C$ sont ancêtres du nœud inséré $D$).
+La hauteur d'un AVL est en $O(\log_2 n)$. La recherche suit donc une branche de longueur logarithmique et coûte $O(\log_2 n)$.
 
-- **Rotation Droite (RD)** : l'arbre de racine $A$ penche à gauche et son sous-arbre gauche de racine $B$ penche à gauche : $fq(A)=2$ et $fq(B)=1$. On applique une rotation droite de $A$. Si le déséquilibre est du côté « extérieur », une seule rotation (simple) suffit.
-- **Rotation Gauche (RG)** : l'arbre de racine $A$ penche à droite et son sous-arbre droit de racine $B$ penche à droite : $fq(A)=-2$ et $fq(B)=-1$. On applique une rotation gauche de $A$.
-- **Rotation double Droite-Gauche (RDG)** : l'arbre de racine $A$ penche à droite et son sous-arbre gauche de racine $B$ penche à gauche : $fq(A)=-2$ et $fq(B)=1$. On applique une rotation droite de $B$, suivie d'une rotation gauche de $A$.
-- **Rotation double Gauche-Droite (RGD)** : l'arbre de racine $A$ penche à gauche et son sous-arbre gauche de racine $B$ penche à droite : $fq(A)=2$ et $fq(B)=-1$. On applique une rotation gauche de $B$, suivie d'une rotation droite de $A$.
+:::
 
-**Rééquilibrer un AVL après insertion** :
+Une insertion ou une suppression commence comme dans un ABR. C'est ensuite que l'on vérifie si le facteur d'équilibre est sorti de l'intervalle autorisé.
 
-- en partant du nœud inséré $D$, on considère le premier sous-arbre $S$ de l'AVL déséquilibré suite à l'insertion de ce nouveau nœud ;
-- le déséquilibre de $S$ est causé par l'insertion de $D$, qui a augmenté de 1 la hauteur d'un sous-arbre de $S$ (et donc la hauteur de $S$), ce qui entraîne souvent le déséquilibre global de l'AVL ;
-- le rééquilibrage de $S$ rétablit son équilibre local et réduit sa taille de 1, donc $S$ retrouve sa hauteur initiale (avant l'insertion de $D$) ; on rétablit ainsi l'équilibre global de l'AVL ;
-- un seul rééquilibrage est suffisant après l'insertion d'un nouveau nœud dans un arbre AVL.
+### Rotations : restaurer l'équilibre sans perdre l'ordre
 
-### Suppression d'un nœud dans un AVL
+Lorsqu'un sous-arbre devient déséquilibré, une rotation modifie localement les liens entre quelques nœuds. Elle préserve l'ordre infixe des clés : les clés qui étaient inférieures au nœud pivot restent à gauche, et celles qui lui étaient supérieures restent à droite.
 
-L'opération dépend du nombre de fils du nœud à supprimer :
+Pour nommer les cas du support, on remonte depuis le nœud inséré $D$ jusqu'au premier nœud déséquilibré $A$. On appelle $B$ l'enfant de $A$ de plus grande hauteur et $C$ l'enfant de $B$ de plus grande hauteur. Dans les quatre cas, $A$, $B$ et $C$ sont ancêtres de $D$.
 
-- **Cas 1** — le nœud à supprimer n'a pas de fils (feuille) : il suffit de le décrocher de l'arbre, en modifiant le lien du père (s'il existe) vers ce fils ; si le père n'existe pas, l'arbre devient vide.
-- **Cas 2** — le nœud à supprimer a un seul fils : il est décroché comme dans le cas 1, et remplacé par son fils unique dans le nœud père (s'il existe) ; sinon l'arbre est réduit au fils unique du nœud supprimé.
-- **Cas 3** — le nœud à supprimer $p$ a deux fils : soit $q$ le nœud de son sous-arbre gauche qui a la valeur la plus grande (ou, indifféremment, le nœud du sous-arbre droit de valeur la plus petite). Il suffit de recopier la valeur de $q$ dans le nœud $p$ et de décrocher le nœud $q$ ; puisque $q$ a la valeur la plus grande dans le fils gauche, il n'a pas de fils droit, et peut être décroché comme dans les cas 1 et 2.
+:::tip Repère : choisir la rotation
 
-Le retrait d'un nœud peut causer un déséquilibre dans un AVL $T$. Soit $A$ le premier nœud déséquilibré rencontré en traversant l'arbre vers la racine à partir de $D$ (ou du nœud qui s'est substitué à $D$). Soit $B$ l'enfant de $A$ ayant la plus grande hauteur, et $C$ l'enfant de $B$ ayant la plus grande hauteur ($B$ et $C$ ne sont pas ancêtres de $D$). On applique la même stratégie de restructuration pour rééquilibrer le sous-arbre enraciné à $A$. Cette restructuration réduit de 1 la hauteur du sous-arbre initialement enraciné à $A$, et pourrait donc déséquilibrer un autre nœud plus haut dans l'arbre — on doit continuer à vérifier l'équilibre jusqu'à ce que la racine de $T$ soit atteinte. On peut donc effectuer jusqu'à $O(\log n)$ rotations lors d'un retrait.
+- **Rotation droite (RD)** : $A$ penche à gauche et $B$, son fils gauche, penche à gauche : $fq(A)=2$ et $fq(B)=1$. Une rotation droite de $A$ place $B$ à la racine du sous-arbre local et $A$ à sa droite.
+- **Rotation gauche (RG)** : cas symétrique, avec $fq(A)=-2$ et $fq(B)=-1$. Une rotation gauche de $A$ place $B$, son fils droit, à la racine du sous-arbre local et $A$ à sa gauche.
+- **Rotation double droite-gauche (RDG)** : $A$ penche à droite et son fils droit $B$ penche à gauche : $fq(A)=-2$ et $fq(B)=1$. On effectue d'abord une rotation droite de $B$, puis une rotation gauche de $A$ ; $C$ devient la racine locale.
+- **Rotation double gauche-droite (RGD)** : $A$ penche à gauche et son fils gauche $B$ penche à droite : $fq(A)=2$ et $fq(B)=-1$. On effectue d'abord une rotation gauche de $B$, puis une rotation droite de $A$ ; $C$ devient la racine locale.
 
-### AVL : complexité
+Les déroulés graphiques et les exemples numériques de chaque rotation sont disponibles dans l'onglet PDF.
 
-Le ré-équilibrage d'un arbre AVL est une opération locale à un sous-arbre : le nombre d'opérations de rotation à effectuer est constant quelle que soit la hauteur du sous-arbre.
+:::
 
-| Opération | Complexité |
-| --- | --- |
-| Recherche : FindElement(k) | $O(\log n)$ |
-| Insertion : InsertItem(k,x) | $O(\log n)$ |
-| Suppression : RemoveElement(k) | $O(\log n)$ |
+:::warning Lecture du cas RDG dans le support
 
-## Les arbres Rouge-Noir
+Le libellé de la diapositive RDG mentionne un sous-arbre gauche, tandis que son schéma et les facteurs $fq(A)=-2$ et $fq(B)=1$ correspondent au fils droit $B$ de $A$. La description ci-dessus suit ces éléments concordants.
 
-Un arbre Rouge-Noir est un arbre binaire de recherche comportant un champ supplémentaire par nœud : sa couleur, qui peut valoir soit ROUGE, soit NOIR. Un arbre Rouge-Noir doit satisfaire les propriétés suivantes :
+:::
 
-1. chaque feuille doit être noire ou « Nil » ;
+Les deux cas simples correspondent à un déséquilibre vers l'extérieur ; les deux rotations réorientent d'abord le sous-arbre de $B$ lorsqu'il penche vers l'intérieur. Le résultat replace le nœud médian $C$, dans les cas doubles, au sommet du sous-arbre local et rétablit l'invariant AVL.
+
+### Insertion et rééquilibrage
+
+On insère d'abord la clé comme dans un ABR, puis on remonte vers la racine en mettant les facteurs d'équilibre à jour. Si un déséquilibre apparaît, on traite le premier sous-arbre $S$ concerné.
+
+:::note Propriété : une correction suffit après une insertion
+
+L'insertion de $D$ augmente de $1$ la hauteur d'un sous-arbre de $S$, et donc celle de $S$. Le rééquilibrage de $S$ rétablit son équilibre local et diminue cette hauteur d'une unité : $S$ retrouve alors sa hauteur d'avant l'insertion. Un seul rééquilibrage suffit donc après l'insertion d'un nœud dans un AVL.
+
+:::
+
+L'insertion comporte une descente puis une remontée sur une hauteur logarithmique. Elle est donc en $O(\log n)$.
+
+### Suppression et rééquilibrage
+
+La suppression respecte d'abord les règles usuelles d'un ABR :
+
+- une feuille est simplement décrochée ;
+- un nœud à un seul fils est remplacé par ce fils ;
+- pour un nœud $p$ à deux fils, on recopie la clé $q$ maximale du sous-arbre gauche, ou de façon équivalente la clé minimale du sous-arbre droit, puis on décroche $q$.
+
+Après ce retrait, un déséquilibre peut apparaître. En remontant à partir de $D$, ou du nœud qui l'a remplacé, on prend le premier nœud déséquilibré $A$, puis son enfant le plus haut $B$ et l'enfant le plus haut $C$ de $B$. Ici, $B$ et $C$ ne sont pas des ancêtres de $D$. La même restructuration que pour l'insertion restaure l'équilibre du sous-arbre enraciné en $A$.
+
+:::warning La suppression peut demander plusieurs corrections
+
+Cette restructuration diminue de $1$ la hauteur du sous-arbre enraciné en $A$. Un nœud plus haut peut alors devenir déséquilibré : la vérification se poursuit jusqu'à la racine. Le support indique jusqu'à $O(\log n)$ rotations lors d'un retrait.
+
+:::
+
+| Opération AVL                    | Complexité  |
+| -------------------------------- | ----------- |
+| Recherche : `FindElement(k)`     | $O(\log n)$ |
+| Insertion : `InsertItem(k,x)`    | $O(\log n)$ |
+| Suppression : `RemoveElement(k)` | $O(\log n)$ |
+
+Les AVL maintiennent directement l'écart de hauteur. Les arbres Rouge-Noir vont maintenant relâcher cette condition locale et imposer des règles de couleur qui donnent, elles aussi, une hauteur logarithmique.
+
+## Arbres Rouge-Noir
+
+Un arbre Rouge-Noir est un ABR qui ajoute une couleur à chaque nœud. Les couleurs ne servent pas à ordonner les clés : elles contraignent la forme de l'arbre.
+
+:::info Définition : propriétés Rouge-Noir
+
+Un arbre Rouge-Noir satisfait les propriétés suivantes :
+
+1. chaque feuille est noire ou vaut `Nil` ;
 2. la racine est noire ;
-3. chaque nœud est soit rouge, soit noir ;
-4. un parent rouge doit avoir deux fils noirs ;
-5. chaque chemin d'une feuille à la racine doit toujours comporter le même nombre de nœuds noirs (ce nombre est appelé **hauteur noire**).
+3. chaque nœud est rouge ou noir ;
+4. un parent rouge a deux fils noirs ;
+5. tout chemin d'une feuille à la racine contient le même nombre de nœuds noirs, appelé **hauteur noire**.
 
-### Recherche, insertion et suppression
+:::
 
-- **Recherche** : s'effectue exactement comme dans tous les arbres binaires et avec la même efficacité algorithmique ($O(\log_2 n)$) ; c'est une opération préliminaire à l'insertion et à la suppression.
-- **Insertion et suppression** : les propriétés des arbres Rouge-Noir doivent être respectées lors des insertions/suppressions, ce qui donne lieu à de nombreux cas possibles — cela contribue à la complexité de l'arbre Rouge-Noir (comparativement à l'arbre AVL).
+La recherche suit le même principe que dans un ABR. La borne de hauteur établie plus loin donne un coût de recherche en $O(\log_2 n)$.
 
-### Insertion
+### Insertion dans un arbre Rouge-Noir
 
-Un nouveau nœud est toujours ROUGE. Si le parent est rouge, il faut appliquer le bon algorithme pour rétablir les propriétés de l'arbre Rouge-Noir (correction de la violation Rouge-Noir entre $X$ et son parent).
+Un nouveau nœud est d'abord coloré en rouge. Une violation peut alors apparaître entre ce nœud et son parent rouge. Le support note $X$ le nœud courant, $P$ son parent, $GP$ son grand-parent et $O$ son oncle.
 
-**Notation** : « P » le nœud parent, « GP » le nœud grand-parent, « O » le nœud oncle, « X » le nouveau nœud (nœud courant).
+:::note Cas de correction présentés dans le support
 
-- **Cas 0** — si « P » est la racine de l'arbre, on colorie la racine en noir. C'est le seul cas où la hauteur noire de l'arbre augmente.
-- **Cas 1** — si l'oncle « O » de X est rouge, on colorie « O » et le parent « P » de X en noir, et le grand-parent « GP » de X en rouge.
-- **Cas 2** — « X » et « P » sont des fils de gauche de « GP ». Si l'oncle « O » de X est noir et « X », « P » sont coloriés en rouge, on colore le parent « P » de X en noir et son grand-parent « GP » en rouge, puis on fait une rotation droite sur « GP ».
-- **Cas 3** — « X » et « P » sont des fils de droite de « GP ». Si l'oncle « O » de X est noir et « X », « P » sont coloriés en rouge, on colore le parent « P » de X en noir et son grand-parent « GP » en rouge, puis on fait une rotation gauche sur « GP ».
+- **Cas 0** : si $P$ est la racine, on la colore en noir. C'est le seul cas où la hauteur noire augmente.
+- **Cas 1** : si l'oncle $O$ de $X$ est rouge, on colore $O$ et $P$ en noir, puis $GP$ en rouge.
+- **Cas 2** : $X$ et $P$ sont fils gauches de $GP$, l'oncle $O$ est noir et $X$, $P$ sont rouges. On colore $P$ en noir, $GP$ en rouge, puis on effectue une rotation droite sur $GP$.
+- **Cas 3** : cas symétrique : $X$ et $P$ sont fils droits de $GP$, l'oncle est noir et $X$, $P$ sont rouges. On colore $P$ en noir, $GP$ en rouge, puis on effectue une rotation gauche sur $GP$.
 
-### Hauteur noire
+:::
 
-**Définition** : la hauteur noire ($h_n$) d'un nœud $x$ (notée $h_n(x)$) dans un arbre Rouge-Noir est le nombre unique de nœuds noirs sur tout chemin du nœud $x$ à une feuille de l'arbre, le nœud $x$ exclu.
+Les schémas des cas et les exemples d'insertion `41, 38, 31, 12, 19, 8` sont conservés dans le PDF. Le support signale que les insertions et suppressions comportent de nombreux cas ; il ne détaille ici que les cas d'insertion ci-dessus.
 
-**Propriété** : $h_n(x) \geq \dfrac{1}{2} h(x)$ où $h(x)$ est la hauteur de $x$.
+### Hauteur noire et hauteur logarithmique
 
-**Démonstration** (par récurrence sur la hauteur $h$ de l'arbre RN, dans un arbre RN à $n$ nœuds et de racine $x$ : $n \geq 2^{h_n(x)} - 1$) :
+:::info Définition : hauteur noire
 
-- Cas de base : $h=0$ et $n=1$. On a $h_n(x)=0$ et $1 \geq 2^0$.
-- Cas inductif : on suppose $n \geq 2^{h_n(x)}-1$ vérifié pour tous les arbres RN de hauteur $\leq h$, et on considère un arbre Rouge-Noir de hauteur $h+1$. Si $h_n(x) = 0$ alors $n \geq 2^0 - 1 = 0$. On suppose $h_n(x) > 0$ : cela signifie que la racine a exactement 2 enfants (sinon, violation de la propriété des arbres RN sur le nombre de nœuds noirs). Ces enfants sont racines d'arbres de hauteur $h$ et de hauteur noire $\geq h_n(x) - 1$, d'où $n \geq (2^{h_n(x)-1}-1) \times 2 + 1 \geq 2^{h_n(x)}-1$.
+La hauteur noire d'un nœud $x$, notée $hn(x)$, est le nombre de nœuds noirs sur tout chemin de $x$ à une feuille, en excluant $x$. La cinquième propriété garantit que ce nombre est unique.
 
-**Théorème** : les arbres RN sont équilibrés. En effet $n \geq 2^{h_n(x)}-1 \geq 2^{h/2}-1$, d'où $\log(n+1) \geq h/2$, donc $h \leq 2\log_2(n+1)$, i.e. $h = O(\log n)$.
+:::
 
-### Complexité
+:::note Théorème : les arbres Rouge-Noir sont équilibrés
 
-| Opération | Complexité |
-| --- | --- |
-| Insertion | $O(\log n)$ (maximum : la hauteur de l'arbre Rouge-Noir) |
-| Coloration rouge | $O(1)$ |
-| Violation (correction) | $O(\log n)$ |
-| Re-coloration | $O(1)$ |
-| Rotation | $O(1)$ |
+Dans un arbre Rouge-Noir à $n$ nœuds et de racine $x$, le support établit :
+
+$$
+n \geq 2^{hn(x)} - 1
+$$
+
+et
+
+$$
+hn(x) \geq \frac{h(x)-1}{2}.
+$$
+
+On obtient ainsi $h \leq 2\log_2(n+1)+1$, donc $h = O(\log n)$.
+
+:::
+
+<details>
+  <summary>Démonstration</summary>
+
+On raisonne par récurrence sur la hauteur $h$ d'un arbre Rouge-Noir de racine $x$. Montrons que :
+
+$$
+n \geq 2^{hn(x)} - 1.
+$$
+
+Pour $h=0$, l'arbre contient un nœud, $hn(x)=0$, et l'inégalité est vérifiée. Pour l'étape inductive, si $hn(x)=0$, on a immédiatement $n \geq 0 = 2^0-1$. Sinon, la racine possède deux enfants ; chacun est la racine d'un sous-arbre dont la hauteur noire vaut au moins $hn(x)-1$. L'hypothèse de récurrence appliquée aux deux sous-arbres donne :
+
+$$
+n \geq 2\bigl(2^{hn(x)-1}-1\bigr)+1
+\geq 2^{hn(x)}-1.
+$$
+
+Enfin, le support relie la hauteur noire à la hauteur totale par $hn(x) \geq \dfrac{h(x)-1}{2}$. En combinant cette relation avec la borne précédente, on a :
+
+$$
+n+1 \geq 2^{hn(x)} \geq 2^{\frac{h-1}{2}}.
+$$
+
+Ainsi, $h \leq 2\log_2(n+1)+1$, ce qui donne $h=O(\log n)$.
+
+</details>
+
+| Opération Rouge-Noir       | Complexité indiquée |
+| -------------------------- | ------------------- |
+| Recherche                  | $O(\log_2 n)$       |
+| Insertion                  | $O(\log n)$         |
+| Coloration rouge           | $O(1)$              |
+| Correction d'une violation | $O(\log n)$         |
+| Recoloration               | $O(1)$              |
+| Rotation                   | $O(1)$              |
+
+## Exercices
+
+Le support propose des exercices de recherche, d'insertion et de suppression dans des AVL, ainsi que des constructions d'arbres Rouge-Noir. Les arbres de départ et les corrections attendues sont visibles dans l'onglet PDF ; utilisez-les pour identifier le premier nœud déséquilibré et justifier la rotation choisie.
+
+## Étapes suivantes
+
+- [Revoir la complexité des algorithmes](./complexite-ch1-complexite-algorithmes) pour relier hauteur et coût asymptotique.
+- [Revoir les algorithmes gloutons](./complexite-ch3-2-glouton) pour comparer une stratégie de construction de solution à une structure de données équilibrée.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
