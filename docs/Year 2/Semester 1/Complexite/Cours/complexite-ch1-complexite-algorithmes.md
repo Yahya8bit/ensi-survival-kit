@@ -407,12 +407,24 @@ où $b \geq 2$, $k \geq 0$, $a > 0$ et $c > 0$. Alors :
 - si $a < b^k$, $T(n) = \Theta(n^k)$.
 :::
 
-Pour $T(n) = 2T(n/2) + O(n^\alpha)$ :
+Les exemples du support écrivent $T(n)=2T(n/2)+O(n^\alpha)$. Cette seule
+majoration du travail non récursif ne satisfait pas l'hypothèse
+$c\times n^k$ du théorème. Si ce travail est seulement dans $O(n^\alpha)$,
+on peut majorer la récurrence par une récurrence de la forme
+$\overline{T}(n)=2\overline{T}(n/2)+c\times n^\alpha$, avec $c>0$, puis
+appliquer le théorème à ce majorant. On obtient seulement :
 
-- si $\alpha = 1/2$, on est dans le premier cas et $T(n) = \Theta(n)$ ;
-- si $\alpha = 1$, on est dans le deuxième cas et
-  $T(n) = \Theta(n\log n)$ ;
-- si $\alpha = 2$, on est dans le troisième cas et $T(n) = \Theta(n^2)$.
+- si $\alpha=1/2$, le premier cas ($2>2^{1/2}$) donne $T(n)=O(n)$ ;
+- si $\alpha=1$, le deuxième cas ($2=2^1$) donne
+  $T(n)=O(n\log n)$ ;
+- si $\alpha=2$, le troisième cas ($2<2^2$) donne $T(n)=O(n^2)$.
+
+Pour conclure à une borne exacte dans ces trois cas, il faut aussi une borne
+inférieure correspondante : par exemple, que le travail non récursif soit dans
+$\Theta(n^\alpha)$, ou exactement de la forme $c\times n^\alpha$ avec
+$c>0$. Le théorème s'applique alors directement et donne respectivement
+$\Theta(n)$, $\Theta(n\log n)$ et $\Theta(n^2)$. Une borne supérieure en
+$O$ ne devient donc pas silencieusement une borne exacte en $\Theta$.
 
 ## Exercices sur les récurrences
 
