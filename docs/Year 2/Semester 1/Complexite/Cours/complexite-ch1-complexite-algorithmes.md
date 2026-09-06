@@ -13,221 +13,354 @@ import TabItem from '@theme/TabItem';
 
 # Chapitre 1 : Complexité des algorithmes
 
-*Conception et analyse d'algorithmes — Nour Houda Dougui, École Nationale des Sciences de l'Informatique (2013-2014)*
+_Conception et analyse d'algorithmes — Nour Houda Dougui, École Nationale des Sciences de l'Informatique (2013-2014)_
 
-<!-- TODO: unclear in source, verify against original PDF — this is a Beamer slide deck; incremental \pause reveals meant each slide's content is repeated multiple times in the extracted text. De-duplicated here to the final (most complete) build of each slide. A few slides ("Exemple 1", "Exemple 2", "Exemple 3") appear to contain only diagrams/graphs with no extractable text and are omitted. The final exercise (Tours de Hanoï) is cut off mid-statement in the source extraction. -->
+Deux algorithmes qui donnent le même résultat ne demandent pas forcément les
+mêmes ressources. Ce chapitre donne les outils pour comparer leur temps
+d'exécution et leur mémoire, puis pour analyser les boucles et les appels
+récursifs qui reviennent dans la suite du cours.
 
-## Plan
+:::info Vous allez apprendre
 
-1. Complexité des algorithmes
-2. Complexité des problèmes
-3. Paradigmes de programmation
-4. Les arbres équilibrés
+- choisir une taille pertinente pour une instance et un modèle de coût ;
+- distinguer meilleur cas, cas moyen et pire cas ;
+- compter le coût de structures itératives et récursives ;
+- lire les notations $O$ et $\Theta$ ainsi que les principales classes de complexité ;
+- résoudre les récurrences issues de l'approche diviser pour régner.
+:::
 
-## Introduction
+## Pourquoi mesurer la complexité ?
 
-Un algorithme est un ensemble d'actions visant un objectif : résoudre un problème donné. Il :
+Un algorithme est un ensemble d'actions qui transforme des entrées en
+résultats, termine sur toutes les données possibles du problème et fournit une
+solution correcte. Lorsqu'il existe plusieurs algorithmes corrects, la
+complexité aide à choisir celui dont le temps et l'espace restent maîtrisables
+quand les données grandissent.
 
-- agit sur des données initiales (entrées),
-- produit des résultats (sorties) ou des effets,
-- doit se terminer sur toutes les données possibles du problème,
-- et doit fournir une solution correcte dans chaque cas.
+Le nombre d'ordres possibles d'une liste de $n$ éléments est $n!$. Même en
+appliquant une opération simple à chaque ordre possible, le calcul est limité à
+des listes de 17 éléments en une seconde avec le meilleur calculateur évoqué
+dans le support : $17! = 3{,}55 \times 10^{14}$. La croissance de la taille de
+l'entrée devient donc vite plus importante qu'une amélioration locale de la
+machine.
 
-Programmation d'un algorithme :
+:::info Définition
+La **complexité algorithmique** étudie l'efficacité comparée des algorithmes.
+Elle mesure notamment :
 
-- expression dans un langage de programmation,
-- utilisation d'une machine donnée (processeur, mémoire),
-- un seul algorithme, plusieurs programmes (variantes),
-- styles de programmation (itérative, récursive...).
+- la taille approximative occupée par les données en mémoire, appelée
+  **complexité spatiale** ;
+- le temps nécessaire à l'exécution, appelé **complexité temporelle**.
+:::
 
-### Motivation du calcul de complexité
+Par exemple, une matrice creuse peut être représentée par un tableau à deux
+dimensions ou par une liste chaînée qui ne conserve que les éléments non nuls,
+avec leurs numéros de ligne et de colonne. Le choix de représentation fait donc
+partie de l'analyse.
 
-Pour un problème donné, il existe souvent plusieurs algorithmes. Y a-t-il un intérêt à choisir ? Et si oui, comment choisir ?
+## Poser le modèle de calcul
 
-Le nombre d'ordres possibles d'une liste de $n$ éléments est $n!$. Si on applique une opération simple à toutes les listes ordonnées possibles à $n$ éléments, avec le meilleur calculateur existant, au cours d'une seconde, on est limité aux listes de 17 éléments ($17! = 3{,}55 \times 10^{14}$).
-
-## Définition de la complexité algorithmique
-
-C'est l'étude de l'efficacité comparée des algorithmes. On mesure :
-
-- la taille approximative des données en mémoire, appelée **complexité spatiale**,
-- le temps que prendra l'exécution de l'algorithme (**complexité temporelle**).
-
-Exemple : représentation d'une matrice creuse — représentation par un tableau à deux dimensions, ou liste chaînée contenant les éléments non nuls de la matrice + l'information sur le numéro de ligne et le numéro de colonne ?
-
-Une bonne maîtrise de la complexité $\leftrightarrow$ des applications qui tournent en un temps prévisible et sur un espace mémoire contrôlé.
-
-## Calcul de la complexité
+Avant de compter, il faut préciser ce que représente la taille de l'entrée et
+ce qui est considéré comme une opération. Ces choix donnent un modèle commun
+pour comparer des algorithmes sur le même problème.
 
 ### Taille des données
 
-La complexité d'un algorithme dépend de plusieurs facteurs :
+La taille retenue est la dimension la plus significative de l'instance :
 
-- **La taille des données à traiter** : un algorithme opérant sur une dizaine d'éléments ne prend pas autant de temps que le même opérant sur un millier de données — il faut évaluer la taille des données nécessaire à l'algorithme.
+- pour des nombres, les nombres eux-mêmes ;
+- pour des mots, leur longueur ;
+- pour des listes et des tableaux, le nombre de cases ou d'éléments ;
+- pour une matrice $m \times n$, $\max(m,n)$, $m \cdot n$ ou $m+n$ selon le
+  problème.
 
-En pratique, on choisit comme taille la ou les dimensions les plus significatives, par exemple selon que le problème est modélisé par :
+Le choix d'une structure de données n'est donc pas neutre : il modifie les
+opérations disponibles et leur coût.
 
-- des nombres : ces nombres,
-- des mots : leur longueur,
-- des listes, tableaux : nombre de cases, d'éléments,
-- des matrices $m \times n$ : $\max(m,n), m \cdot n, m + n$.
+### Coût des opérations
 
-Le choix de telle ou telle structure de données n'est pas anodin quant à l'efficacité d'un algorithme.
+Toutes les opérations n'ont pas la même durée : une addition est plus rapide
+qu'une élévation à la puissance, et une comparaison entre deux valeurs est plus
+rapide qu'un accès à une donnée dans un fichier. Pour construire une analyse
+simple, on peut supposer un coût uniforme : chaque opération élémentaire coûte
+alors une constante indépendante de la taille des données.
 
-### Type des opérations
+### Meilleur, moyen et pire cas
 
-Toutes les opérations effectuées par un algorithme ne nécessitent pas la même durée :
+Soit $A$ un algorithme appliqué à une donnée $d \in D$, et $T(A,d)$ son temps
+d'exécution. Les trois mesures suivantes décrivent des comportements
+différents :
 
-- une addition est plus rapide qu'une élévation à la puissance,
-- une comparaison entre deux valeurs est plus rapide qu'un accès à une donnée dans un fichier...
+:::info Définition
 
-Pour simplifier, on peut faire l'hypothèse que toutes les opérations ont un coût uniforme (même si cela manque souvent de réalisme). Ce coût est alors constant car il ne dépend plus de rien.
+$$
+\begin{aligned}
+T_{Max}(A,D) &= \max\{T(A,d) \mid d \in D\}, \\
+T_{Min}(A,D) &= \min\{T(A,d) \mid d \in D\}, \\
+T_{Moy}(A,D) &= \sum_{d \in D} p(d) \cdot T(A,d).
+\end{aligned}
+$$
 
-### Complexité au pire, au mieux et en moyenne
+où $p(d)$ est la probabilité d'obtenir la donnée $d$.
+:::
 
-Soit $A$ un algorithme appliqué sur des données $d \in D$ et soit $T(A,d)$ le temps d'exécution de $A$ en fonction de la donnée $d$. Il existe trois types de mesure de complexité pour un algorithme :
+:::note Proposition
 
-- la mesure du pire des cas : $T_{Max}(A,D) = \max\{T(A,d), d \in D\}$
-- la mesure du meilleur des cas : $T_{Min}(A,D) = \min\{T(A,d), d \in D\}$
-- la mesure de la moyenne : $T_{Moy}(A,D) = \sum p(d) \cdot T(A,d)$ avec $p(d)$ la probabilité d'avoir la donnée $d$
+$$
+T_{Min}(A,D) \leq T_{Moy}(A,D) \leq T_{Max}(A,D).
+$$
 
-Exemple : recherche d'un élément dans un tableau.
+:::
 
-On a la propriété suivante entre ces mesures de complexité :
+Une recherche dans un tableau illustre ces trois mesures : l'élément peut être
+trouvé immédiatement, à la dernière position ou à une position dont la loi est
+donnée par $p$. Dans ce cours, l'analyse porte principalement sur le pire cas,
+car il donne une borne garantie.
 
-$$T_{Min}(A,D) \leq T_{Moy}(A,D) \leq T_{Max}(A,D)$$
+## Compter les opérations
 
-On s'intéresse à la complexité d'un algorithme dans le pire cas.
+On note $T(n)$ le nombre d'opérations élémentaires pour une entrée de taille
+$n$. La règle utile est de décomposer le programme selon sa structure : une
+séquence additionne les coûts, un embranchement retient le chemin le plus
+coûteux et une boucle additionne les coûts de ses passages.
 
-### Calcul de complexité des algorithmes itératifs
+:::note Règles de calcul pour un programme itératif
 
-Dans un programme strictement itératif, les boucles sont disjointes ou emboîtées : il n'y a pas de récursivité. Notation : $T(n)$ le nombre d'opérations élémentaires.
+- **Séquence** : pour `Traitement1 ; Traitement2`,
+  $T(n) = T_1(n) + T_2(n)$.
+- **Embranchement** : pour `si condition alors Traitement1 sinon Traitement2`,
+  $T(n) = T_c(n) + \max(T_1(n), T_2(n))$.
+- **Boucle** : pour `tant que condition faire Traitement`,
+  $T(n) = (k+1) \times T_c(n) + \sum_{i=1}^{k} T_i(n)$.
+:::
 
-- **Séquence** (Traitement1 ; Traitement2) : $T(n) = T_1(n) + T_2(n)$ (somme des coûts)
-- **Embranchement** (si condition alors Traitement1 sinon Traitement2) : $T(n) = T_c(n) + \max(T_1(n), T_2(n))$ (max des coûts)
-- **Boucle** (tant que condition faire Traitement) : $T(n) = (k+1) \times T_c(n) + \sum_{i=1}^{k} T_i(n)$ (somme des coûts des passages)
+### Exemple : une étape du tri par sélection
 
-### Calcul de complexité des algorithmes récursifs
+Le comptage devient concret lorsque le coût de chaque instruction est visible.
 
-Pour une fonction récursive :
+:::tip Exemple
 
+```text title="Extrait du tri par sélection"
+min ← i                                      // 1 affectation
+pour j de i+1 à n faire                      // 1 aff. + 1 comp. + (1 aff. + 1 comp.) par passage
+    si A[j] < A[min] alors                   // 1 comparaison par passage
+        min ← j                              // 1 affectation si le test est vrai
 ```
+
+- Dans le pire cas, quand le tableau est trié par ordre inverse :
+  $4 \times (n-i) + 3$.
+- Dans le meilleur cas, quand le tableau est trié, l'instruction `min ← j`
+  n'est jamais exécutée : $3 \times (n-i+1)$.
+- Si la moitié des $(n-i)$ tests sont vrais, le coût moyen est
+  $\dfrac{4(n-i)}{2} + \dfrac{3(n-i)}{2} + 3$.
+:::
+
+Les appels récursifs se comptent avec la même idée, mais leur coût dépend à son
+tour de la taille des sous-problèmes.
+
+### Fonctions récursives
+
+Pour la fonction récursive suivante, le traitement local coûte $C(n)$ et les
+deux appels récursifs coûtent chacun $T(n/2)$ :
+
+```text title="Fonction récursive"
 fonction FunctionRecursive(n)
 (1) si (n > 1) alors
 (2)     Traitement(n)                       coût C(n)
-(3)     FunctionRecursive(n/2)               coût T(n/2)
-(4)     FunctionRecursive(n/2)               coût T(n/2)
+(3)     FunctionRecursive(n/2)              coût T(n/2)
+(4)     FunctionRecursive(n/2)              coût T(n/2)
 ```
 
-Équation récursive : $T(n) = 2 \times T(n/2) + C(n)$
+On obtient donc l'équation récursive :
 
-### Exemple (extrait du tri par sélection)
+$$
+T(n) = 2 \times T(n/2) + C(n).
+$$
 
-```
-min ← i                                      // 1 affectation
-pour j de i+1 à n faire                      // 1 aff. + 1 comp. + (1 aff. + 1 comp.) par passage
-    si A[j] < A[min] alors                   // (1 comparaison) par passage
-        min ← j                              // (si test vrai : 1 affectation) par passage
-```
-
-- Dans le pire cas, quand la table est triée par ordre inverse : $4 \times (n-i) + 3$
-- Dans le meilleur cas, quand le tableau est trié, on n'exécute jamais l'instruction `min ← j` : $3 \times (n-i+1)$
-- Supposons que, sur les $(n-i)$ tests, la moitié est évaluée à vrai. En moyenne : $\dfrac{4(n-i)}{2} + \dfrac{3(n-i)}{2} + 3$
+Cette forme prépare l'étude asymptotique : plutôt que de retenir un nombre
+précis d'opérations, on cherche la vitesse de croissance qui domine quand $n$
+devient grand.
 
 ## Estimation asymptotique
 
-En complexité, on ne veut pas évaluer précisément les temps d'exécution (d'autant que ça dépend de la machine). On se contente de trouver des approximations.
+Les temps d'exécution exacts dépendent de la machine. Les notations de Landau
+décrivent une croissance à une constante multiplicative près.
 
-On dit que $T$ est asymptotiquement majorée (quand $n \to \infty$) par $f$, et on utilise la notation de Landau $O(f(n))$ :
+:::info Définition
+On dit que $T$ est asymptotiquement majorée par $f$ quand $n \to \infty$, et
+on note $T(n) = O(f(n))$, si :
 
-$$T(n) = O(f(n)) \text{ si } \exists\, c\, \exists\, n_0 \text{ tels que } \forall n > n_0,\ T(n) \leq c \times f(n)$$
+$$
+\exists\, c\, \exists\, n_0 \text{ tels que } \forall n > n_0,\quad
+T(n) \leq c \times f(n).
+$$
 
-On dit que $T$ est du même ordre de grandeur que $f$, et on note $\Theta(f(n))$, quand $T(n) = O(f(n))$ et $f(n) = O(T(n))$ :
+:::
 
-$$T(n) = \Theta(f(n)) \text{ si } \exists\, c_1, c_2, n_0 \text{ tels que } \forall n > n_0,\ c_1 \times f(n) \leq T(n) \leq c_2 \times f(n)$$
+:::info Définition
+On note $T(n) = \Theta(f(n))$ lorsque $T(n) = O(f(n))$ et
+$f(n) = O(T(n))$, c'est-à-dire si :
 
-### Exemples
+$$
+\exists\, c_1, c_2, n_0 \text{ tels que } \forall n > n_0,\quad
+c_1 \times f(n) \leq T(n) \leq c_2 \times f(n).
+$$
 
-- $f(n) = n^3 + 2n^2 + 4n + 2 = O(n^3)$ (si $n \geq 1$ alors $f(n) \leq 8 \times n^3$)
-- $f(n) = n\log(n) + 12n + 888 = O(n\log(n))$
-- $f(n) = 1000n^{10} - n^7 + \dfrac{2^n}{1000} = O(2^n)$
+:::
 
-## Les principales classes de complexité
+Les termes de plus haut degré gouvernent ces bornes. Ainsi :
 
-- **$O(1)$** temps constant : temps d'exécution indépendant de la taille des données à traiter.
-- **$O(\log n)$** temps logarithmique : on rencontre une telle complexité lorsque l'algorithme casse un gros problème en plusieurs petits, de sorte que la résolution d'un seul de ces problèmes conduit à la solution du problème initial. Exemple : recherche dichotomique dans une liste triée.
-- **$O(n)$** temps linéaire : cette complexité est généralement obtenue lorsqu'un traitement en temps constant est effectué sur chaque donnée en entrée. Exemple : recherche d'un élément dans une liste.
-- **$O(n\log n)$** : l'algorithme scinde le problème en plusieurs sous-problèmes plus petits qui sont résolus de manière indépendante. La résolution de l'ensemble de ces problèmes plus petits apporte la solution du problème initial. Exemple : tri fusion.
-- **$O(n^2)$** temps quadratique ou polynomial : apparaît notamment lorsque l'algorithme envisage toutes les paires de données parmi les $n$ entrées. Exemple : deux boucles imbriquées. Remarque : $O(n^3)$ temps cubique.
-- **$O(2^n)$** temps exponentiel : souvent le résultat de recherche brutale d'une solution.
+- $n^3 + 2n^2 + 4n + 2 = O(n^3)$, car si $n \geq 1$ alors
+  $n^3 + 2n^2 + 4n + 2 \leq 8 \times n^3$ ;
+- $n\log(n) + 12n + 888 = O(n\log(n))$ ;
+- $1000n^{10} - n^7 + \dfrac{2^n}{1000} = O(2^n)$.
 
-**À retenir** — en pratique : un algorithme à complexité exponentielle est inutilisable ; pour $n$ pas trop grand, les algorithmes polynomiaux sont encore efficaces.
+### Principales classes de complexité
 
-### Exemple 4 : Tri par dénombrement [Seward 1954]
+Les classes suivantes donnent un repère rapide pour comparer la croissance :
 
-Si on sait que les valeurs sont comprises entre 0 et max (avec max pas trop grand), on peut trier les valeurs en comptant tout d'abord le nombre de 0, le nombre de 1, le nombre de 2 ... le nombre de max en entrée. Ensuite, il suffit de parcourir le tableau à nouveau en indiquant la bonne quantité de chaque valeur.
+- **$O(1)$**, temps constant : le temps d'exécution est indépendant de la
+  taille des données.
+- **$O(\log n)$**, temps logarithmique : l'algorithme réduit un gros problème
+  à des problèmes plus petits et la résolution d'un seul sous-problème suffit.
+  La recherche dichotomique dans une liste triée en est un exemple.
+- **$O(n)$**, temps linéaire : un traitement en temps constant est effectué
+  sur chaque donnée, comme dans une recherche séquentielle.
+- **$O(n\log n)$** : le problème est scindé en sous-problèmes indépendants,
+  puis leurs solutions sont réunies, comme avec le tri-fusion.
+- **$O(n^2)$**, temps quadratique ou polynomial : cette classe apparaît
+  notamment lorsqu'on examine toutes les paires parmi $n$ données. Le temps
+  $O(n^3)$ est cubique.
+- **$O(2^n)$**, temps exponentiel : il résulte souvent d'une recherche brutale
+  d'une solution.
 
-1. Écrire cet algorithme. On utilisera un tableau annexe `count` où `count[i]` indique le nombre de `i` dans le tableau initial.
+:::warning
+En pratique, un algorithme à complexité exponentielle devient inutilisable. Les
+algorithmes polynomiaux restent efficaces seulement lorsque $n$ n'est pas trop
+grand.
+:::
+
+### Exercice : tri par dénombrement
+
+Lorsque les valeurs sont comprises entre 0 et `max`, avec `max` pas trop grand,
+on peut compter le nombre de `0`, de `1`, de `2`, jusqu'à `max`, puis parcourir
+le tableau pour écrire chaque valeur selon son nombre d'occurrences.
+
+1. Écrire cet algorithme en utilisant un tableau annexe `count`, où `count[i]`
+   indique le nombre de `i` dans le tableau initial.
 2. Calculer la complexité de cet algorithme.
 3. Discuter cette complexité par rapport à la borne théorique inférieure.
 
-## Fonctions récursives : paradigme Diviser pour Régner
+## Récurrences et diviser pour régner
 
-La stratégie Diviser pour Régner consiste à scinder un problème en sous-problèmes de même nature sur des instances plus petites, à résoudre ces sous-problèmes, puis à combiner les résultats obtenus pour apporter une solution au problème posé. Il s'agit donc d'une démarche essentiellement récursive qui donne lieu à trois étapes à chaque niveau de récursivité :
+La stratégie diviser pour régner scinde un problème en sous-problèmes de même
+nature, résout ces sous-problèmes sur des instances plus petites, puis combine
+leurs résultats. À chaque niveau de récursivité, on distingue :
 
-- **Diviser** : le problème est scindé en un certain nombre de sous-problèmes ;
-- **Régner** : résoudre les sous-problèmes récursivement ou, si la taille d'un sous-problème est assez réduite, le résoudre directement ;
-- **Combiner** : réorganiser les solutions des sous-problèmes en une solution complète du problème initial.
+- **Diviser** : scinder le problème en sous-problèmes ;
+- **Régner** : les résoudre récursivement ou directement lorsqu'ils sont assez
+  petits ;
+- **Combiner** : réorganiser leurs solutions en une solution complète.
 
-### Exemple : l'algorithme tri-fusion
+### Exemple : tri-fusion
 
-L'algorithme de tri-fusion repose sur la décomposition suivante :
+:::tip Exemple
+Pour une séquence de longueur $l$, le tri-fusion :
 
-- **Diviser** : on scinde la séquence de longueur $l$ en 2 séquences de taille $l/2$ ;
-- **Régner** : on résout chacune des deux sous-séquences en utilisant récursivement le tri-fusion si elle n'est pas réduite à un élément, et en ne faisant rien sinon ;
-- **Combiner** : fusionner les deux sous-séquences triées en une séquence triée.
+- la divise en deux séquences de taille $l/2$ ;
+- trie récursivement chaque sous-séquence si elle n'est pas réduite à un
+  élément ;
+- fusionne les deux sous-séquences triées.
 
-Équation récursive : $T(n) = 2 \times T(n/2) + n$ et $T(1) = 0$
+Sa récurrence est :
 
-## Équations récursives (approche diviser pour régner)
+$$
+T(n) = 2 \times T(n/2) + n, \qquad T(1) = 0.
+$$
 
-Cas général :
+:::
 
-$$T(n) = a \times T(n/b) + f(n) \text{ et } T(1) = c$$
+La récurrence résume les appels récursifs et le travail de combinaison. Dans le
+cas général, on écrit :
 
-Trois méthodes de résolution : par substitution, par développement itératif, méthode générale.
+:::info Définition
+
+$$
+T(n) = a \times T(n/b) + f(n), \qquad T(1) = c.
+$$
+
+Ici, $a$ est le nombre de sous-problèmes, $n/b$ leur taille et $f(n)$ le coût
+hors appels récursifs.
+:::
+
+Trois méthodes permettent de résoudre ces équations : la substitution, le
+développement itératif et une méthode générale.
 
 ### Méthode par substitution
 
-Principe : on vérifie une intuition.
+Cette méthode part d'une intuition $T(n) = g(n)$, puis vérifie que la fonction
+proposée satisfait la récurrence et la condition initiale après avoir fixé les
+constantes.
 
-- Hypothèse : $T(n) = g(n)$ (intuition)
-- Conclusion : $g(n) = a \times g(n/b) + f(n)$ et $g(1) = c$, à démontrer en fixant les constantes.
+Pour $T(n) = 1 + T(n/2)$ avec $T(1) = 1$, l'intuition est
+$T(n) = O(\log_2 n)$.
 
-**Exemple** : $T(n) = 1 + T(n/2)$ et $T(1) = 1$
+<details>
+  <summary>Démonstration</summary>
 
-Intuition : $T(n) = O(\log_2 n)$.
+On pose $T(n) = a \times \log_2(n) + c$. Alors :
 
-Hypothèse : $T(n) = a \times \log_2(n) + c$, donc $T(n/2) = a \times \log_2(n) - a + c$.
+$$
+T(n/2) = a \times \log_2(n) - a + c.
+$$
 
-En substituant : $T(n) = 1 + T(n/2) = 1 + a \times \log_2(n) - a + c$, donc $1 - a + c = c$ et $a = 1$, et puisque $T(1) = 1$ donc $c = 1$.
+En substituant dans la récurrence :
 
-Conclusion : $T(n) = \log_2(n) + 1$.
+$$
+T(n) = 1 + T(n/2) = 1 + a \times \log_2(n) - a + c.
+$$
+
+On obtient $1 - a + c = c$, donc $a = 1$. Comme $T(1) = 1$, on a aussi
+$c = 1$. Ainsi :
+
+$$
+T(n) = \log_2(n) + 1.
+$$
+
+</details>
 
 ### Méthode par développement itératif
 
-**Exemple : tri-fusion** — $T(n) = 2 \times T(n/2) + n$ et $T(1) = 0$
+Pour le tri-fusion, on développe la récurrence jusqu'au cas de base. Le calcul
+montre pourquoi le coût de combinaison $n$ est payé sur $\log(n)$ niveaux.
 
-$$T(n) = 2 \times T(n/2) + n = 4 \times T(n/4) + 2n = 8 \times T(n/8) + 3n = \cdots = n \times T(1) + n\log(n) = n\log(n)$$
+<details>
+  <summary>Démonstration</summary>
+
+Avec $T(n) = 2 \times T(n/2) + n$ et $T(1) = 0$ :
+
+$$
+\begin{aligned}
+T(n) &= 2 \times T(n/2) + n \\
+     &= 4 \times T(n/4) + 2n \\
+     &= 8 \times T(n/8) + 3n \\
+     &= \cdots \\
+     &= n \times T(1) + n\log(n) \\
+     &= n\log(n).
+\end{aligned}
+$$
+
+</details>
 
 ### Exercice : MaxMin
 
-Écrire un algorithme pour le calcul du Max et du Min d'un ensemble $E$.
+On cherche le maximum et le minimum d'un ensemble $E$.
 
-- 1ère idée : 2 itérations indépendantes : combien de comparaisons ? $2n$ comparaisons.
-- 2ème idée : partage de l'ensemble en 2 sous-ensembles $E_1$ et $E_2$, recherche récursive sur chaque sous-ensemble et fusion des résultats : combien de comparaisons ?
+- Première idée : deux itérations indépendantes, soit $2n$ comparaisons.
+- Deuxième idée : partager $E$ en deux sous-ensembles $E_1$ et $E_2$, chercher
+  récursivement leurs extrema, puis fusionner les résultats.
 
-```
+```text title="MaxMin"
 fonction MaxMin(Ensemble E)
 (1)  si |E| = 1 alors
 (2)      max ← a               (E = {a})
@@ -244,61 +377,112 @@ fonction MaxMin(Ensemble E)
 (13) retourner (max,min)
 ```
 
-Si on partage $E$ en 2 parties égales, $T(n)$ = nombre de comparaisons pour $|E| = n$ :
+Si $E$ est partagé en deux parties égales, $T(n)$ est le nombre de
+comparaisons pour $|E| = n$ :
 
-$$T(1) = 0, \quad T(2) = 1 \text{ (une comparaison suffit)}, \quad T(n) = 2T(n/2) + 2$$
+$$
+T(1) = 0, \qquad T(2) = 1 \text{ (une comparaison suffit)}, \qquad
+T(n) = 2T(n/2) + 2.
+$$
 
-Montrez par récurrence que pour $n = 2^p$ ($p \geq 1$), $T(n) = \dfrac{3n}{2} - 2$.
+Montrer par récurrence que, pour $n = 2^p$ avec $p \geq 1$ :
+
+$$
+T(n) = \dfrac{3n}{2} - 2.
+$$
 
 ### Méthode générale
 
-**Théorème** : soit $T(n)$ une fonction définie par l'équation de récurrence suivante, où $b \geq 2$, $k \geq 0$, $a > 0$ et $c > 0$ :
+:::note Théorème
+Soit $T(n)$ une fonction définie par :
 
-$$T(n) = a \times T(n/b) + c \times n^k$$
+$$
+T(n) = a \times T(n/b) + c \times n^k,
+$$
 
-La relation entre $a$, $b$ et $k$ détermine la fonction $T(n)$ comme suit :
+où $b \geq 2$, $k \geq 0$, $a > 0$ et $c > 0$. Alors :
 
-- si $a > b^k$, alors $T(n) = \Theta(n^{\log_b a})$
-- si $a = b^k$, alors $T(n) = \Theta(n^k \times \log n)$
-- si $a < b^k$, alors $T(n) = \Theta(n^k)$
+- si $a > b^k$, $T(n) = \Theta(n^{\log_b a})$ ;
+- si $a = b^k$, $T(n) = \Theta(n^k \times \log n)$ ;
+- si $a < b^k$, $T(n) = \Theta(n^k)$.
+:::
 
-**Exemples** : $T(n) = 2T(n/2) + O(n^\alpha)$.
+Pour $T(n) = 2T(n/2) + O(n^\alpha)$ :
 
-- Si $\alpha = 1/2$, on est dans le cas 1, donc $T(n) = \Theta(n)$,
-- Si $\alpha = 1$, on est dans le cas 2, donc $T(n) = \Theta(n\log n)$,
-- Si $\alpha = 2$, on est dans le cas 3, donc $T(n) = \Theta(n^2)$.
+- si $\alpha = 1/2$, on est dans le premier cas et $T(n) = \Theta(n)$ ;
+- si $\alpha = 1$, on est dans le deuxième cas et
+  $T(n) = \Theta(n\log n)$ ;
+- si $\alpha = 2$, on est dans le troisième cas et $T(n) = \Theta(n^2)$.
 
-### Exercice 1 : suite de Fibonacci
+## Exercices sur les récurrences
 
-Équation récursive : $T(n) = T(n-1) + T(n-2) + \alpha$
+### Suite de Fibonacci
 
-$$T(n) \leq 2 \times T(n-1) + \alpha \text{ car } T \text{ est croissante}$$
-$$T(n) \leq 2 \times (2 \times T(n-2) + \alpha) + \alpha \leq 4 \times (2 \times T(n-3) + \alpha) + 2\alpha + \alpha \leq \cdots$$
-$$T(n) \leq 2^n \times \alpha + \cdots + 4\alpha + 2\alpha + \alpha = \alpha \times \sum_{i=0}^{n} 2^i = \alpha \times (2^{n+1} - 1)$$
-$$T(n) = O(2^n)$$
+La récurrence de la version récursive est :
 
-Proposez un algorithme de complexité linéaire au calcul du terme de rang $n$ de la suite de Fibonacci.
+$$
+T(n) = T(n-1) + T(n-2) + \alpha.
+$$
 
-```
+La majoration suivante conduit à une complexité exponentielle.
+
+<details>
+  <summary>Démonstration</summary>
+
+Comme $T$ est croissante :
+
+$$
+T(n) \leq 2 \times T(n-1) + \alpha.
+$$
+
+En développant :
+
+$$
+\begin{aligned}
+T(n) &\leq 2 \times (2 \times T(n-2) + \alpha) + \alpha \\
+     &\leq 4 \times (2 \times T(n-3) + \alpha) + 2\alpha + \alpha \\
+     &\leq \cdots \\
+     &\leq 2^n \times \alpha + \cdots + 4\alpha + 2\alpha + \alpha \\
+     &= \alpha \times \sum_{i=0}^{n} 2^i \\
+     &= \alpha \times (2^{n+1} - 1).
+\end{aligned}
+$$
+
+Donc $T(n) = O(2^n)$.
+
+</details>
+
+Le support propose ensuite un algorithme de complexité linéaire pour calculer
+le terme de rang $n$ :
+
+```text title="Fibo-Simple"
 fonction Fibo-Simple(Entier n)
 (1) Entier tab[n], i
 (2) Début
 (3)     tab[0] = 1                              // 1
-(4)     tab[1] = 1                               // 1
-(5)     pour i = 2 à n                           // n-1
-(6)         tab[i] = tab[i-1] + tab[i-2]         // n-1
-(7)     Renvoyer tab[n]                          // 1
+(4)     tab[1] = 1                              // 1
+(5)     pour i = 2 à n                          // n-1
+(6)         tab[i] = tab[i-1] + tab[i-2]        // n-1
+(7)     Renvoyer tab[n]                         // 1
 (8) Fin
 ```
 
-### Exercice 2 : Tours de Hanoï
+### Tours de Hanoï
 
-Le problème des tours de Hanoï consiste à déplacer des disques de diamètres différents d'une tour de « départ » à une tour d'« arrivée » en passant par une tour « intermédiaire », et ceci en un minimum de coups, tout en respectant les règles suivantes :
+Le problème consiste à déplacer des disques de diamètres différents d'une tour
+de départ à une tour d'arrivée en passant par une tour intermédiaire, en un
+minimum de coups. Deux règles s'appliquent :
 
-- on ne peut déplacer plus d'un disque à la fois,
-- on ne peut placer un disque que sur un autre disque plus grand que lui ou sur un emplacement vide.
+- on ne peut déplacer plus d'un disque à la fois ;
+- on ne peut placer un disque que sur un disque plus grand que lui, ou sur un
+  emplacement vide.
 
-<!-- TODO: unclear in source, verify against original PDF page 42+ — the extraction cuts off here; the exercise question itself (write the recursive algorithm, derive T(n)) is not present in the extracted text. -->
+## Étapes suivantes
+
+- [Complexité des problèmes](./complexite-ch2-complexite-problemes) poursuit
+  l'étude avec les problèmes de décision et les classes de complexité.
+- [Diviser pour régner](./complexite-ch3-1-diviser-pour-regner) développe la
+  stratégie introduite ici et ses récurrences.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
