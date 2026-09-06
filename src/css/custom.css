@@ -1,29 +1,520 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
-
-/* You can override the default Infima variables here. */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --ifm-color-primary: #3578e5; /*#25c2a0;*/
-  --ifm-color-primary-dark: #1d68e1; /*rgb(33, 175, 144);*/
-  --ifm-color-primary-darker: #1b62d4; /*rgb(31, 165, 136);*/
-  --ifm-color-primary-darkest: #1751af; /*rgb(26, 136, 112);*/
-  --ifm-color-primary-light: #4e89e8; /*rgb(70, 203, 174);*/
-  --ifm-color-primary-lighter: #5a91ea; /*rgb(102, 212, 189);*/
-  --ifm-color-primary-lightest: #80aaef; /*rgb(146, 224, 208);*/
-  --ifm-code-font-size: 90%; /*95%;*/
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-color-primary: #08799b;
+  --ifm-color-primary-dark: #066985;
+  --ifm-color-primary-darker: #055f79;
+  --ifm-color-primary-darkest: #044b60;
+  --ifm-color-primary-light: #168cab;
+  --ifm-color-primary-lighter: #2a9bb7;
+  --ifm-color-primary-lightest: #bce7ef;
+  --ifm-background-color: #fcfaf6;
+  --ifm-background-surface-color: #ffffff;
+  --ifm-font-color-base: #263744;
+  --ifm-heading-color: #152b39;
+  --ifm-font-family-base: "Manrope", "Avenir Next", sans-serif;
+  --ifm-font-family-monospace: "JetBrains Mono", "SFMono-Regular", monospace;
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.65;
+  --ifm-heading-line-height: 1.2;
+  --ifm-global-radius: 8px;
+  --ifm-code-font-size: 85%;
+  --ifm-navbar-height: 4.25rem;
+  --ifm-navbar-padding-horizontal: 1rem;
+  --ifm-footer-background-color: #152b39;
+  --docusaurus-highlighted-code-line-bg: rgba(8, 121, 155, 0.1);
+  --ensi-heading: #152b39;
+  --ensi-text-muted: #60717c;
+  --ensi-border: #dbe3e4;
+  --ensi-border-strong: #bccbce;
+  --ensi-surface: #ffffff;
+  --ensi-surface-hover: #f2f9f9;
+  --ensi-accent-soft: #e0f4f5;
+  --ensi-hero-background: #f4fbfa;
+  --ensi-code-background: #edf5f5;
+  --ensi-focus: #d66324;
+  --ensi-info-surface: #edf8f8;
+  --ensi-info-text: #244553;
+  --ensi-info-heading: #17647b;
+  --ensi-note-surface: #f3f1f8;
+  --ensi-note-border: #d5cbe6;
+  --ensi-success-surface: #edf8f1;
+  --ensi-success-border: #b8dfc8;
+  --ensi-warning-surface: #fff7e9;
+  --ensi-warning-border: #efd39b;
+  --ensi-danger-surface: #fceff0;
+  --ensi-danger-border: #ecc0c5;
+  --ensi-footer-title: #f2f7f7;
+  --ensi-footer-text: #b7cbd1;
+  --ensi-footer-link: #88d4e0;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
-  --ifm-background-color: #1e2125;
-  --ifm-background-surface-color: #121212;
+  --ifm-color-primary: #59c1d4;
+  --ifm-color-primary-dark: #3cb3c9;
+  --ifm-color-primary-darker: #2fa9c0;
+  --ifm-color-primary-darkest: #168da7;
+  --ifm-color-primary-light: #79cdda;
+  --ifm-color-primary-lighter: #8ed6e1;
+  --ifm-color-primary-lightest: #c2edf1;
+  --ifm-background-color: #101d29;
+  --ifm-background-surface-color: #152633;
+  --ifm-font-color-base: #d9e5e9;
+  --ifm-heading-color: #f2f7f7;
+  --ifm-footer-background-color: #0c1721;
+  --docusaurus-highlighted-code-line-bg: rgba(89, 193, 212, 0.14);
+  --ensi-heading: #f2f7f7;
+  --ensi-text-muted: #a8bbc2;
+  --ensi-border: #29414d;
+  --ensi-border-strong: #43606a;
+  --ensi-surface: #152633;
+  --ensi-surface-hover: #19313d;
+  --ensi-accent-soft: #163c47;
+  --ensi-hero-background: #11232e;
+  --ensi-code-background: #0c1821;
+  --ensi-focus: #ffb36c;
+  --ensi-info-surface: #123743;
+  --ensi-info-text: #d4e8eb;
+  --ensi-info-heading: #81d2df;
+  --ensi-note-surface: #29263a;
+  --ensi-note-border: #50476f;
+  --ensi-success-surface: #173a2b;
+  --ensi-success-border: #356a50;
+  --ensi-warning-surface: #3d301d;
+  --ensi-warning-border: #765d32;
+  --ensi-danger-surface: #3b242b;
+  --ensi-danger-border: #754552;
+  --ensi-footer-title: #f2f7f7;
+  --ensi-footer-text: #b7cbd1;
+  --ensi-footer-link: #88d4e0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  text-underline-offset: 0.18em;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--ensi-focus);
+  outline-offset: 3px;
+}
+
+/* Navigation remains present but visually recedes behind the study material. */
+.navbar {
+  border-bottom: 1px solid var(--ensi-border);
+  background: color-mix(in srgb, var(--ifm-background-color) 88%, transparent);
+  box-shadow: none;
+  backdrop-filter: blur(14px);
+}
+
+.navbar__brand {
+  color: var(--ensi-heading);
+  font-weight: 800;
+}
+.navbar__title {
+  font-size: 0.95rem;
+}
+.navbar__logo {
+  height: 1.7rem;
+  margin-right: 0.55rem;
+}
+
+.navbar__item,
+.navbar__link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--ensi-text-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: var(--ifm-color-primary-dark);
+}
+
+[data-theme="dark"] .navbar__link:hover,
+[data-theme="dark"] .navbar__link--active {
+  color: var(--ifm-color-primary);
+}
+
+.navbar-sidebar {
+  background: var(--ifm-background-color);
+}
+
+/* Prose stays near 65ch while the document canvas safely accommodates study material. */
+.theme-doc-markdown {
+  max-width: min(100%, 900px);
+}
+
+.markdown {
+  max-width: 100%;
+}
+
+.theme-doc-markdown
+  > :not(
+    .theme-code-block,
+    .tabs-container,
+    .mermaid,
+    .table-wrapper,
+    table,
+    svg,
+    iframe
+  ) {
+  max-width: 65ch;
+}
+
+.theme-tabs-container
+  [role="tabpanel"]
+  > :is(
+    header,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    ul,
+    ol,
+    blockquote,
+    details,
+    .theme-admonition
+  ) {
+  max-width: 65ch;
+}
+
+.markdown .table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--ensi-border);
+  border-radius: 8px;
+  background: var(--ensi-surface);
+}
+
+.markdown table {
+  display: table;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.markdown th {
+  color: var(--ensi-heading);
+  background: var(--ensi-surface-hover);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.markdown th,
+.markdown td {
+  border-color: var(--ensi-border);
+  padding: 0.75rem 0.9rem;
+  vertical-align: top;
+}
+
+.markdown :not(pre) > code {
+  border: 1px solid var(--ensi-border);
+  border-radius: 5px;
+  padding: 0.12rem 0.32rem;
+  color: var(--ifm-color-primary-darkest);
+  background: var(--ensi-code-background);
+  font-size: 0.82em;
+}
+
+[data-theme="dark"] .markdown :not(pre) > code {
+  color: var(--ifm-color-primary-lightest);
+}
+
+.theme-code-block {
+  border: 1px solid var(--ensi-border);
+  border-radius: 8px;
+  box-shadow: none;
+}
+.theme-code-block pre,
+.theme-code-block code {
+  background: var(--ensi-code-background) !important;
+}
+.theme-code-block pre {
+  padding-block: 1.1rem;
+}
+.prism-code {
+  border-radius: 7px;
+}
+
+/* Existing MDX tabs stay familiar, while their PDF and Markdown states gain hierarchy. */
+.tabs {
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--ensi-border);
+}
+
+.tabs__item {
+  min-height: 40px;
+  border-radius: 6px 6px 0 0;
+  padding: 0.55rem 0.75rem;
+  color: var(--ensi-text-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.tabs__item--active,
+.tabs__item:hover {
+  border-bottom-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary-dark);
+}
+
+[data-theme="dark"] .tabs__item--active,
+[data-theme="dark"] .tabs__item:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* Info callouts, including "You will learn", become compact study notes. */
+.alert {
+  border: 1px solid var(--ensi-border);
+  border-radius: 8px;
+  box-shadow: none;
+  padding: 1rem 1rem 1rem 1.1rem;
+}
+
+.alert--info {
+  --ifm-alert-background-color: var(--ensi-info-surface);
+  --ifm-alert-border-color: transparent;
+  color: var(--ensi-info-text);
+}
+
+.alert--info .admonition-heading {
+  margin-bottom: 0.4rem;
+  color: var(--ensi-info-heading);
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-transform: none;
+}
+
+.alert--info .admonition-heading svg {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.72;
+}
+.alert--info .admonition-content > :last-child {
+  margin-bottom: 0;
+}
+.alert .admonition-content > ul {
+  margin-block: 0.45rem 0;
+  margin-left: 28px;
+  padding-left: 0;
+}
+.alert--secondary {
+  --ifm-alert-background-color: var(--ensi-note-surface);
+  --ifm-alert-border-color: var(--ensi-note-border);
+}
+.alert--success {
+  --ifm-alert-background-color: var(--ensi-success-surface);
+  --ifm-alert-border-color: var(--ensi-success-border);
+}
+.alert--warning {
+  --ifm-alert-background-color: var(--ensi-warning-surface);
+  --ifm-alert-border-color: var(--ensi-warning-border);
+}
+.alert--danger {
+  --ifm-alert-background-color: var(--ensi-danger-surface);
+  --ifm-alert-border-color: var(--ensi-danger-border);
+}
+
+.markdown details {
+  border: 1px solid var(--ensi-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  background: var(--ensi-surface);
+}
+.markdown details + details {
+  margin-top: 0.75rem;
+}
+.markdown summary {
+  color: var(--ensi-heading);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+/* Documentation navigation: guide with color and a slim rail rather than filled blocks. */
+.theme-doc-sidebar-container {
+  border-right-color: var(--ensi-border) !important;
+}
+.menu {
+  padding: 0.8rem;
+}
+
+.menu__link,
+.menu__caret {
+  min-height: 36px;
+  border-radius: 6px;
+  color: var(--ensi-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.menu__link:hover,
+.menu__caret:hover {
+  background: var(--ensi-surface-hover);
+  color: var(--ensi-heading);
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  position: relative;
+  color: var(--ifm-color-primary-dark);
+  background: transparent;
+  font-weight: 800;
+}
+
+.menu__link--active:not(.menu__link--sublist)::before {
+  position: absolute;
+  left: -0.8rem;
+  width: 3px;
+  height: 1.2rem;
+  border-radius: 0 3px 3px 0;
+  background: var(--ifm-color-primary);
+  content: "";
+}
+
+[data-theme="dark"] .menu__link--active:not(.menu__link--sublist) {
+  color: var(--ifm-color-primary);
+}
+.theme-doc-toc-desktop {
+  font-size: 0.8rem;
+}
+.table-of-contents {
+  border-left: 1px solid var(--ensi-border);
+}
+.table-of-contents__link {
+  padding-block: 0.22rem;
+  color: var(--ensi-text-muted);
+}
+.table-of-contents__link:hover {
+  color: var(--ensi-heading);
+}
+
+.table-of-contents__link--active {
+  position: relative;
+  color: var(--ifm-color-primary-dark);
+  font-weight: 700;
+}
+
+.table-of-contents__link--active::before {
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: -1px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--ifm-color-primary);
+  content: "";
+}
+
+[data-theme="dark"] .table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+}
+.breadcrumbs {
+  margin-bottom: 1.5rem;
+}
+.breadcrumbs__link {
+  color: var(--ensi-text-muted);
+  font-size: 0.82rem;
+}
+.breadcrumbs__item--active .breadcrumbs__link {
+  color: var(--ensi-heading);
+  font-weight: 700;
+}
+
+.pagination-nav__link {
+  border: 1px solid var(--ensi-border);
+  border-radius: 8px;
+  background: var(--ensi-surface);
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--ifm-color-primary-light);
+  background: var(--ensi-surface-hover);
+}
+.pagination-nav__label {
+  color: var(--ensi-heading);
+  font-weight: 800;
+}
+
+.navbar__search,
+.navbar__search-input {
+  border-radius: 7px;
+}
+
+.navbar__search-input {
+  border-color: var(--ensi-border);
+  background: var(--ensi-surface);
+}
+
+.footer {
+  border-top: 1px solid var(--ensi-border);
+}
+.footer__title {
+  color: var(--ensi-footer-title);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+.footer__link-item,
+.footer__copyright {
+  color: var(--ensi-footer-text);
+}
+.footer__link-item:hover {
+  color: var(--ensi-footer-link);
+}
+
+@media (min-width: 997px) {
+  .navbar {
+    padding-inline: clamp(0.5rem, 2vw, 2rem);
+  }
+  .theme-doc-markdown {
+    padding-top: 0.75rem;
+  }
+}
+
+@media (max-width: 996px) {
+  .markdown table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .tabs__item {
+    flex: 0 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

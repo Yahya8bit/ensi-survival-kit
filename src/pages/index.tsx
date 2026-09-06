@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
@@ -10,20 +9,48 @@ import {
 } from "@site/data/contributors";
 import { Contributor } from "@site/data/Contributors.interface";
 
+const studyYears = [
+  {
+    number: "1",
+    title: "Première année",
+    description: "Fondations, algorithmes, logique et systèmes.",
+    to: "/docs/category/year-1",
+  },
+  {
+    number: "2",
+    title: "Deuxième année",
+    description:
+      "Conception, complexité, optimisation et intelligence artificielle.",
+    to: "/docs/category/year-2",
+  },
+  {
+    number: "3",
+    title: "Troisième année",
+    description: "Les ressources de cette année arrivent prochainement.",
+  },
+];
+
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro"
-          >
-            Start here ! Use at your own risk.
+    <header className={styles.heroBanner}>
+      <div className={styles.heroInner}>
+        <p className={styles.eyebrow}>Ressources pour les étudiants ENSI</p>
+        <h1>{siteConfig.title}</h1>
+        <p className={styles.heroCopy}>
+          Cours, exercices, corrections et outils pour avancer avec plus de
+          clarté tout au long de l'année.
+        </p>
+        <div className={styles.heroActions}>
+          <Link className={styles.primaryAction} to="/docs/intro">
+            Commencer à explorer
           </Link>
+          <a
+            className={styles.secondaryAction}
+            href="https://github.com/Yahya8bit/ensi-survival-kit"
+          >
+            Voir le projet
+          </a>
         </div>
       </div>
     </header>
@@ -35,31 +62,32 @@ interface ContributorListProps {
 }
 
 const ContributorList: React.FC<ContributorListProps> = ({ contributors }) => {
+  if (contributors.length === 0) return null;
+
   return (
-    <div className="flex flex-col items-center w-full ">
-      <h2 className="pb-3 text-3xl text-center"> CONTRIBUTORS </h2>
-      <div className=" md:w-6/12">
-        <div className="flex flex-wrap items-center justify-center gap-3 px-8 md:gap-6">
-          {contributors.map((e) => (
-            <div key={e.id}>
-              <a
-                title={`${e.login}: ${e.contributions} contributions`}
-                target="_blank"
-                rel="noopener noreferrer"
-                href={e.html_url}
-              >
-                <div className="flex flex-col">
-                  <img
-                    className="w-16 h-16 rounded-full md:w-24 md:h-24"
-                    src={e.avatar_url}
-                  />
-                </div>
-              </a>
-            </div>
-          ))}
-        </div>
+    <section
+      className={styles.contributors}
+      aria-labelledby="contributors-title"
+    >
+      <div className={styles.sectionHeading}>
+        <p className={styles.eyebrow}>Communauté</p>
+        <h2 id="contributors-title">Construit avec les étudiants</h2>
       </div>
-    </div>
+      <div className={styles.avatarGrid}>
+        {contributors.map((e) => (
+          <a
+            key={e.id}
+            className={styles.contributor}
+            title={`${e.login}: ${e.contributions} contributions`}
+            target="_blank"
+            rel="noopener noreferrer"
+            href={e.html_url}
+          >
+            <img src={e.avatar_url} alt={`Profil GitHub de ${e.login}`} />
+          </a>
+        ))}
+      </div>
+    </section>
   );
 };
 
@@ -71,9 +99,44 @@ export default function Home(): JSX.Element {
   return (
     <Layout title={`Home`} description="">
       <HomepageHeader />
-      <div className="grid py-20 place-items-center">
+      <main>
+        <section className={styles.studySection} aria-labelledby="study-title">
+          <div className={styles.sectionHeading}>
+            <p className={styles.eyebrow}>Votre espace d'étude</p>
+            <h2 id="study-title">Trouver le bon point de départ</h2>
+            <p>
+              Naviguez par année, retrouvez les supports de cours et gardez les
+              exercices à portée de main.
+            </p>
+          </div>
+          <div className={styles.yearGrid}>
+            {studyYears.map((year) => {
+              const content = (
+                <>
+                  <span className={styles.yearNumber} aria-hidden="true">
+                    {year.number}
+                  </span>
+                  <span>
+                    <strong>{year.title}</strong>
+                    <small>{year.description}</small>
+                  </span>
+                </>
+              );
+
+              return year.to ? (
+                <Link className={styles.yearLink} key={year.title} to={year.to}>
+                  {content}
+                </Link>
+              ) : (
+                <div className={styles.yearPlaceholder} key={year.title}>
+                  {content}
+                </div>
+              );
+            })}
+          </div>
+        </section>
         <ContributorList contributors={filteredContributors} />
-      </div>
+      </main>
     </Layout>
   );
 }

@@ -21,7 +21,8 @@ const config = async () => {
         /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
         ({
           hashed: true,
-          language: ["en"],
+          language: ["en", "fr"],
+          highlightSearchTermsOnTargetPage: true,
         }),
       ],
     ],
@@ -56,10 +57,14 @@ const config = async () => {
 
     stylesheets: [
       {
-        href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
+        href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap",
+        type: "text/css",
+      },
+      {
+        href: "https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css",
         type: "text/css",
         integrity:
-          "sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM",
+          "sha384-nH0MfJ44wi1dd7w6jinlyBgljjS8EJAh2JBoRad8a3VDw2K69vfaaqm4WnR+gXtA",
         crossorigin: "anonymous",
       },
     ],
@@ -100,9 +105,9 @@ const config = async () => {
           theme: { light: "base", dark: "base" },
         },
         navbar: {
-          title: "Home",
+          title: "ENSI Knowledge",
           logo: {
-            alt: "My Site Logo",
+            alt: "ENSI Knowledge",
             src: "img/logo.svg",
             srcDark: "img/logo-dark.svg",
           },
@@ -111,7 +116,7 @@ const config = async () => {
               type: "doc",
               docId: "intro",
               position: "left",
-              label: "Docs",
+              label: "Explorer les cours",
             },
             {
               href: "https://github.com/Yahya8bit/ensi-survival-kit",
@@ -124,16 +129,16 @@ const config = async () => {
           style: "dark",
           links: [
             {
-              title: "Docs",
+              title: "Étudier",
               items: [
                 {
-                  label: "Tutorial",
+                  label: "Commencer ici",
                   to: "/docs/intro",
                 },
               ],
             },
             {
-              title: "More",
+              title: "Projet",
               items: [
                 {
                   label: "GitHub",
@@ -142,11 +147,11 @@ const config = async () => {
               ],
             },
           ],
-          copyright: `Licensed under GPL v3.0`,
+          copyright: `ENSI Knowledge · Contenu communautaire · GPL v3.0`,
         },
         prism: {
-          theme: prismThemes.github,
-          darkTheme: prismThemes.vsDark,
+          theme: prismThemes.oneLight,
+          darkTheme: prismThemes.oneDark,
           additionalLanguages: [
             "bash",
             "csharp",
