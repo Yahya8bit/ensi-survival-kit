@@ -138,22 +138,46 @@ la capacité en autorisant une dernière fraction d'objet.
 <details>
 <summary>Pseudocode complet</summary>
 
-```text title="Sac à dos fractionnaire"
-Trier(A, W, C)                         // ordre décroissant du rapport cᵢ/wᵢ
-X ← ∅                                  // initialiser les xᵢ à 0
-i ← 1
-Tant que (cmax > 0) et (i ≤ n) faire
-    Si W[i] ≥ cmax alors
-        X[i] ← 1
+```text title="Sac à dos fractionnaire - version pédagogique corrigée"
+SacADosFractionnaire(A, M)
+Pour chaque objet i faire
+    rapport[i] ← cᵢ / wᵢ
+    xᵢ ← 0
+Fin Pour
+Trier A par rapport décroissant
+capacité_restante ← M
+
+Pour chaque objet i de A faire
+    Si wᵢ ≤ capacité_restante alors
+        xᵢ ← 1
+        capacité_restante ← capacité_restante − wᵢ
     Sinon
-        X[i] ← cmax/W[i]
+        xᵢ ← capacité_restante / wᵢ
+        capacité_restante ← 0
+        arrêter
     Fin Si
-    cmax ← cmax − W[i]
-    i++
-Fin Tant que
+Fin Pour
 ```
 
 </details>
+
+:::note Précision sur le support
+
+Le pseudocode du support inverse les cas « objet entier » et « fraction »,
+puis soustrait le poids entier même après une prise fractionnaire. La version
+ci-dessus est une version pédagogique corrigée, et non une transcription
+littérale du PDF.
+
+:::
+
+:::warning Portée de la règle
+
+Le tri par rapport $c_i/w_i$ est justifié ici parce que le dernier objet peut
+être fractionné : les propriétés énoncées ci-dessous soutiennent alors le choix
+glouton. Cette conclusion ne s'étend pas au sac à dos tout ou rien, où
+$x_i\in\{0,1\}$.
+
+:::
 
 :::note Propriétés indiquées par le support
 
