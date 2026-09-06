@@ -229,25 +229,70 @@ fusion dans le cas $a = c^k$, avec $a = 2$, $c = 2$ et $k = 1$.
 
 ## Exemple : tri rapide (QuickSort)
 
-QuickSort choisit un élément comme pivot, place les éléments plus petits à sa
-gauche et les autres à sa droite, puis trie récursivement les deux côtés.
+QuickSort choisit un élément comme pivot, partitionne le segment complet
+$T[g..d]$ autour de lui, puis trie récursivement les deux segments produits.
+Le PDF présente aussi cette idée sous forme de trois séquences : éléments plus
+petits, égaux et plus grands que le pivot.
 
-1. **Diviser** : sélectionner un pivot $x$ dans $S$, puis répartir les
-   éléments en trois séquences : $L$ (plus petits que $x$), $E$ (égaux à
-   $x$) et $G$ (plus grands que $x$).
-2. **Régner** : trier récursivement $L$ et $G$.
-3. **Combiner** : concaténer $L$, puis $E$, puis $G$.
+1. **Diviser** : choisir le pivot et partitionner $T[g..d]$ en place.
+2. **Régner** : trier récursivement les segments situés de part et d'autre du
+   pivot.
+3. **Combiner** : aucun traitement supplémentaire n'est nécessaire : le pivot
+   est déjà entre les deux segments.
 
 <details>
-<summary>Détails d'implémentation</summary>
+<summary>Partitionnement en place</summary>
 
-- Deux pointeurs : $k$ initialisé à $1$, $l$ initialisé à taille($L$).
-- Bouger $k$ vers la droite jusqu'à un élément strictement supérieur au pivot.
-- Bouger $l$ vers la gauche jusqu'à un élément inférieur ou égal au pivot.
-- Échanger $L[k]$ et $L[l]$, puis répéter tant que $k < l$.
-- Échanger le pivot et $L[l]$.
+```text title="QuickSort - formulation pédagogique clarifiée"
+Procédure QuickSort(T, g, d)
+si g < d alors
+    p ← Partitionner(T, g, d)
+    QuickSort(T, g, p-1)
+    QuickSort(T, p+1, d)
+fin si
+
+Fonction Partitionner(T, g, d)
+pivot ← T[g]
+gauche ← g+1
+droite ← d
+
+Tant que vrai faire
+    Tant que gauche ≤ d et T[gauche] ≤ pivot faire
+        gauche ← gauche+1
+    fin tant que
+    Tant que droite ≥ g+1 et T[droite] > pivot faire
+        droite ← droite-1
+    fin tant que
+    si gauche > droite alors
+        sortir
+    fin si
+    échanger T[gauche] et T[droite]
+    gauche ← gauche+1
+    droite ← droite-1
+fin tant que
+
+échanger T[g] et T[droite]
+retourner droite
+```
 
 </details>
+
+:::note Précision sur le support
+
+Le support utilise $L$ à la fois pour une séquence déjà partitionnée et pour
+le tableau parcouru par les pointeurs. La formulation ci-dessus clarifie les
+noms : $T[g..d]$ est le segment complet, et `gauche` et `droite` délimitent
+ses régions pendant le partitionnement ; elle n'est pas une transcription
+littérale du PDF.
+
+:::
+
+Avant chaque échange, les éléments de $T[g+1..gauche-1]$ sont inférieurs ou
+égaux au pivot, ceux de $T[droite+1..d]$ lui sont strictement supérieurs, et
+la région entre les deux indices reste à examiner. Les tests de bornes
+précèdent chaque accès à $T$. À l'arrêt, après l'échange final, le pivot est en
+position $p=\text{droite}$ ; les appels récursifs portent donc sur
+$T[g..p-1]$ et $T[p+1..d]$, deux segments strictement plus petits.
 
 L'analyse du support mesure, à chaque profondeur $i$ de l'arbre QuickSort,
 $S_i(n)$, la somme des tailles d'entrée des nœuds. Ainsi,
