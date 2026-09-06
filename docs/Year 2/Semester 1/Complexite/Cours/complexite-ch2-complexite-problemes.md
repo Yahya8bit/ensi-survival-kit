@@ -592,37 +592,47 @@ $$
 E_M(n) \leq P(n) \qquad \text{pour tout } n.
 $$
 
-La classe $P$-space est celle des langages décidés par une machine de Turing
-déterministe polynomiale en espace. La classe $NP$-space est celle des langages
-acceptés par une machine de Turing non déterministe polynomiale en espace.
+La classe $PSPACE$ (notée « P-space » dans le support) est celle des langages
+décidés par une machine de Turing déterministe polynomiale en espace. La classe
+$NPSPACE$ (notée « NP-space » dans le support) est celle des langages acceptés
+par une machine de Turing non déterministe polynomiale en espace.
 
 :::
 
 :::note Théorème
 
 $$
-P\text{-space} = NP\text{-space}
+PSPACE = NPSPACE
 \qquad \text{et} \qquad
-P \subset NP \subset P\text{-space}.
+P \subseteq NP \subseteq PSPACE.
 $$
+
+:::
+
+:::note Précision sur le support
+
+Les inclusions ci-dessus sont établies, mais le PDF suggère une inclusion
+stricte vers l'espace polynomial. On ne sait pas actuellement si $P=NP$ ni si
+$NP=PSPACE$ ; ces séparations ne doivent donc pas être présentées comme
+démontrées. L'égalité $PSPACE=NPSPACE$ est établie par le théorème de Savitch.
 
 :::
 
 <details>
   <summary>Démonstration</summary>
 
-Pour $L \in NP\text{-space}$, le support considère une machine de Turing
+Pour $L \in NPSPACE$, le support considère une machine de Turing
 déterministe $M'$ qui reconnaît $L$ et écrit :
 
 $$
 E_{M'}(n) \leq 3p(n) = p'(n).
 $$
 
-Il en déduit $L \in P\text{-space}$, donc
-$NP\text{-space} \subset P\text{-space}$. L'inclusion réciproque donne :
+Il en déduit $L \in PSPACE$, donc
+$NPSPACE \subseteq PSPACE$. L'inclusion réciproque donne :
 
 $$
-P\text{-space} = NP\text{-space}.
+PSPACE = NPSPACE.
 $$
 
 Enfin, si $L \in NP$, il existe une machine de Turing non déterministe
@@ -632,7 +642,7 @@ $$
 E_M(n) \leq T_M(n) \leq P(n).
 $$
 
-Le support conclut alors que $L \in NP\text{-space} = P\text{-space}$.
+Le support conclut alors que $L \in NPSPACE = PSPACE$.
 
 </details>
 
