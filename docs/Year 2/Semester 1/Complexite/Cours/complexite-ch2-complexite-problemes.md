@@ -36,9 +36,16 @@ Un **problème** pose une question générale. Une **instance** est une donnée
 particulière fournie en entrée, de taille $n$ ; lorsqu'elle est représentée par
 un mot $x$, on prend $n=|x|$. Un **algorithme** donne une procédure pour
 répondre à cette question sur les instances qu'il accepte. La complexité d'un
-algorithme mesure les ressources consommées par cette procédure; la complexité
-d'un problème compare ce qui reste possible quand on choisit le meilleur
-algorithme connu dans un modèle de calcul fixé.
+algorithme mesure les ressources consommées par cette procédure.
+
+Dans un modèle de calcul et pour une ressource fixés, un algorithme en
+$O(f(n))$ fournit une borne supérieure pour résoudre le problème. Une borne
+inférieure en $\Omega(g(n))$ signifie qu'aucun algorithme de ce modèle ne peut
+faire asymptotiquement mieux. La complexité intrinsèque du problème désigne le
+meilleur coût asymptotique réalisable parmi les algorithmes qui le résolvent :
+le meilleur algorithme actuellement connu ne donne donc qu'une borne
+supérieure. Lorsque les bornes supérieure et inférieure coïncident
+asymptotiquement, elles caractérisent le problème en $\Theta$.
 
 Le support se limite d'abord aux problèmes décidables : une solution
 algorithmique existe. Il reste à savoir si elle utilise une quantité de temps
