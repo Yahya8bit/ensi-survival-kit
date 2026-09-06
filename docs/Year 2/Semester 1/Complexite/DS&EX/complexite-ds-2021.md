@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 title: "Devoir Surveillé — 12/11/2021"
 sidebar_label: DS 2021
 hide_title: true

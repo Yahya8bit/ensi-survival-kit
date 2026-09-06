@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
-title: Proposition de correction — Examen 2011/2012
-sidebar_label: Examen 2011/2012 (Correction)
+title: "Examen — 03/01/2012"
+sidebar_label: Examen 2011/2012
 hide_title: true
 ---
 
@@ -11,11 +11,63 @@ import TabItem from '@theme/TabItem';
 <Tabs>
 <TabItem value="markdown" label="Markdown" default>
 
-# Proposition de correction — Examen ACOO 2011/2012
+# Examen — Analyse et Conception Orientées Objets (2011/2012)
 
-*Formulaire de réponses — Examen ACOO — Session Principale. Ce document est une proposition de correction ; l'énoncé complet de l'examen (sujet « Monopoly ») n'est pas inclus dans ce document source — seul le formulaire de réponses corrigé est disponible.*
+*Université de La Manouba — École Nationale des Sciences de l'Informatique — Examen Principal du 1er Semestre — Niveau : II2 — Date : mardi 3 janvier 2012 — Durée : 2h — Documents non autorisés — Nombre de pages : 13 pages (3 p. énoncé + 10 p. réponses) — Enseignants : Y. Jamoussi, I. Ben Hamouda, I. Fliss, S. Mtibaa, G. Ziada*
 
-## Problème
+*NB : Répondez directement sur les feuilles de réponses. Ne répondez pas à l'aveuglette. La précision, la consistance et la clarté seront appréciées.*
+
+## Énoncé
+
+### Problème
+
+L'objectif de ce problème est d'analyser et de concevoir en partie, une version simplifiée du jeu de société Monopoly qui se joue de 2 à 6 joueurs. Dans ce jeu, les joueurs se déplacent sur un plateau contenant 40 cases organisées cycliquement (lorsqu'on atteint la dernière case, on continue sur la première) comme l'illustre la figure ci-dessous. Les 40 cases représentent : 22 terrains à bâtir, 4 gares, 2 compagnies, une case « prison », une case « allez en prison », une case « luxe », une case « impôt sur le revenu », une case « parc gratuit », une case « taxe de luxe », une case « départ », des cases « chance » et des cases « caisse de communauté ». Monopoly est le jeu où l'on vend, achète ou loue des propriétés de manière profitable, afin que les joueurs puissent s'enrichir. Le joueur qui ne parvient pas à faire face aux dépenses qui lui incombent fait faillite, ses propriétés deviennent libres et il quitte ainsi le jeu. Le but du jeu est d'être le dernier joueur n'ayant pas fait faillite.
+
+Ce jeu comporte 28 cases dites de « Propriété » relativement aux terrains, aux gares et aux compagnies. Chaque propriété peut faire l'objet d'un achat (si elle n'est pas déjà acquise par un autre joueur), d'une vente ou d'un paiement / encaissement de loyer.
+
+Les 28 propriétés sont divisées en 10 « groupes » :
+
+- Les terrains d'une même couleur forment un groupe de propriétés. Il existe donc huit groupes différents de propriétés (puisqu'il y a huit couleurs).
+- Les 4 gares forment le 9ème groupe.
+- Les 2 compagnies forment le 10ème groupe.
+
+Dans ce jeu, chaque joueur est caractérisé par son nom et son capital d'argent. Il occupe une case parmi les 40 cases du plateau. Il possède un pion, portant son nom, qui marque sa position dans le plateau. Les différents joueurs démarrent le jeu à la position case de "départ", et le capital initial de chacun d'entre eux est de 20.000 euros.
+
+Le système détient les Titres de Propriété et un nombre illimité de constructions (maisons et hôtels). Il paye les salaires et les primes, encaisse l'argent des impôts, des taxes et des achats de terrain et des constructions. Le système ne peut jamais "faire faillite" (on supposera qu'il détient une quantité infinie d'argent).
+
+À son tour, chaque joueur lance 2 dés puis avance son pion sur le plateau de jeu, d'autant de cases que l'indique le total des dés et ce dans le sens des aiguilles d'une montre. Chaque fois que le joueur passe lors de son avancement par la case "Départ", le système lui verse un salaire de 20.000 euros. Si le joueur obtient un double avec les dés, il se déplace normalement. Il effectue l'opération de sa case d'arrivée, puis relance les dés et se déplace à nouveau. Il effectuera alors une nouvelle opération. Par ailleurs, s'il obtient un double trois fois de suite, il doit se rendre immédiatement en Prison. Son tour de jeu est alors terminé.
+
+Plusieurs pions peuvent se trouver sur une même case au même moment. La case sur laquelle le joueur va s'arrêter indique ce que ce dernier doit ou peut faire. En fonction de la case de destination, il se produit l'une des actions suivantes :
+
+- Si la case de destination est un terrain qui n'a pas de propriétaire, le joueur peut l'acheter s'il le souhaite et s'il dispose du capital nécessaire pour son achat.
+- Si la case de destination est un terrain à la possession d'un autre propriétaire, il doit lui payer un loyer.
+- Si la case de destination est un terrain dont il est le propriétaire, rien ne se passe.
+- Si la case de destination est une case de type "CHANCE" ou "CAISSE DE COMMUNAUTE", il doit tirer une carte de la pile correspondante et applique l'une des trois actions suivantes : se rendre en prison ou se déplacer sur une autre case ; faire un paiement (taxes, impôt) ; percevoir une récompense sous forme d'une somme d'argent.
+- Si la case de destination est une case de type "IMPÔT" ou "TAXE", il doit payer le montant indiqué sur ces cases.
+- Si la case de destination est une case de type "ALLEZ EN PRISON", il doit s'y rendre.
+
+Lorsqu'un joueur possède tous les terrains d'un groupe de couleur, il a le droit d'acheter des maisons pour ce groupe (au plus 4 maisons par terrain), ce qui augmente la valeur du loyer. Le prix d'une Maison est indiqué sur le Titre de Propriété correspondant. À tout moment, durant son tour de jeu, le joueur peut acheter et construire autant de Maisons que sa fortune le lui permet (il n'y a aucune contrainte sur la façon de construire les maisons).
+
+Pour pouvoir acheter un Hôtel, un joueur doit posséder 4 Maisons sur chaque terrain d'un même groupe. Si un joueur désire construire un Hôtel, il demande au système de lui échanger les 4 Maisons du terrain de son choix contre un Hôtel, et il s'acquitte du prix indiqué pour un Hôtel sur le Titre de Propriété, puis il place son Hôtel sur ce terrain. Il ne peut construire qu'un seul Hôtel par terrain.
+
+Lors de son tour de jeu, un joueur qu'il soit endetté (n'ayant pas un capital suffisant pour payer ses dépenses : impôts, taxes et loyers) ou non peut selon son choix revendre au prix d'achat, des constructions, des terrains nus, des Gares ou des Compagnies de Distribution au système.
+
+Par ailleurs, l'arrivée d'un joueur en Prison met fin à son tour de jeu. Il ne franchit pas la case "Départ" et ne reçoit pas 20.000 euros jusqu'à ce qu'il quitte la prison. Le joueur pourra sortir de Prison :
+
+- S'il fait un double avec les dés durant l'un des trois tours qui suit son arrivée en Prison ; il se déplace alors du nombre de cases indiqué par les dés, puis relance les dés comme tout joueur ayant obtenu un double et il rejoue encore une fois.
+- Après avoir lancé les dés au cours du troisième tour : il doit alors — s'il n'a pas fait de double — payer une amende de 5.000 euros. Puis, il se déplace du nombre de cases indiqué par les dés et il continue à jouer.
+
+Pendant qu'un joueur est en Prison, il peut percevoir des loyers. S'il n'est pas "envoyé" en Prison mais qu'il parvient sur cette case dans le cours normal du jeu, son séjour est considéré comme une "simple visite". Le joueur n'encourra alors aucune pénalité et il peut se déplacer normalement au tour suivant.
+
+Lors de l'analyse du jeu Monopoly, un développeur a proposé le diagramme de classes UML incomplet suivant :
+
+<!-- TODO: unclear in source, verify against original PDF page 3 — le diagramme de classes UML fourni par l'énoncé (schéma) n'est pas repris dans le texte extrait. -->
+
+**Travail à faire**
+
+L'objectif de ce problème et d'analyser et concevoir en partie le jeu simplifié de « Monopoly » grâce aux diagrammes UML vus en cours. Pour cela, répondez directement aux questions qui sont posées dans les feuilles de réponses.
+
+## Corrigé
 
 ### Partie 1 : Expression des besoins (7pts)
 
@@ -237,7 +289,12 @@ Le patron de conception Singleton ne peut être appliqué que pour le cas de la 
 </details>
 
 </TabItem>
-<TabItem value="pdf" label="PDF">
+<TabItem value="pdf-statement" label="PDF (énoncé)">
+
+<PdfViewer file="/pdfs/acoo-examen-2011-2012-statement.pdf" />
+
+</TabItem>
+<TabItem value="pdf-correction" label="PDF (correction)">
 
 <PdfViewer file="/pdfs/acoo-examen-2011-2012-correction.pdf" />
 

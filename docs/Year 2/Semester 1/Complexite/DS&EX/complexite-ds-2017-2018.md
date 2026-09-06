@@ -1,18 +1,12 @@
 ---
-sidebar_position: 4
-title: "DS-AAC-2017-2 (fichier probablement mal classé)"
-sidebar_label: DS-AAC-2017-2 (à vérifier)
+sidebar_position: 3
+title: "Devoir Surveillé — 16/11/2017"
+sidebar_label: DS 2017/2018
 hide_title: true
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-
-:::warning Fichier probablement mal classé dans le dossier ACOO
-Le contenu de ce PDF (`DS-AAC-2017-2.pdf`) n'est **pas** un devoir surveillé d'ACOO (Analyse et Conception Orientée Objet). Son en-tête indique explicitement la matière **« Conception et Analyse des algorithmes »** (algorithmique et complexité — recherche en tableau, division pour régner sur les polynômes, NP-complétude), pour la classe II2, année 2017/2018. Il ne contient aucun contenu UML/objet.
-
-« AAC » dans le nom du fichier semble donc désigner cette matière d'algorithmique (« Analyse et Algorithmique de la Complexité » ou un intitulé proche — à confirmer), pas une ancienne appellation d'ACOO. Le fichier est transcrit ci-dessous tel quel par souci de fidélité à la source, mais **son classement dans le dossier ACOO est probablement une erreur** ; il faudrait le déplacer vers le dossier de la matière d'algorithmique correspondante après vérification.
-:::
 
 <Tabs>
 <TabItem value="markdown" label="Markdown" default>
@@ -81,7 +75,7 @@ Considérons les deux problèmes de décision suivants :
 </TabItem>
 <TabItem value="pdf" label="PDF">
 
-<PdfViewer file="/pdfs/acoo-ds-aac-2017-2.pdf" />
+<PdfViewer file="/pdfs/complexite-ds-2017-2018.pdf" />
 
 </TabItem>
 </Tabs>

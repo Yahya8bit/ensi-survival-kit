@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 title: "Examen — 05/01/2018 (Corrigé)"
 sidebar_label: Examen 2018 (Corrigé)
 hide_title: true

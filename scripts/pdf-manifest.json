@@ -1250,7 +1250,7 @@
     ]
   },
   {
-    "name": "acoo-ds-corrige.pdf",
+    "name": "acoo-ds-2011-2012.pdf",
     "drivePath": [
       "Year 2",
       "Semester 1",
@@ -1268,11 +1268,38 @@
     ]
   },
   {
-    "name": "acoo-ds-aac-2017-2.pdf",
+    "name": "acoo-examen-2011-2012-statement.pdf",
     "drivePath": [
       "Year 2",
       "Semester 1",
       "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "acoo-examen-2018-2019.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "acoo-cpoo-examen-2008-2009.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "ACOO",
+      "DS&EX"
+    ]
+  },
+  {
+    "name": "complexite-ds-2017-2018.pdf",
+    "drivePath": [
+      "Year 2",
+      "Semester 1",
+      "Complexite",
       "DS&EX"
     ]
   },

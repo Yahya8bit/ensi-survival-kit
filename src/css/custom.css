@@ -98,6 +98,7 @@ html {
 body {
   background: var(--ifm-background-color);
   color: var(--ifm-font-color-base);
+  overflow-x: hidden;
   text-rendering: optimizeLegibility;
 }
 
@@ -215,9 +216,12 @@ article + .pagination-nav {
 }
 
 .theme-code-block {
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid var(--ensi-border);
   border-radius: 8px;
   box-shadow: none;
+  overflow-x: auto;
 }
 .theme-code-block pre,
 .theme-code-block code {
