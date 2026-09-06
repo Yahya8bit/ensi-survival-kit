@@ -158,46 +158,20 @@ summary:focus-visible,
   background: var(--ifm-background-color);
 }
 
-/* Prose stays near 65ch while the document canvas safely accommodates study material. */
-.theme-doc-markdown {
-  max-width: min(100%, 900px);
+/* One fluid reading column keeps prose and study material on the same axis. */
+.theme-doc-markdown.markdown {
+  width: 100%;
+  max-width: 56rem;
+  margin-inline: auto;
 }
 
-.markdown {
-  max-width: 100%;
-}
-
-.theme-doc-markdown
-  > :not(
-    .theme-code-block,
-    .tabs-container,
-    .mermaid,
-    .table-wrapper,
-    table,
-    svg,
-    iframe
-  ) {
-  max-width: 65ch;
-}
-
-.theme-tabs-container
-  [role="tabpanel"]
-  > :is(
-    header,
-    p,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    ul,
-    ol,
-    blockquote,
-    details,
-    .theme-admonition
-  ) {
-  max-width: 65ch;
+/* Keep document chrome on the same reading axis as the article. */
+.theme-doc-breadcrumbs,
+.theme-doc-footer,
+article + .pagination-nav {
+  width: 100%;
+  max-width: 56rem;
+  margin-inline: auto;
 }
 
 .markdown .table-wrapper {
@@ -395,6 +369,26 @@ summary:focus-visible,
 .theme-doc-toc-desktop {
   font-size: 0.8rem;
 }
+
+@media (min-width: 997px) {
+  /* Let the desktop TOC rail reach the document viewport edge. */
+  main:has(.theme-doc-toc-desktop) > .container {
+    max-width: none;
+    margin-right: 0;
+  }
+
+  main:has(.theme-doc-toc-desktop) .col.col--3:has(> .theme-doc-toc-desktop) {
+    padding-right: 0;
+  }
+
+  .theme-doc-toc-desktop {
+    width: 100%;
+    max-width: none;
+    margin-right: 0;
+    padding-right: var(--ifm-spacing-horizontal);
+  }
+}
+
 .table-of-contents {
   border-left: 1px solid var(--ensi-border);
 }
