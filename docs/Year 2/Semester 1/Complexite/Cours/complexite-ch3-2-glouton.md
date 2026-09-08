@@ -50,7 +50,7 @@ ou seulement une heuristique.
 ```text title="Schéma glouton général"
 Glouton(A, n)
 Début
-    Trier A par ordre de poids décroissant
+    Trier A selon le critère de sélection glouton
     S ← ∅
     Pour i = 1 jusqu'à n faire
         x ← SELECTION(A)
