@@ -33,7 +33,7 @@ Un arbre organise des nœuds reliés par des relations père-fils. La racine est
 
 Le support numérote le niveau de la racine par $0$ et appelle **hauteur** le nombre de niveaux, ou de nœuds, de la branche la plus longue. Cette convention est conservée dans tout le chapitre : ne mélangez pas hauteur, profondeur et niveau.
 
-Pour un arbre binaire complet, il y a $2^p$ nœuds au niveau $p$ ; le support note $2^h$ le nombre de feuilles, où $h$ est la hauteur.
+Pour un arbre binaire complet, il y a $2^p$ nœuds au niveau $p$ ; le support note $2^{h-1}$ le nombre de feuilles, où $h$ est la hauteur.
 
 :::
 
@@ -197,7 +197,7 @@ La hauteur noire d'un nœud $x$, notée $hn(x)$, est le nombre de nœuds noirs s
 Dans un arbre Rouge-Noir à $n$ nœuds et de racine $x$, le support établit :
 
 $$
-n \geq 2^{hn(x)} - 1
+n \geq 2^{hn(x)}
 $$
 
 et
@@ -206,9 +206,11 @@ $$
 hn(x) \geq \frac{h(x)-1}{2}.
 $$
 
-On obtient ainsi $h \leq 2\log_2(n+1)+1$, donc $h = O(\log n)$.
+On obtient ainsi $h \leq 2\log_2(n)+1$, donc $h = O(\log n)$.
 
 :::
+
+Le PDF écrit localement son cas de base Rouge-Noir avec $h=0$ ; ci-dessous, le raisonnement est réécrit selon la convention du chapitre, où un arbre réduit à sa racine a $h=1$.
 
 <details>
   <summary>Démonstration</summary>
@@ -216,23 +218,23 @@ On obtient ainsi $h \leq 2\log_2(n+1)+1$, donc $h = O(\log n)$.
 On raisonne par récurrence sur la hauteur $h$ d'un arbre Rouge-Noir de racine $x$. Montrons que :
 
 $$
-n \geq 2^{hn(x)} - 1.
+n \geq 2^{hn(x)}.
 $$
 
-Pour $h=0$, l'arbre contient un nœud, $hn(x)=0$, et l'inégalité est vérifiée. Pour l'étape inductive, si $hn(x)=0$, on a immédiatement $n \geq 0 = 2^0-1$. Sinon, la racine possède deux enfants ; chacun est la racine d'un sous-arbre dont la hauteur noire vaut au moins $hn(x)-1$. L'hypothèse de récurrence appliquée aux deux sous-arbres donne :
+Pour $h=1$, l'arbre contient un nœud, $hn(x)=0$, et l'inégalité est vérifiée. Pour l'étape inductive, si $hn(x)=0$, on a immédiatement $n \geq 1 = 2^0$. Sinon, la racine possède deux enfants ; chacun est la racine d'un sous-arbre de hauteur $h-1$ et dont la hauteur noire vaut au moins $hn(x)-1$. L'hypothèse de récurrence appliquée aux deux sous-arbres donne :
 
 $$
-n \geq 2\bigl(2^{hn(x)-1}-1\bigr)+1
-\geq 2^{hn(x)}-1.
+n \geq 2\bigl(2^{hn(x)-1}\bigr)+1
+\geq 2^{hn(x)}.
 $$
 
 Enfin, le support relie la hauteur noire à la hauteur totale par $hn(x) \geq \dfrac{h(x)-1}{2}$. En combinant cette relation avec la borne précédente, on a :
 
 $$
-n+1 \geq 2^{hn(x)} \geq 2^{\frac{h-1}{2}}.
+n \geq 2^{hn(x)} \geq 2^{\frac{h-1}{2}}.
 $$
 
-Ainsi, $h \leq 2\log_2(n+1)+1$, ce qui donne $h=O(\log n)$.
+Ainsi, $h \leq 2\log_2(n)+1$, ce qui donne $h=O(\log n)$.
 
 </details>
 
