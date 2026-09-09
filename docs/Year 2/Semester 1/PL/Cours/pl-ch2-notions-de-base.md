@@ -30,7 +30,7 @@ $$
 \right.
 $$
 
-$Max\ Z = {}^t\!c\,x$ représente la fonction bénéfice, coût, …etc. et $Ax \le b$ représente les contraintes (d'égalités et d'inégalités).
+$Max\ Z = {}^t\!c\,x$ représente la fonction bénéfice, coût, …etc. Dans la forme canonique affichée ici, $Ax \le b$ représente les contraintes d'inégalité. La forme standard utilise des égalités $Ax=b$ ; plus généralement, un PL peut contenir des égalités et des inégalités linéaires.
 
 $A$ est une matrice d'ordre $m \times n$, $b$ est un vecteur à $m$ composantes et $c$ un vecteur à $n$ composantes.
 
@@ -72,7 +72,9 @@ $$
 
 **Question** : Comment passer d'une forme canonique à une forme standard ?
 
-**Réponse** : Pour une forme canonique, il suffit de rajouter un vecteur $\xi \ge 0$ pour obtenir un problème en forme standard :
+**Réponse** : Pour une contrainte $a_i^T x \le b_i$, on ajoute une variable d'écart $\xi_i \ge 0$ : $a_i^T x + \xi_i = b_i$. Pour une contrainte $a_i^T x \ge b_i$, on soustrait une variable d'excès $s_i \ge 0$ : $a_i^T x - s_i = b_i$. Les contraintes d'égalité sont déjà sous forme standard.
+
+Dans le cas canonique $Ax \le b$, l'ajout du vecteur $\xi \ge 0$ donne :
 
 $$
 \left\{
@@ -85,9 +87,15 @@ $$
 \right.
 $$
 
-$\xi$ : s'appelle vecteur des variables d'écart.
+$\xi$ est le vecteur des variables d'écart. Les variables d'écart ou d'excès ont un coefficient nul dans la fonction objectif.
 
 Pour la forme standard, il existe une solution initiale évidente, non nécessairement optimale, $(x = 0 \text{ et } \xi = b)$ si $b \ge 0$.
+
+::::note Initialisation
+
+La mise sous forme standard ne fournit pas toujours une base réalisable évidente, notamment en présence de contraintes $\ge$. La construction d'une base initiale dans ce cas sera traitée avec les méthodes du chapitre suivant.
+
+::::
 
 **Exemple**
 
@@ -139,8 +147,8 @@ $$X_{Opt} = \{x_0 \in \mathbb{R}^n \;/\; {}^t\!c\,x_0 \ge {}^t\!c\,x;\ \forall x
 
 **Propriétés**
 
-- $X_{ad}$ est convexe borné inférieurement
-- $X_{Opt}$ est convexe borné inférieurement
+- $X_{ad}$ est convexe ; il peut être vide ou non borné.
+- Lorsque $X_{Opt}$ est non vide, il est convexe ; il peut lui aussi être non borné.
 
 ## IV. Solution de base, variables de base et variables non de base
 
@@ -160,7 +168,7 @@ $$
 \text{Avec}
 \left\{
 \begin{aligned}
-&A \text{ est une matrice d'ordre } m \times n\ (n \ge m) \\
+&A \text{ est une matrice d'ordre } m \times n\ (n \ge m) \text{ et } \operatorname{rang}(A)=m \\
 &b \in \mathbb{R}^m \\
 &c \in \mathbb{R}^n \\
 &x \in \mathbb{R}^n
@@ -168,11 +176,9 @@ $$
 \right.
 $$
 
-$A = [B, N]$ : On partitionne $A$ en deux sous-matrices.
+$A = [B, N]$ : après un éventuel réordonnancement des colonnes, on partitionne $A$ en deux sous-matrices.
 
-$B$ = une matrice carrée d'ordre $m$ telle que : $B^{-1}$ existe et $B^{-1}b \ge 0$.
-
-$N$ = une matrice d'ordre $m \times (n-m)$.
+Une **base** est un choix de $m$ colonnes linéairement indépendantes de $A$. La sous-matrice correspondante $B$ est donc carrée d'ordre $m$ et inversible. Les autres colonnes forment $N$, de taille $m \times (n-m)$.
 
 - $x_B$ : vecteur des variables de base, c'est le vecteur des variables $x_j$ correspondant aux colonnes de $B$.
 - $x_N$ : vecteur des variables non de base, c'est le vecteur des variables $x_j$ correspondant aux colonnes de $N$ (sont appelées aussi variables hors base).
@@ -183,7 +189,11 @@ $$Z = {}^t\!c\,x = {}^t\!c_B\,x_B + {}^t\!c_N\,x_N$$
 
 $$b = Ax = Bx_B + Nx_N$$
 
-**La solution définie par** : $x = (x_B = B^{-1}b,\ x_N = 0)$ est appelée solution de base associée à $B$.
+Pour construire la solution de base associée à $B$, on pose $x_N=0$. Le système $Bx_B+Nx_N=b$ donne alors $x_B=B^{-1}b$ :
+
+$$x = (x_B=B^{-1}b,\ x_N=0).$$
+
+Cette solution est une **solution de base**. Elle est une **solution réalisable de base** (SRB) si et seulement si $x_B=B^{-1}b\ge0$.
 
 ### Exemple
 
@@ -247,11 +257,13 @@ $$x_B = \begin{pmatrix} x_1 \\ y_2 \end{pmatrix} \;\text{et}\; x_N = \begin{pmat
 
 **Ce choix donne la solution de base** : $x_B = \begin{pmatrix} 14 \\ 10 \end{pmatrix}$ et $x_N = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$
 
-### Un choix à rejeter
+### Une solution de base non réalisable
 
 $$A = \begin{pmatrix} 3 & 4 & 1 & 0 \\ 1 & 3 & 0 & 1 \end{pmatrix} \;\Rightarrow\; B = \begin{pmatrix} 4 & 0 \\ 3 & 1 \end{pmatrix} \;\text{et}\; N = \begin{pmatrix} 3 & 1 \\ 1 & 0 \end{pmatrix}$$
 
 $$B^{-1} \exists \;\text{ et }\; B^{-1} = \frac{1}{4}\begin{pmatrix} 1 & 0 \\ -3 & 4 \end{pmatrix} \;\text{mais}\; B^{-1}b = \begin{pmatrix} \dfrac{21}{2} \\ \dfrac{-30}{4} \end{pmatrix}$$
+
+Cette matrice $B$ est bien une base, mais la solution de base associée n'est pas réalisable car sa seconde variable de base vaut $-\frac{30}{4}<0$.
 
 **Remarque** : La Solution Initiale Évidente (**SIE**) admet la matrice identité comme base. Dans le cas de l'exemple, la (SIE) est :
 
@@ -259,37 +271,27 @@ $$x_B = \begin{pmatrix} y_1 \\ y_2 \end{pmatrix} = \begin{pmatrix} 42 \\ 24 \end
 
 ## V. Théorème fondamental de la programmation linéaire
 
-**Définition** : $C$ est un convexe, on dit que $x \in C$ est un point extrémal si $x$ n'est pas combinaison linéaire convexe de $y$ et $z$, pour tout $y$ et $z$ dans $C$.
+**Définition** : Soit $C$ un convexe. Un point $x\in C$ est **extrémal** s'il ne peut pas s'écrire $x=\lambda y+(1-\lambda)z$, avec $y,z\in C$, $y\ne z$ et $0<\lambda<1$.
 
-**Propriétés**
+Un point extrémal est un point frontière, mais la réciproque est fausse en général.
 
-$$(x_0 \text{ extrémal de } C) \Leftrightarrow (x_0 \text{ n'est pas compromis de deux autres points de } C)$$
+::::note Théorème fondamental de la programmation linéaire
 
-$$\Leftrightarrow (\nexists\, h \ne 0 \;/\; x_0 \pm h \in C) \Leftrightarrow (C \setminus \{x_0\} \text{ est un convexe})$$
+Si un PL possède un optimum fini qui est atteint, alors il existe au moins une solution optimale extrémale. Dans la forme standard $Ax=b$, $x\ge0$, avec $\operatorname{rang}(A)=m$, ces points extrémaux correspondent aux SRB.
 
-**Lemme** : « Si $C$ est convexe borné inférieurement alors il admet au moins un point extrémal »
+La justification est polyédrale : l'ensemble des solutions réalisables est un polyèdre et l'ensemble de ses solutions optimales est une face non vide ; cette face contient une solution extrémale dans le cadre standard considéré ici.
 
-**Remarque** : Un point extrémal sera toujours un point frontière mais l'inverse n'est pas toujours vrai.
-
-**Théorème fondamental de la programmation linéaire** : Si le problème de programmation linéaire admet une solution optimale, il en admet au moins une qui est extrémale.
-
-**Preuve** : L'ensemble des solutions optimales $X_{Opt}$ (non vide par hypothèse), il est convexe et borné inférieurement, il admet donc un point extrémal qui est un point extrémal dans $X_{ad}$.
+::::
 
 ## VI. Caractérisation d'une solution réalisable de base
 
-**Propriété d'une fonction linéaire** : Si une fonction linéaire atteint son maximum (ou son minimum) sur $X_{ad}$, cet optimum a lieu en un point extrémal.
-
-**Première constatation** : Étant donné que dans un programme linéaire la fonction objectif à maximiser ou à minimiser est une fonction linéaire, l'algorithme de simplexe permettra de trouver parmi les solutions optimales, une qui est extrémale.
+La recherche d'un optimum fini atteint peut donc se ramener à la recherche d'une solution extrémale, c'est-à-dire d'une SRB dans la forme standard de rang plein considérée ici.
 
 **Question** : Comment caractériser algébriquement et géométriquement un point extrémal ?
 
 ### VI.1 Caractérisation algébrique d'un point extrémal
 
-Soit $A$ une matrice ($m \times n$) et $b$ un vecteur à $m$ composantes.
-
-$$X_{ad} = \{x \in \mathbb{R}^n \;/\; Ax = b;\ x \ge 0\}$$
-
-Une CNS pour que $\hat{x}$ soit un point extrémal de $X_{ad}$ est que $\hat{x}$ soit un point de $X_{ad}$ vérifiant le système $\bar{A}\hat{x} = \bar{b}$, où $\bar{A}$ est une sous-matrice régulière d'ordre $n$ et $\bar{b}$ un sous-vecteur de $\mathbb{R}^n$.
+Considérons un polyèdre $X=\{x\in\mathbb{R}^n\;/\;Lx\le h\}$. Un point réalisable $\hat{x}$ est extrémal si et seulement s'il existe $n$ contraintes actives en $\hat{x}$ dont les vecteurs normaux sont linéairement indépendants. Une contrainte $L_i x\le h_i$ est active lorsque $L_i\hat{x}=h_i$.
 
 **Exemple** : Considérant l'ensemble des solutions admissibles d'un programme linéaire :
 
@@ -311,30 +313,27 @@ $$\begin{pmatrix} -1 & 0 \\ 0 & -1 \end{pmatrix}\begin{pmatrix} x_1 \\ x_2 \end{
 
 **Remarque** : L'intersection d'un nombre fini de demi-espaces fermés est un polyèdre.
 
-**Lemme** : Le polyèdre convexe $X_{ad} = \{x \in \mathbb{R}^n \;/\; Ax = b;\ x \ge 0\}$ possède un nombre fini $N$ de solutions de base réalisables et $N \le C_n^m$.
+**Propriété** : Sous les hypothèses de la forme standard, notamment $\operatorname{rang}(A)=m$, le polyèdre convexe $X_{ad}=\{x\in\mathbb{R}^n\;/\;Ax=b;\ x\ge0\}$ possède un nombre fini $N$ de SRB, avec $N\le C_n^m$.
 
-**Théorème** : L'ensemble des points extrêmes du polyèdre convexe $X_{ad}$ correspond à l'ensemble des solutions de base réalisables.
+**Théorème** : Sous ces mêmes hypothèses, l'ensemble des points extrêmes de $X_{ad}$ correspond exactement à l'ensemble des SRB.
 
 ### VI.3 Caractérisation géométrique d'une SRB
 
 Une SRB est donnée par :
 
-$$x = \begin{pmatrix} x_B = B^{-1}b \ge 0 & (m \text{ variables}) \\ x_N = 0 & (n-m \text{ variables}) \end{pmatrix}$$
+$$x = \begin{pmatrix} x_B = B^{-1}b \ge 0 & (m \text{ variables}) \\ x_N = 0 & (n-m \text{ variables}) \end{pmatrix}.$$
 
-$$x \in \big[(n-m \text{ hyperplans}) \cap (m \text{ hyperplans})\big] = \big[\{x_N = 0\} \cap \{x_B = B^{-1}b \ge 0\}\big]$$
+Elle satisfait les $m$ égalités indépendantes $Ax=b$ et les $n-m$ contraintes de non-négativité actives $x_N=0$ ; elle est donc un sommet de $X_{ad}$.
 
-Les points $x \in X_{ad}$ satisfaisant des contraintes d'égalités sont situés donc sur des faces de $X_{ad}$.
-
-$$\bigcap (n \text{ faces de } X_{ad}) = \text{un sommet (un point extrême "corner point")}$$
-$$\bigcap (n-1 \text{ faces de } X_{ad}) = \text{une arête}$$
-
-L'algorithme de simplexe consistera à se déplacer de point extrême en point extrême en suivant des arêtes de $X_{ad}$ jusqu'à ce que l'on ait atteint l'optimum.
+L'algorithme du simplexe, étudié au chapitre suivant, passe de base en base le long des arêtes lorsque cela est possible. En cas de dégénérescence, un pivot peut changer la base sans changer le sommet ; une règle anti-cyclage appropriée est alors nécessaire pour garantir l'arrêt.
 
 $$X_{ad} \text{ (infinité de solutions admissibles)} \;\longrightarrow\; \text{Les points extrémaux (corner points)} = \text{L'ensemble des solutions réalisables de base } (x_B = B^{-1}b \ge 0;\ x_N = 0)$$
 
 ## VII. Solution de base dégénérée
 
 Une solution réalisable de base est dite **dégénérée** si au moins une variable de base est nulle.
+
+Ainsi, plusieurs bases peuvent représenter le même sommet lorsqu'une variable de base vaut zéro.
 
 **Remarque** : S'il existe une base dégénérée, alors on peut rencontrer un éventuel cyclage de l'algorithme : on retrouve une base déjà rencontrée et on boucle indéfiniment. Pour traiter les cas de dégénérescence, on peut appliquer la règle de Bland (1977) qui assure l'arrêt de l'algorithme en un nombre fini d'itérations.
 
