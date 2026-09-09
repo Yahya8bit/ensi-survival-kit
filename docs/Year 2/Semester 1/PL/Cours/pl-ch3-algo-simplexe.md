@@ -17,9 +17,9 @@ import TabItem from '@theme/TabItem';
 
 ## I. Principe de l'algorithme
 
-Pour un problème de maximisation, l'algorithme de simplexe génère une suite de solutions réalisables, qui améliorent d'une façon monotone croissante la fonction $Z = {}^t\!c\,x$.
+Pour un problème de maximisation, l'algorithme de simplexe part d'une **solution réalisable de base** (SRB) et génère une suite de solutions réalisables qui améliorent d'une façon monotone croissante la fonction $Z = {}^t\!c\,x$.
 
-À une itération donnée, on considère la solution $x = \begin{pmatrix} x_B = B^{-1}b \\ x_N = 0 \end{pmatrix}$ associée à la base $B$.
+À une itération donnée, on considère la SRB $x = \begin{pmatrix} x_B = B^{-1}b \\ x_N = 0 \end{pmatrix}$ associée à la base $B$, avec $B^{-1}b\ge0$.
 
 Dans ce cas :
 
@@ -31,7 +31,9 @@ $$\Rightarrow Z = {}^t\!c_B\,B^{-1}b + \left({}^t\!c_N - {}^t\!c_B\,B^{-1}N\righ
 
 $${}^t\bar{c}_N = {}^t\!c_N - {}^t\!c_B\,B^{-1}N \;:\; \text{vecteur des coûts réduits des VNB}$$
 
-Une variable de base possédant un coût réduit positif, si elle devenait non nulle augmenterait la fonction objectif.
+En posant $z_0={}^t\!c_B\,B^{-1}b$, les équations de travail du tableau sont donc $x_B=B^{-1}b-B^{-1}Nx_N$ et $Z=z_0+{}^t\!\bar{c}_N x_N$, avec ${}^t\!\bar{c}_N={}^t\!c_N-{}^t\!c_B\,B^{-1}N$.
+
+Ainsi, avec la convention de maximisation utilisée ici, une **variable non de base** possédant un coût réduit positif peut, si elle devient non nulle, augmenter la fonction objectif. Lorsque tous les coûts réduits des variables non de base sont non positifs, la SRB courante est optimale.
 
 $$Z = {}^t\!c_B\,B^{-1}b + \big(\bar{c}_1 \;\cdots\; \bar{c}_j > 0 \;\cdots\; \bar{c}_{n-m}\big)\begin{pmatrix} x_N^1 \\ \vdots \\ x_N^j = 0 \\ \vdots \\ x_N^{n-m} \end{pmatrix}$$
 
@@ -42,7 +44,7 @@ $$Z = {}^t\!c_B\,B^{-1}b + \big(\bar{c}_1 \;\cdots\; \bar{c}_j > 0 \;\cdots\; \b
 
 ## II. Critère d'optimalité
 
-Une solution réalisable de base correspondante à une base $B$ est optimale, si les coûts réduits des variables non de base sont tous négatifs.
+Une solution réalisable de base correspondante à une base $B$ est optimale si les coûts réduits des variables non de base sont tous non positifs.
 
 $$\bar{c}_j = \left({}^t\!c_N - {}^t\!c_B\,B^{-1}N\right)_j \le 0 \quad \text{pour} \quad 1 \le j \le n-m$$
 
@@ -50,7 +52,7 @@ $$\bar{c}_j = \left({}^t\!c_N - {}^t\!c_B\,B^{-1}N\right)_j \le 0 \quad \text{po
 
 *George Dantzig, 1949*
 
-À une itération donnée, on considère la solution $x = \begin{pmatrix} x_B = B^{-1}b \\ x_N = 0 \end{pmatrix}$.
+À une itération donnée, on considère la SRB $x = \begin{pmatrix} x_B = B^{-1}b \\ x_N = 0 \end{pmatrix}$, avec $B^{-1}b\ge0$.
 
 $$
 \left\{
@@ -97,13 +99,21 @@ Quelle est la plus grande valeur $\theta$ qu'on peut donner à $x_{j_0}$ sans vi
 
 On a $x_{Bi} = v_{Bi} - a_{ij_0}\theta$. Pour que $x_{Bi}$ reste $\ge 0$, choisir :
 
-$$\theta = \min_{a_{ij_0} > 0} \left(\frac{v_{Bi}}{a_{ij_0}}\right) \qquad \forall i,\ 1 \le i \le m$$
+$$\theta = \min_{a_{ij_0} > 0} \left(\frac{v_{Bi}}{a_{ij_0}}\right).$$
+
+Seules les lignes pour lesquelles $a_{ij_0}>0$ participent à ce test. Si aucune telle ligne n'existe, alors $x_{j_0}$ peut augmenter indéfiniment sans violer la non-négativité des variables de base : le problème de maximisation est non borné dans cette direction.
 
 Supposons que la ligne $i_0$ donne le minimum : $\dfrac{v_{Bi_0}}{a_{i_0j_0}} = \min\left(\dfrac{v_{Bi}}{a_{ij_0}}\right)$
 
 - La ligne $i_0$ est la **ligne de pivot**.
 - La variable $x_{Bi_0}$ est la **variable sortante de la base**.
 - $a_{i_0j_0}$ s'appelle **le pivot**.
+
+::::note Dégénérescence et égalités dans le test des rapports
+
+Un minimum de rapport nul donne un pivot dégénéré. Si plusieurs lignes atteignent le même minimum, le choix de la variable sortante est à égalité. Dans ces cas, un pivot peut changer la base sans changer le sommet représenté ; une règle déterministe anti-cyclage, telle que la règle de Bland, peut être appliquée si nécessaire.
+
+::::
 
 ### Mise à jour du tableau de simplexe lors d'un changement de base
 
@@ -204,17 +214,15 @@ On constate que la variable d'écart $y_2$ est non nulle. On dit que la contrain
 
 ## Remarque : Cas d'une solution non bornée
 
-Si $j_0$ est une colonne de pivot dont le coût réduit est $\bar{c}_{j_0} < 0$ et tel que $a_{ij_0} < 0\ \forall i \Rightarrow$ la solution du programme linéaire est infinie.
+Dans la convention de maximisation de ce chapitre, si une variable entrante $x_{j_0}$ a un coût réduit $\bar{c}_{j_0}>0$ et qu'il n'existe aucune ligne telle que $a_{ij_0}>0$, alors l'objectif est non borné au-dessus. De manière équivalente, tous les coefficients de la colonne entrante vérifient $a_{ij_0}\le0$.
 
-En effet, comme $(x_B)_i = v_{Bi} - a_{ij_0}\theta$ ; avec $a_{ij_0} < 0$ on peut considérer une valeur $\theta$ aussi grande que l'on veut sans qu'aucune des variables de base ne devienne $< 0$.
+En effet, comme $(x_B)_i = v_{Bi} - a_{ij_0}\theta$, lorsque $a_{ij_0}\le0$ on peut considérer une valeur $\theta$ aussi grande que l'on veut sans qu'aucune des variables de base ne devienne négative.
 
-Dans ce cas : $Z = {}^t\!c_B\,B^{-1}b + \bar{c}_{j_0}\theta$ prend une valeur infinie.
-
-<!-- TODO: source slide 15 title reads "coût réduit est c̄j0 < 0" while the body inequality shown is "c̄j0 < 0" paired with the unbounded-ray condition aij0 < 0 — transcribed exactly as it appears on the slide (page 15), flagged here since the sign convention differs from the earlier ">0 entering variable" rule and is worth double-checking against the lecturer's intent. -->
+Dans ce cas, $Z = {}^t\!c_B\,B^{-1}b + \bar{c}_{j_0}\theta$ croît sans borne lorsque $\theta\to+\infty$.
 
 ## V. Solution initiale : Méthode des deux phases
 
-Si le problème n'admet pas une solution initiale évidente : écrire la forme standard avec des $b_i \ge 0$. Considérons la forme auxiliaire :
+Si le problème n'admet pas une solution initiale évidente, écrire la forme standard avec des $b_i\ge0$. Considérons la forme auxiliaire :
 
 $$
 (PL)
@@ -233,7 +241,7 @@ $$
 &Min\ w = \sum_{i=1}^m \psi_i \\
 &\text{S-C} \\
 &Z = {}^t\!c\,x \\
-&b = Ax + \psi \\
+&Ax + \psi = b \\
 &x_i \ge 0;\ \psi_i \ge 0
 \end{aligned}
 \right.
@@ -245,13 +253,15 @@ Pour le programme auxiliaire considérer la SIE : $x = \begin{pmatrix} x_B = \ps
 
 ### Méthode des deux phases
 
-**Phase I** : Appliquer l'algorithme de simplexe pour le programme auxiliaire. Si le minimum de $w$ est $0$ alors le problème initial admet une solution si toutes les variables artificielles $\psi_i$ sont non de base (si certaines sont de base et elles sont nulles).
+**Phase I** : Minimiser $w=\sum_{i=1}^m\psi_i$ ; pour conserver la convention de tableau de maximisation de ce chapitre, on peut de manière équivalente maximiser $-w$. On a $w^*=0$ si et seulement si le problème initial est réalisable ; si $w^*>0$, il est infaisable.
 
-**Phase II** : Éliminer la fonction $w$ ainsi que les variables artificielles $\psi_i$ du tableau de simplexe et appliquer, si nécessaire, l'algorithme de simplexe une deuxième fois sur le tableau restant.
+Une variable artificielle peut rester basique avec une valeur nulle à l'optimum de Phase I. Avant la Phase II, on la fait sortir de la base par pivot si une colonne non artificielle convient ; si aucun pivot n'est possible, la ligne correspondante est redondante et peut être supprimée.
+
+**Phase II** : Une fois les variables artificielles sorties de la base ou les lignes redondantes supprimées, éliminer leurs colonnes, restaurer la fonction objectif originale, puis appliquer si nécessaire l'algorithme de simplexe au tableau restant.
 
 ## Méthode de pénalité ou méthode M
 
-Écrire la forme standard avec les $b_i \ge 0$. Rajouter une variable artificielle pour chaque contrainte qui cause un problème pour la SIE (c-à-d pour les contraintes $=$ et $\ge$). Soit $M>0$ très grand ($M = 10^6$), on obtient le problème suivant :
+Écrire la forme standard avec les $b_i\ge0$. Rajouter une variable artificielle pour chaque contrainte qui cause un problème pour la SIE (c-à-d pour les contraintes $=$ et $\ge$). Pour un problème de maximisation, on pénalise ces variables par $-M\psi_i$, où $M>0$ est une constante symbolique suffisamment grande :
 
 $$
 (PL)
@@ -265,10 +275,12 @@ $$
 \right.
 $$
 
-Appliquer l'algorithme de simplexe, deux cas sont possibles :
+Appliquer l'algorithme de simplexe. À l'optimum :
 
-- **Cas 1** : une variable artificielle au moins reste dans la base avec une valeur $>0$, alors le problème n'a pas de solution.
-- **Cas 2** : Toutes les variables artificielles sont non de base (si certaines sont de base et elles sont nulles), alors la solution est optimale.
+- **Cas 1** : si une variable artificielle a une valeur $>0$, alors le problème initial est infaisable.
+- **Cas 2** : si toutes les variables artificielles sont nulles, la solution est réalisable pour le problème initial. Les éventuelles variables artificielles basiques nulles se traitent comme à la fin de la Phase I avant de lire la solution optimale du problème original.
+
+Une valeur numérique fixe de $M$ n'est pas universellement suffisante : elle doit être justifiée par l'échelle du problème et peut créer des difficultés numériques. La méthode des deux phases évite ce choix.
 
 ## Exemples
 
