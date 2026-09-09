@@ -49,6 +49,20 @@ $$
 
 **Remarque** : Le dual du programme dual est le primal.
 
+**Correspondances de signes** — Pour un primal de maximisation et son dual de minimisation, les correspondances générales sont les suivantes :
+
+| Contrainte du primal | Signe de la variable duale associée |
+|---|---|
+| $a_i^T x \le b_i$ | $u_i \ge 0$ |
+| $a_i^T x \ge b_i$ | $u_i \le 0$ |
+| $a_i^T x = b_i$ | $u_i$ libre (sans contrainte de signe) |
+
+| Signe de $x_j$ dans le primal | Contrainte duale correspondante |
+|---|---|
+| $x_j \ge 0$ | $(A^T u)_j \ge c_j$ |
+| $x_j \le 0$ | $(A^T u)_j \le c_j$ |
+| $x_j$ libre | $(A^T u)_j = c_j$ |
+
 **Exemple**
 
 $$
@@ -197,7 +211,11 @@ $\bar{u}$ est admissible SSI $\left({}^t\!c_N - {}^t\!c_B B^{-1}N\right) \le 0$
 
 $${}^t\!b\,\bar{u} = {}^t\!b\,{}^t\!\left(c_B^t B^{-1}\right) = {}^t\!\left(B^{-1}b\right)c_B = {}^t\!x_B\,c_B = {}^t\!x\,c = \text{valeur max du primal}$$
 
-**Dualité faible** : ${}^t\!c\,x \le {}^t\!b\,u \;\Rightarrow\; Min\ w = Max\ Z$
+Pour le couple construit, $x_B$ est réalisable pour le primal, $\bar{u}$ est réalisable pour le dual et
+
+$$ {}^t\!c\,x_B = {}^t\!b\,\bar{u}. $$
+
+Combinée à la dualité faible, cette égalité des valeurs de deux solutions réalisables prouve que $x_B$ et $\bar{u}$ sont optimales. Ainsi, $Max\ Z = Min\ w$
 
 ## IV. Tableau de simplexe Primal-Dual
 
@@ -221,10 +239,10 @@ Ce qui donne :
 $$Z = {}^t\!c_B B^{-1}b + \left({}^t\!c_N - {}^t\!c_B B^{-1}N\right)x_N - {}^t\!c_B B^{-1}Y$$
 $$B^{-1}b = I\,x_B + B^{-1}N\,x_N + B^{-1}Y$$
 
-|       | $x_B$          | $x_N$                              | $Y$              |
-|-------|----------------|-------------------------------------|------------------|
-| $Z$   | ${}^t\!c_B B^{-1}b$ | $0$ | $\left({}^t\!c_N - {}^t\!c_B B^{-1}N\right)$ | ${}^t\!c_B B^{-1}$ |
-| $x_B$ | $B^{-1}b$      | $I$ | $B^{-1}N$ | $B^{-1}$ |
+|       | RHS | $x_B$ | $x_N$ | $Y$ |
+|-------|-----|-------|-------|-----|
+| $Z$   | ${}^t\!c_B B^{-1}b$ | $0$ | $\left({}^t\!c_N - {}^t\!c_B B^{-1}N\right)$ | $-{}^t\!c_B B^{-1}$ |
+| $x_B$ | $B^{-1}b$ | $I$ | $B^{-1}N$ | $B^{-1}$ |
 
 |                     | Simplexe | Dual Simplexe |
 |---------------------|----------|----------------|
@@ -258,13 +276,13 @@ En effectuant une suite de pivotages en maintenant admissible pour le programme 
 Ce changement de base garantit :
 
 (i) la fonction $w$ diminue
-(ii) les coûts réduits restent toujours positifs ou nuls.
+(ii) les coûts réduits restent toujours négatifs ou nuls.
 
 **Le pivotage** : de la même manière que l'algorithme de simplexe.
 
 ### Exemple
 
-**Remarque** : Dans le tableau simplexe qu'on optimise par la méthode duale de simplexe, si à une itération on a $\left(B^{-1}b\right)_{i_0} < 0$ et $a_{i_0j} \ge 0\ \forall j$, alors le programme primal n'est pas réalisable.
+**Remarque** : Dans un tableau où la faisabilité duale est maintenue, c'est-à-dire $\left({}^t\!c_N - {}^t\!c_B B^{-1}N\right) \le 0$, si à une itération on a $\left(B^{-1}b\right)_{i_0} < 0$ et $a_{i_0j} \ge 0\ \forall j$, alors aucune colonne entrante n'est éligible et le programme primal n'est pas réalisable.
 
 **Exemple** :
 
@@ -415,13 +433,11 @@ $$
 &-u_1 + u_5 \le 3 \\
 &-u_2 + u_3 \le 3 \\
 &-u_2 + u_4 \le 5 \\
-&-u_2 - u_5 \le 4 \\
+&-u_2 + u_5 \le 4 \\
 &u_i \ge 0
 \end{aligned}
 \right.
 $$
-
-<!-- TODO: the last constraint on page 19 reads "-u2 - u5 ≤ 4" in the source slide (verified against the PDF page image), which breaks the pattern of every other listed constraint (all use "-u1/-u2 + u_k"); it may be a typo in the source for "-u2 + u5 ≤ 4" but is transcribed exactly as shown rather than silently corrected — verify against the original if this is used for computation. -->
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
