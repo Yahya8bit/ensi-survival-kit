@@ -26,8 +26,16 @@ Quels sont les nombres respectifs de ceintures des deux types à fabriquer chaqu
 On doit structurer le problème posé à l'aide d'un modèle mathématique permettant :
 
 - D'identifier les variables inconnues du problème
-- De présenter les limitations sous forme d'équations de contraintes linéaires
+- De présenter les limitations sous forme d'égalités et/ou d'inégalités linéaires, ainsi que les conditions de signe ou de domaine des variables de décision
 - De traduire l'objectif du problème par une fonction linéaire
+
+::::info Définitions utiles
+
+- Une **variable de décision** représente une quantité dont la valeur doit être choisie pour résoudre le problème.
+- Une **solution réalisable** est un choix de valeurs des variables de décision qui satisfait toutes les contraintes linéaires ainsi que leurs restrictions de signe ou de domaine.
+- La **région réalisable** (ou domaine réalisable) est l'ensemble de toutes les solutions réalisables.
+
+::::
 
 ### Problème de fabrication
 
@@ -96,7 +104,9 @@ $$
 
 <!-- TODO: page 5 of the source is a hand-drawn coordinate-plane graph (not a source diagram made of reproducible ASCII-art/shapes — a genuine plotted figure), so it is described in prose here rather than faithfully re-rendered; refer to the PDF tab for the actual figure. -->
 
-Le graphique trace le polygone des solutions réalisables défini par les quatre contraintes ($x_1 \le 400$, $x_2 \le 700$, $x_1 + x_2 \le 800$, $2x_1 + x_2 \le 1000$) dans le premier quadrant, ainsi qu'une famille de droites parallèles $Z = 2x_1 + \frac{3}{2}x_2 = c^{te}$ que l'on déplace dans la direction du gradient (flèche orange) jusqu'à toucher le dernier sommet du polygone avant de le quitter. Le sommet optimal indiqué sur le graphique est $(200, 600)$.
+Le graphique trace le polygone des solutions réalisables défini par les quatre contraintes ($x_1 \le 400$, $x_2 \le 700$, $x_1 + x_2 \le 800$, $2x_1 + x_2 \le 1000$) dans le premier quadrant, ainsi qu'une famille de droites parallèles $Z = 2x_1 + \frac{3}{2}x_2 = c^{te}$ que l'on déplace dans la direction du gradient (flèche orange) jusqu'à toucher le dernier sommet du polygone avant de le quitter. Le sommet optimal indiqué sur le graphique est $(200, 600)$, d'où :
+
+$$Z_{max} = Z(200,600) = 2 \times 200 + \frac{3}{2} \times 600 = 1300.$$
 
 - On rappelle que le gradient de la fonction coût $Z$, noté $\nabla Z$, est un vecteur défini par :
 
@@ -106,11 +116,32 @@ $$
 
 Montrer que le vecteur transposé du gradient, $(\nabla Z)^t$, de la fonction coût est une direction d'augmentation de celui-ci en tout point $x^0$. (Indication : utiliser le développement en série de Taylor de la fonction $Z$ au voisinage de $x^0$).
 
-- **Pour un problème de maximisation** : La droite, parallèle à la droite $Z=0$, et qui est la plus éloignée de l'origine, c'est celle qui passe par la solution optimale.
-- **Pour un problème de minimisation** : La droite, parallèle à la droite $Z=0$, et qui est la plus proche de l'origine, c'est celle qui passe par la solution optimale.
-- **Remarque** : un problème de programmation linéaire peut :
-  - Ne pas admettre de solution.
-  - Avoir une infinité de solutions.
+Les droites de niveau $Z = {}^t\!cx = \alpha$ sont parallèles. Pour un problème de **maximisation**, on les déplace dans le sens d'augmentation de $Z$, c'est-à-dire dans la direction de $c = \nabla Z$. Pour un problème de **minimisation**, on les déplace dans le sens de diminution de $Z$, c'est-à-dire dans la direction de $-c$. Dans les deux cas, la droite optimale correspond au niveau extrême qui rencontre encore la région réalisable.
+
+::::note Précision sur le support
+
+Le support décrit les droites optimales comme étant les plus éloignées ou les plus proches de l'origine. Cette distance n'est pas un critère général : la direction d'amélioration de l'objectif est le critère géométrique correct.
+
+::::
+
+### Méthode graphique à deux variables
+
+Pour résoudre graphiquement un PL à deux variables :
+
+1. Tracer la droite frontière associée à chaque inégalité.
+2. Déterminer le demi-plan qui satisfait chaque inégalité.
+3. Intersecter ces demi-plans avec les contraintes de signe.
+4. Identifier la région réalisable obtenue.
+5. Tracer une droite de niveau de l'objectif.
+6. La translater dans le sens qui améliore l'objectif.
+7. Identifier le dernier contact avec la région réalisable et y évaluer l'objectif.
+
+### Issues possibles
+
+- Lorsqu'un optimum fini est atteint, il existe, dans le cadre standard $Ax \le b$, $x \ge 0$ considéré ici, une solution optimale à un sommet de la région réalisable ; une solution optimale peut aussi appartenir à toute une arête.
+- Il y a **plusieurs optima** lorsqu'une droite de niveau optimale coïncide avec une arête réalisable.
+- Le problème est **infaisable** lorsque la région réalisable est vide.
+- L'objectif est **non borné** lorsque son amélioration peut se poursuivre indéfiniment tout en restant dans la région réalisable.
 
 ## Exercice 1
 
