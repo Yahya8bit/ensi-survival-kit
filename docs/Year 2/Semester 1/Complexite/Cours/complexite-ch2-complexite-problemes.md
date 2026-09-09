@@ -274,11 +274,20 @@ se transforme polynomialement vers tout langage de $C_2$.
 
 :::
 
-:::note Propriétés
+:::note Précision sur le support
 
-La classe $P$ est une classe d'équivalence polynomiale. Pour tout $L_1 \in P$
-et tout $L_2 \in NP$, le support énonce $L_1 \alpha L_2$; ainsi
-$P \preceq_p c$ pour toute classe d'équivalence $c$ de $NP$.
+Le PDF présente $P$ comme une classe d'équivalence et affirme que tout langage
+de $P$ se réduit à tout langage de $NP$. Avec la définition par équivalence
+oui/non ci-dessus, cette affirmation est fausse : $P$ contient notamment des
+langages triviaux et non triviaux, qui n'appartiennent pas tous au même degré
+de réduction.
+
+Le résultat utile est le suivant. Si $L_2$ est **non trivial**, c'est-à-dire
+s'il possède au moins une instance $y_{oui} \in L_2$ et une instance
+$y_{non} \notin L_2$, alors pour tout $L_1 \in P$, on a $L_1 \alpha L_2$.
+La réduction décide $x \in L_1$ en temps polynomial, puis renvoie
+$y_{oui}$ ou $y_{non}$ selon la réponse. Cette hypothèse est indispensable :
+elle exclut notamment $\emptyset$ et $\Sigma_2^*$.
 
 :::
 
@@ -575,23 +584,23 @@ Soit $M$ une machine de Turing offline déterministe. Sa complexité en espace
 est :
 
 $$
-E_M(n) = \max\{m \mid |x| = n,\ m \text{ est le nombre de cases visitées lors
-de l'exécution de } M \text{ sur } x\}.
+E_M(n) = \max\{m \mid |x| = n,\ m \text{ est le nombre de cases de travail
+visitées lors de l'exécution de } M \text{ sur } x\}.
 $$
 
 :::
 
 :::info Définition
 
-Pour une machine de Turing offline déterministe $M$, l'espace de calcul sur un
-mot $w$ est donné par le nombre de cases visitées pour la plus courte exécution
-de $M$ sur $w$ qui accepte $w$.
+Pour une machine déterministe qui s'arrête sur $w$, la computation est unique,
+qu'elle accepte ou rejette. Son espace de calcul est donc le nombre de cases
+de travail visitées pendant cette unique computation.
 
-Pour une machine de Turing offline non déterministe $M$ :
-
-$$
-E_M(n) = \max\{EC_N(x) \mid |x| = n\}.
-$$
+Pour une machine non déterministe, la borne d'espace doit valoir pour toute
+branche de computation sur les entrées de taille $n$. Une machine utilise
+$s(n)$ cases d'espace si aucune de ses branches n'en visite plus de $s(n)$.
+Cette convention distingue l'espace non déterministe d'un choix de « plus
+courte exécution acceptante ».
 
 :::
 
@@ -626,22 +635,27 @@ $$
 Les inclusions ci-dessus sont établies, mais le PDF suggère une inclusion
 stricte vers l'espace polynomial. On ne sait pas actuellement si $P=NP$ ni si
 $NP=PSPACE$ ; ces séparations ne doivent donc pas être présentées comme
-démontrées. L'égalité $PSPACE=NPSPACE$ est établie par le théorème de Savitch.
+démontrées. Le PDF écrit aussi une simulation déterministe en $3p(n)$ espaces,
+ce qui n'est pas une borne générale valide. L'égalité $PSPACE=NPSPACE$ est
+établie par le théorème de Savitch.
 
 :::
 
 <details>
   <summary>Démonstration</summary>
 
-Pour $L \in NPSPACE$, le support considère une machine de Turing
-déterministe $M'$ qui reconnaît $L$ et écrit :
+Pour une fonction $s(n) \geq \log n$ constructible en espace, le théorème de
+Savitch donne :
 
 $$
-E_{M'}(n) \leq 3p(n) = p'(n).
+NSPACE(s(n)) \subseteq DSPACE(s(n)^2).
 $$
 
-Il en déduit $L \in PSPACE$, donc
-$NPSPACE \subseteq PSPACE$. L'inclusion réciproque donne :
+Si $L \in NPSPACE$, il existe donc une borne polynomiale $p(n)$ pour laquelle
+$L \in NSPACE(p(n)) \subseteq DSPACE(p(n)^2)$. Comme $p(n)^2$ reste un
+polynôme, $L \in PSPACE$ ; ainsi $NPSPACE \subseteq PSPACE$. L'inclusion
+réciproque est immédiate, car une machine déterministe est un cas particulier
+d'une machine non déterministe. On obtient :
 
 $$
 PSPACE = NPSPACE.
