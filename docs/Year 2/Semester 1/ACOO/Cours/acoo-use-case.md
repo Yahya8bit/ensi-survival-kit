@@ -15,8 +15,6 @@ import TabItem from '@theme/TabItem';
 
 *ENSI — II2 — ACOO*
 
-<!-- TODO: unclear in source, verify against original PDF (slide deck text extraction reorders some bullet fragments and diagram labels) — best-effort reconstruction below, see task summary -->
-
 ## Introduction
 
 - Objets du monde réel — « De quoi parle-t-on ? » → **Analyse** → modèle conceptuel.
@@ -24,6 +22,15 @@ import TabItem from '@theme/TabItem';
 - Algorithme du logiciel (scénario) — « Comment 'physique' ? » → **Code** → modèle physique → objets du langage.
 
 Description d'un problème : **ANALYSE — QUOI ?** (Analyse Quoi-Faire ?). Description de la solution d'un problème : **CONCEPTION** (Conception Comment-Faire ?).
+
+```mermaid
+flowchart LR
+    R[Objets du monde réel<br/>« De quoi parle-t-on ? »] -->|Algorithme du monde réel| L[Objets du logiciel<br/>« Comment logique ? »]
+    L -->|Algorithme du logiciel<br/>scénario| P[Objets du langage<br/>« Comment physique ? »]
+    R --- A[Analyse<br/>Modèle conceptuel]
+    L --- C[Conception<br/>Modèle logique]
+    P --- Code[Code<br/>Modèle physique]
+```
 
 ## Modélisation des besoins — perspectives d'un système
 
@@ -40,7 +47,15 @@ Pourquoi les cas d'utilisation :
   - ils connaissent l'aspect fonctionnel du système.
 - Le système doit donc être bâti à partir des descriptions des utilisateurs.
 
-Vue motivation → vue des cas d'utilisation (besoins des utilisateurs), vue logique, vue des composants, vue des processus, vue de déploiement.
+La vue des cas d'utilisation exprime les besoins des utilisateurs et motive les vues logique, des composants, des processus et de déploiement.
+
+```mermaid
+flowchart TB
+    B[Besoins des utilisateurs<br/>vue des cas d'utilisation] --- L[Vue logique]
+    B --- C[Vue des composants]
+    B --- P[Vue des processus]
+    B --- D[Vue de déploiement]
+```
 
 ## Diagramme des cas d'utilisation
 
@@ -59,6 +74,18 @@ Un diagramme de cas d'utilisation est modélisé par :
 ## L'utilisateur et le système
 
 Un utilisateur interagit avec un `Système` qui offre des services via plusieurs cas d'utilisation (`Use Case 1`, `Use Case 2`, `Use Case 3`).
+
+```mermaid
+flowchart LR
+    U[Utilisateur] --- UC1([Use Case 1])
+    U --- UC2([Use Case 2])
+    U --- UC3([Use Case 3])
+    subgraph S[Système]
+      UC1
+      UC2
+      UC3
+    end
+```
 
 Le diagramme de cas d'utilisation répond aux questions suivantes :
 
@@ -144,6 +171,14 @@ Ne pas confondre la notion d'Acteur et de personne utilisant le système :
 
 Exemple : `Etudiant`, `Secrétaire` interagissent avec un `Système de Gestion Scolaire`, qui interagit avec `<<acteur>> Imprimante` et `<<acteur>> Site Web de l'établissement`.
 
+```mermaid
+flowchart LR
+    E[Étudiant] --- SGS
+    Sec[Secrétaire] --- SGS
+    SGS[Système de Gestion Scolaire] --- I[<<acteur>><br/>Imprimante]
+    SGS --- W[<<acteur>><br/>Site Web de l'établissement]
+```
+
 ## Différents types d'acteurs
 
 - Utilisateurs principaux, ex : client, guichetier
@@ -152,6 +187,22 @@ Exemple : `Etudiant`, `Secrétaire` interagissent avec un `Système de Gestion S
 - Systèmes externes, ex : systèmes bancaires
 
 **Exemple** (`DistributeurDeBillet` — « Système informatique de la banque ») : `Client` — `RetirerDeLArgentAuDistributeur`, `ConsulterSonCompte` ; `TransporteurDeBillets` — `AjouterDesBillets`, `RetirerLesCartesAvalées` ; `Technicien` — `AssurerLaMaintenance`.
+
+```mermaid
+flowchart LR
+    Client[Client] --- Retrait([RetirerDeLArgentAuDistributeur])
+    Client --- Compte([ConsulterSonCompte])
+    Transporteur[TransporteurDeBillets] --- Ajout([AjouterDesBillets])
+    Technicien --- Cartes([RetirerLesCartesAvalées])
+    Technicien --- Maintenance([AssurerLaMaintenance])
+    subgraph D[DistributeurDeBillets]
+      Retrait
+      Compte
+      Ajout
+      Cartes
+      Maintenance
+    end
+```
 
 ## Acteurs principaux et secondaires
 
@@ -223,6 +274,11 @@ Exemple : `GuichetierEnChef` (spécialisation de `Guichetier`) — `CréerUnComp
 
 Un acteur peut être une spécialisation d'un autre acteur déjà défini. Dans ce cas, on utilise la relation de généralisation/spécialisation (`Acteur général` → `Acteur spécialisé`).
 
+```mermaid
+flowchart BT
+    General[Guichetier] <|-- Specialise[GuichetierEnChef]
+```
+
 ## Relations cas d'utilisation - cas d'utilisation
 
 UML définit trois types de relations standardisées entre cas d'utilisation :
@@ -234,10 +290,18 @@ UML définit trois types de relations standardisées entre cas d'utilisation :
 Les trois types de relations sont :
 
 - l'inclusion (`<<include>>`) quand le cas source comprend le cas destination ;
-- l'extension (`<<extends>>`) quand le cas source ajoute optionnellement son comportement au cas destination ;
+- l'extension (`<<extend>>`) quand le cas source ajoute optionnellement son comportement au cas destination ;
 - la généralisation quand le cas enfant est une spécialisation du cas parent.
 
-**Exemple de relations entre cas d'utilisation** (inclusion, extension et spécialisation) : `S'Identifier` `<<include>>` `RetirerDeLArgent`, `TransférerDeLArgent` `<<include>>` `RetirerDeLArgent` ; `RetirerDeLArgentAuDistributeur` `<<extends>>` `RetirerDeLArgent`, `RetirerDeLArgentAvecDifféré` `<<extends>>` `RetirerDeLArgent`.
+**Exemple de relations entre cas d'utilisation** (inclusion, extension et spécialisation) : `RetirerDeLArgent` et `TransférerDeLArgent` `<<include>>` `S'Identifier` ; `RetirerDeLArgentAvecDifféré` `<<extend>>` `RetirerDeLArgent` ; `RetirerDeLArgentAuDistributeur` spécialise `RetirerDeLArgent`.
+
+```mermaid
+flowchart LR
+    Retirer([RetirerDeLArgent]) -. "<<include>>" .-> Identifier([S'Identifier])
+    Transferer([TransférerDeLArgent]) -. "<<include>>" .-> Identifier
+    Differe([RetirerDeLArgentAvecDifféré]) -. "<<extend>>" .-> Retirer
+    DAB([RetirerDeLArgentAuDistributeur]) -->|spécialisation| Retirer
+```
 
 ## Relation d'inclusion
 
@@ -341,6 +405,11 @@ Il n'existe pas de norme (UML) établie pour la description textuelle des cas d'
 
 **Gabarit de description** : sommaire d'identification (titre, type, résumé, acteurs, date de création/mise à jour, version, auteur(s)) ; description des enchaînements (pré-conditions, scénario nominal, enchaînements alternatifs/exceptions, contraintes).
 
+| Sommaire d'identification | Description des enchaînements |
+|---|---|
+| Titre, type, résumé, acteurs | Préconditions, scénario nominal, enchaînements alternatifs / exceptions, contraintes |
+| Date de création et de mise à jour, version, auteur(s) | Étapes numérotées du scénario |
+
 ## Exemple de description détaillée d'un CU (`RetirerDeLArgentAuDistributeur`)
 
 - **Précondition** : le distributeur contient des billets, il est en attente d'une opération, il n'est ni en panne, ni en maintenance.
@@ -392,6 +461,30 @@ Un système simplifié de caisse enregistreuse de supermarché :
 ### Diagramme de cas d'utilisation de la caisse
 
 `Responsable Magasin` — `Initialiser la caisse` ; `Caissier` — `Traiter le passage en caisse` (`<<inclut>>` `Traiter le Paiement`, `<<étend>>` `Prendre en compte coupons`) ; `Client` ; acteurs secondaires : `<<Acteur>> Gestion des stocks`, `<<Acteur>> Centre autorisation cartes`, `<<Acteur>> Centre autorisation chèques` ; sous-cas de `Traiter le Paiement` : `Paiement Liquide`, `Paiement Chèque`, `Paiement Carte`.
+
+```mermaid
+flowchart LR
+    RM[Responsable Magasin] --- Init([Initialiser la caisse])
+    Caissier --- Passage([Traiter le passage en caisse])
+    Client --- Passage
+    Passage -. "<<include>>" .-> Paiement([Traiter le paiement])
+    Coupons([Prendre en compte coupons]) -. "<<extend>>" .-> Passage
+    Liquide([Paiement liquide]) -->|spécialisation| Paiement
+    Cheque([Paiement chèque]) -->|spécialisation| Paiement
+    Carte([Paiement carte]) -->|spécialisation| Paiement
+    Stocks[<<acteur>><br/>Gestion des stocks] --- Passage
+    Cartes[<<acteur>><br/>Centre autorisation cartes] --- Carte
+    Cheques[<<acteur>><br/>Centre autorisation chèques] --- Cheque
+    subgraph Caisse[Caisse]
+      Init
+      Passage
+      Coupons
+      Paiement
+      Liquide
+      Cheque
+      Carte
+    end
+```
 
 ### Description des cas d'utilisation « Caisse »
 
