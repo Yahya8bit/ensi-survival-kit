@@ -151,9 +151,9 @@ flowchart TD
 
 Rajouter $x_2 \le 2$ au tableau optimal de $S_1$. Selon le tableau de $S_1$ :
 
-$$x_2 = \frac{13}{6} - \frac{7}{10}y_1 - \frac{2}{3}y_3$$
+$$x_2 = \frac{13}{6} - \frac{1}{6}y_1 - \frac{2}{3}y_3$$
 
-$$x_2 + y_5 = 2 \;\Rightarrow\; -\frac{7}{10}y_1 - \frac{2}{3}y_3 + y_5 = -\frac{1}{6}$$
+$$x_2 + y_5 = 2 \;\Rightarrow\; -\frac{1}{6}y_1 - \frac{2}{3}y_3 + y_5 = -\frac{1}{6}$$
 
 <!-- TODO: the two tableaux on page 6 of the source (columns x1,x2,y1,y2,y3,y5) are handwritten and several individual cell fractions are hard to read with full confidence; the legible bottom-line result carried forward to page 7 is transcribed below. Verify exact tableau cells against the original image if needed. -->
 
@@ -184,7 +184,7 @@ Rajouter $x_1 \ge 1$ au tableau optimal obtenu en $S_3$. D'après le tableau :
 
 $$x_1 = \frac{3}{4} + \frac{1}{4}y_1 - \frac{3}{2}y_5$$
 
-$$x_1 \ge 1 \;\Leftrightarrow\; -x_1 \le -1 \text{ et } -x_1 + y_6 = -1 \;\Rightarrow\; -\frac{1}{4}y_1 + \frac{3}{2}y_5 = -\frac{1}{4}$$
+$$x_1 \ge 1 \;\Leftrightarrow\; -x_1 \le -1 \text{ et } -x_1 + y_6 = -1 \;\Rightarrow\; -\frac{1}{4}y_1 + \frac{3}{2}y_5 + y_6 = -\frac{1}{4}$$
 
 |        |      | $x_1$ | $x_2$ | $y_1$  | $y_2$ | $y_3$ | $y_5$ | $y_6$ |
 |--------|------|-------|-------|--------|-------|-------|-------|-------|
@@ -195,9 +195,11 @@ $$x_1 \ge 1 \;\Leftrightarrow\; -x_1 \le -1 \text{ et } -x_1 + y_6 = -1 \;\Right
 | $y_3$  | 1/4  | 0     | 0     | 21/20  | 0     | 1     | -3/2  | 0     |
 | $y_6$  | -1/4 | 0     | 0     | -1/4   | 0     | 0     | 3/2   | 1     |
 
-Après pivotage : $x_1 = \dfrac{3}{4} + \dfrac{1}{4}\times 1 = 1$, $x_2 = 2 + 0\times 1 = 2$, $Z^* = \dfrac{13}{4} - \dfrac{1}{4}\times 1 = -3$.
+Après pivotage : $x_1 = \dfrac{3}{4} + \dfrac{1}{4}\times 1 = 1$, $x_2 = 2 + 0\times 1 = 2$, et $(-Z)^* = \dfrac{13}{4} - \dfrac{1}{4}\times 1 = 3$, donc $Z^*=-3$.
 
 **Solution optimale (nœud $S_6$)** : $Z^* = -3$, $x_1 = 1$, $x_2 = 2$.
+
+Avant la résolution de $S_6$, la solution entière de $S_2$ donne l'incumbent $Z=-2$ : $S_5$, de borne inférieure $-3$, ne peut donc pas encore être élagué. Après la mise à jour de l'incumbent à $Z=-3$ par $S_6$, la borne inférieure de $S_5$ lui est égale ; $S_5$ peut alors être élagué par borne.
 
 ## Conclusion
 
@@ -218,7 +220,7 @@ flowchart TD
     S3 -->|x1≥1| S6
 ```
 
-Le nœud $S_2$ ($Z^*=-2$) est éliminé au profit d'une borne inférieure meilleure ($S_1$). Après exploration complète, la meilleure solution entière trouvée est celle de $S_6$ : $x_1 = 1$, $x_2 = 2$, $Z^* = -3$.
+Le nœud $S_2$ fournit la première solution entière réalisable, donc l'incumbent $Z=-2$, et est élagué car son optimum de relaxation est entier. Cet incumbent est conservé jusqu'à ce que $S_6$ fournisse la meilleure solution entière : $x_1 = 1$, $x_2 = 2$, $Z^* = -3$.
 
 ### Interprétation géométrique
 
