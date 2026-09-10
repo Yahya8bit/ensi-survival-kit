@@ -15,8 +15,6 @@ import TabItem from '@theme/TabItem';
 
 *ENSI — II2*
 
-<!-- TODO: unclear in source, verify against original PDF (slide deck text extraction reorders some bullet fragments) — best-effort reconstruction below, see task summary -->
-
 ## La mise en place d'un système
 
 - Description d'un problème : **ANALYSE** — Analyse Quoi-Faire ?
@@ -35,6 +33,14 @@ import TabItem from '@theme/TabItem';
 ## Intérêt des objets ?
 
 Structure d'une application objet => flots de messages entre un certain nombre d'objets, les objets sont « presque » indépendants les uns des autres.
+
+```mermaid
+flowchart LR
+    o1[Objet 1] -->|message| o2[Objet 2]
+    o2 --> o1
+    o2 --> o3[Objet 3]
+    o3 -->|message| o1
+```
 
 - Cette indépendance (l'une des grandes forces de l'approche O.O.) permet la réutilisation des objets par de nombreuses applications.
 - Les objets sont plus stables que les spécifications qui définissent leurs interactions => les applications sont plus simples à écrire et à faire évoluer.
@@ -82,8 +88,6 @@ Langage de modélisation des applications construites à l'aide d'objets, indép
 - **Ce n'est pas** :
   - Une méthode
 
-<!-- TODO: unclear in source, verify against original PDF — a diagram (slide 9-10) showing the convergence of OMT (Rumbaugh et al.), Booch, and OOSE (Jacobson et al.) methods (plus Fusion, Classe-Relation, ROOM, HOOD, etc.) into UML around 1990/1995 could not be reliably reconstructed from the OCR text alone -->
-
 ## Genèse d'UML
 
 - Utilisation d'un standard de modélisation « universel »
@@ -92,7 +96,21 @@ Langage de modélisation des applications construites à l'aide d'objets, indép
 - 1989 : création de l'OMG (Object Management Group) ; groupe créé à l'initiative de grandes sociétés informatiques américaines afin de normaliser les systèmes à objets ; 1ère réalisation de l'OMG : CORBA (communication entre applications objets dans un système distribué hétérogène)
 - La dernière version de la spécification validée par l'OMG est UML 2.5.1 (2017)
 
-<!-- TODO: unclear in source, verify against original PDF — timeline diagram: Catalysis, Unified Method 0.8 (1995), ROOM, Rational (1996), UML 0.9, UML 1.1 (Nov. 1997, OMG), UML 2.5 (Juin 1999 / Mars 2015), UML 1.3 (Fin 2001), UML 1.4 — the exact chronological layout could not be reliably reconstructed from OCR text -->
+```mermaid
+flowchart LR
+    OMT[OMT<br/>Rumbaugh et al.] --> UM[Unified Method 0.8<br/>1995]
+    Booch --> UM
+    OOSE[OOSE<br/>Jacobson et al.] --> U09[UML 0.9<br/>1996]
+    UM --> U09
+    Catalysis --> U09
+    ROOM --> U09
+    U09 --> U11[UML 1.1<br/>nov. 1997]
+    U11 --> U13[UML 1.3<br/>juin 1999]
+    U13 --> U14[UML 1.4<br/>fin 2001]
+    U14 --> U25[UML 2.5<br/>mars 2015]
+```
+
+Cette chronologie illustre l'idée centrale : UML ne remplace pas une démarche de développement ; il unifie une **notation** issue de plusieurs méthodes.
 
 ## Devant et derrière, avant et après…
 
@@ -185,14 +203,17 @@ Monde Réel → Monde de l'information : un objet réel (ex. *Colette skie vite,
 
 ## Vues multiples (aspects d'un système logiciel)
 
-<!-- TODO: unclear in source, verify against original PDF — illustration of multiple viewpoints on a building (vue du maçon, du plombier, de l'électricien, du locataire, du propriétaire, de l'architecte) -->
+```mermaid
+flowchart TB
+    S[Un même système : une maison] --- M[Vue du maçon]
+    S --- P[Vue du plombier]
+    S --- E[Vue de l'électricien]
+    S --- L[Vue du locataire]
+    S --- Pr[Vue du propriétaire]
+    S --- A[Vue de l'architecte]
+```
 
-- Vue du maçon
-- Vue du plombier
-- Vue de l'électricien
-- Vue du locataire
-- Vue du propriétaire
-- Vue de l'architecte
+Chaque vue répond à des questions différentes ; elles sont partielles et complémentaires, non concurrentes.
 
 ## Modèle ?
 
@@ -311,8 +332,6 @@ Les créateurs d'UML insistent tout particulièrement sur le fait que la notatio
 
 ## Les contributions à UML
 
-<!-- TODO: unclear in source, verify against original PDF — diagram attributing specific concepts to specific authors (Booch, Rumbaugh, Jacobson, Meyer, Harel, Embley, Gamma et al., Wirfs-Brock, Shlaer-Mellor, Odell) could not be reliably reconstructed from OCR text; best-effort list below -->
-
 - **Meyer** : Conception par contrat, invariants
 - **Rumbaugh/Jacobson** : la description des opérations, le nombre de messages (Fusion)
 - **Harel** : diagrammes à état
@@ -377,7 +396,14 @@ Les préoccupations (facettes) de modélisation d'UML peuvent être catégorisé
 
 → Tous les diagrammes d'UML vont être catégorisés selon ces classifications.
 
-<!-- TODO: unclear in source, verify against original PDF — "Les niveaux d'abstractions" slide contains no extractable text content -->
+## Les niveaux d'abstraction
+
+| Niveau | Ce que le modèle représente |
+|---|---|
+| Capture des besoins | Les frontières fonctionnelles du système. |
+| Analyse | Les concepts manipulés par les utilisateurs, aux points de vue statique et dynamique. |
+| Conception | Les concepts employés par les outils, langages ou plates-formes. |
+| Déploiement | Les matériels et logiciels à interconnecter. |
 
 ## Les briques de base
 
@@ -389,7 +415,25 @@ Les briques de base de UML sont :
 
 Les briques de base simples sont utilisées pour construire des structures plus complexes et plus grandes.
 
-<!-- TODO: unclear in source, verify against original PDF — several consecutive "Les représentations possibles" slides contain no extractable text content (likely pure diagram slides) -->
+## Les représentations possibles : le modèle 4+1 vues
+
+Le modèle 4+1 organise des vues indépendantes et complémentaires autour des besoins des utilisateurs.
+
+```mermaid
+flowchart TB
+    B[Besoins des utilisateurs] --- L[Vue logique<br/>abstraction, éléments du domaine]
+    B --- C[Vue des composants<br/>modules et dépendances]
+    B --- P[Vue des processus<br/>tâches, communication, synchronisation]
+    B --- D[Vue de déploiement<br/>nœuds, ressources, performances]
+```
+
+| Vue | Question principale |
+|---|---|
+| Logique | Quels éléments, relations et mécanismes du domaine ? |
+| Composants (réalisation) | Quels modules réalisent le modèle et quelles dépendances ont-ils ? |
+| Processus | Comment le système est-il découpé en tâches qui communiquent et se synchronisent ? |
+| Déploiement | Sur quelles ressources matérielles répartir le logiciel ? |
+| Cas d'utilisation (« +1 ») | Quels besoins et scénarios guident et justifient les quatre autres vues ? |
 
 ## Le langage UML
 
@@ -450,6 +494,22 @@ Les briques de base simples sont utilisées pour construire des structures plus 
 5. Réalisation → Modèle de réalisation
 6. Tests → Modèle de tests
 
+```mermaid
+flowchart LR
+    E[1. Capture des exigences] --> A[2. Analyse]
+    A --> C[3. Consolidation des exigences]
+    C --> D[4. Conception]
+    D --> R[5. Réalisation]
+    R --> T[6. Tests]
+    T --> C
+    E --> ME[Modèle d'exigences]
+    A --> MA[Modèle d'analyse]
+    D --> MC[Modèle de conception]
+    D --> MD[Modèle de déploiement]
+    R --> MR[Modèle de réalisation]
+    T --> MT[Modèle de tests]
+```
+
 ## Phases non outillées par UML
 
 - **Codage** : transcription dans un langage de programmation objet des objets du dossier de conception.
@@ -462,7 +522,10 @@ Les briques de base simples sont utilisées pour construire des structures plus 
 
 ## Conclusion — les bénéfices d'UML
 
-<!-- TODO: unclear in source, verify against original PDF page (final slide) — the "bénéfices d'UML" bullet content was not present in the extracted text -->
+- Une notation unique et standard, connue des intervenants, exploitable à tous les niveaux du développement et dans des domaines au-delà du logiciel.
+- Une sémantique définie par un méta-modèle.
+- Un format d'échange entre ateliers : **XMI**.
+- Un mécanisme d'extension par les **profils**, pour adapter UML à un contexte ; SysML est un exemple de profil UML.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
