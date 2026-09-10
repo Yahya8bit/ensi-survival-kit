@@ -54,7 +54,7 @@ Généralement la direction $d$ est une direction de descente, c-à-d $\nabla f(
 
 ### I.1 Méthode de Newton-Raphson
 
-La fonction $g$ est supposée deux fois continûment différentiable. La recherche d'un minimum de $g$ se fait en recherchant un point stationnaire, c-à-d $\alpha^*$ vérifiant l'équation non linéaire $\dfrac{dg}{d\alpha} = g'(\alpha) = 0$ par la méthode de Newton.
+La fonction $g$ est supposée deux fois continûment différentiable. La méthode de Newton est ici appliquée à l'équation non linéaire $g'(\alpha)=0$, afin de rechercher un point stationnaire $\alpha^*$. Pour identifier ce point comme un minimum, il faut une hypothèse d'optimisation supplémentaire, par exemple $g''(\alpha^*)>0$ localement, ou la convexité/unimodalité de $g$ sur l'intervalle considéré.
 
 **Remarque** : On désigne par la méthode de Newton, c'est celle qui est utilisée par la recherche des racines d'une fonction $f(x) = 0$.
 
@@ -74,7 +74,7 @@ D'une manière générale, on a : $\alpha_{k+1} = h(\alpha_k)$ avec $h(x) = x - 
 
 ### Remarques
 
-1. La convergence de la méthode de Newton-Raphson dépend du choix de $\alpha_0$. Si $\alpha_0$ est proche de la solution $g'(\alpha) = 0$, nécessairement cette méthode converge. C'est pour cela, il est intéressant d'utiliser une méthode pour le choix de $\alpha_0$ afin d'assurer la convergence de la méthode de Newton-Raphson : exemple la méthode de dichotomie.
+1. La convergence de la méthode de Newton-Raphson dépend du choix de $\alpha_0$. Une garantie locale usuelle suppose que $\alpha^*$ est une racine simple de $g'$ — en particulier $g''(\alpha^*)\ne0$ —, les conditions de régularité locales habituelles, et un point initial suffisamment proche de $\alpha^*$. Une méthode d'encadrement peut aider à choisir ce point initial.
 
 2. La méthode de N-R est convergente lorsqu'elle est appliquée à une fonction quadratique de la forme : $g(\alpha) = u\alpha^2 + v\alpha + w$ où $u > 0$.
 
@@ -106,7 +106,7 @@ C'est donc que la suite $\alpha_k$ s'éloigne de 0 et tend vers $\infty$.
 
 Un obstacle important dans la mise en œuvre pratique de la méthode de Newton, est d'avoir à la fois la dérivée première et seconde en chaque point.
 
-En approximant la dérivée seconde en $\alpha_k$ par : $\dfrac{g(\alpha_k) - g(\alpha_{k-1})}{\alpha_k - \alpha_{k-1}}$
+En approximant la dérivée seconde en $\alpha_k$ par : $\dfrac{g'(\alpha_k) - g'(\alpha_{k-1})}{\alpha_k - \alpha_{k-1}}$
 
 La formule de Newton devient :
 
@@ -126,12 +126,13 @@ Supposons $\exists\ \alpha^*\ /\ g'(\alpha^*) = 0$. Il s'agit de trouver $\alpha
 - $g'(0) < 0$ : la direction de déplacement est une direction de descente.
 - $\exists\ \bar{\alpha}\ /\ \forall\ \alpha \ge \bar{\alpha}\ \ g'(\alpha) > 0$.
 
-La méthode consiste à déterminer un premier intervalle $[\alpha_{min}, \alpha_{max}]\ /\ g'(\alpha_{min}) < 0$ et $g'(\alpha_{max}) > 0$, puis à réduire progressivement cet intervalle par dichotomie jusqu'à obtention d'un intervalle final d'amplitude $\le \varepsilon$ suffisamment petite.
+La méthode consiste à déterminer un premier intervalle $[\alpha_{min}, \alpha_{max}]\ /\ g'(\alpha_{min}) < 0$ et $g'(\alpha_{max}) > 0$, puis à réduire progressivement cet intervalle par dichotomie jusqu'à obtention d'un intervalle final d'amplitude $\le \varepsilon$ suffisamment petite. Par continuité de $g'$, ce changement de signe encadre une racine de $g'$, donc un point stationnaire ; pour l'interpréter comme le minimum recherché, on suppose en outre $g$ convexe ou unimodale sur l'intervalle.
 
 Plus précisément, à une itération donnée on calcule $g'(\alpha_1)$ au point $\alpha_1 = \dfrac{\alpha_{min} + \alpha_{max}}{2}$ :
 
 - Si $g'(\alpha_1) > 0 \Rightarrow$ on remplace $\alpha_{max}$ par $\alpha_1$ et on itère.
 - Si $g'(\alpha_1) < 0 \Rightarrow$ on remplace $\alpha_{min}$ par $\alpha_1$ et on itère.
+- Si $g'(\alpha_1) = 0 \Rightarrow$ on s'arrête : $\alpha_1$ est un point stationnaire.
 
 **Remarque** : Pour déterminer l'intervalle initial $[\alpha_{min}, \alpha_{max}]$, on peut utiliser la stratégie suivante :
 
@@ -139,6 +140,7 @@ Plus précisément, à une itération donnée on calcule $g'(\alpha_1)$ au point
 2. Calculer $g'(h)$.
    - Si $g'(h) < 0 \Rightarrow \alpha_{min} = h$ et $h = 2h$ (retourner en (2))
    - Si $g'(h) > 0 \Rightarrow \alpha_{max} = h$. Fin.
+   - Si $g'(h) = 0 \Rightarrow h$ est un point stationnaire. Fin.
 
 ## II. Méthodes d'encadrement
 
@@ -179,24 +181,24 @@ En utilisant l'unimodalité, il est facile de voir que seuls les cinq cas suivan
 
 <!-- TODO: pages 10-11 of the source draw a small number-line sketch for each of the 5 cases above, marking which sub-interval "à éliminer" — genuine illustrative sketches, summarized in prose in the case list above rather than individually re-rendered; see PDF tab. -->
 
-Comme chaque itération revient à enlever deux quarts, on réduit $[a,b]$ de moitié. De même, on poursuivra le processus. Au total, après $n$ évaluations de la fonction $g$, on aura réduit l'intervalle de départ d'un facteur de $2^{(n-3)/2}$ ($n \ge 5$), c-à-d : au début on évalue $g$ 5 fois (soit 5 points $x_1 \to x_5$), puis à chaque itération on évalue $g$ deux fois $\Rightarrow$ pour $n$ évaluations de $g$ on réduit l'intervalle $[a,b]$ $\dfrac{n-3}{2}$ fois :
+Comme chaque itération revient à enlever deux quarts, on réduit $[a,b]$ de moitié. La réduction initiale utilise 5 évaluations, puis chaque réduction supplémentaire utilise 2 nouvelles évaluations. Ainsi, pour $n=5+2k$ évaluations (donc $n$ impair), l'intervalle initial a été réduit $(n-3)/2$ fois :
 
 $$\frac{[a\,b]_n}{[a\,b]} = \frac{1}{2^{(n-3)/2}}$$
 
 **Remarque** : Le rapport de réduction de l'intervalle de départ en fonction de $n$ (nombre d'évaluations de $g$) est donné par :
 
-$$\frac{b^n - a^n}{b-a} = \frac{1}{2^{(n-3)/2}} \qquad n \ge 5$$
+$$\frac{b^n - a^n}{b-a} = \frac{1}{2^{(n-3)/2}} \qquad n=5+2k,\ k\ge0$$
 
 avec $[a^n\, b^n]$ est l'intervalle obtenu après $n$ évaluations de $g$.
 
-À titre d'exemple :
+Les plus petits nombres d'évaluations assurant les précisions suivantes sont :
 
-| $n$ | $\dfrac{b^n-a^n}{b-a}$ |
-|-----|-------------------------|
-| 17  | $10^{-2}$               |
-| 23  | $10^{-3}$               |
-| 29  | $10^{-4}$               |
-| 42  | $10^{-6}$               |
+| Précision garantie | $n$ minimal |
+|--------------------|-------------|
+| $10^{-2}$          | 17          |
+| $10^{-3}$          | 23          |
+| $10^{-4}$          | 31          |
+| $10^{-6}$          | 43          |
 
 ### II.3 Méthode de Fibonacci
 
@@ -224,15 +226,13 @@ En écrivant que $\dfrac{D_k}{D_{N-1}} = \dfrac{D_{k+1}}{D_{N-1}} + \dfrac{D_{k+
 
 $$\begin{cases} F_n = F_{n-1} + F_{n-2} \\ F_1 = 1 \end{cases} \qquad (n = 3,4,...,N-1)$$
 
-La suite $F_n$ est déterminée dès qu'on choisit $F_2$ et par la suite des $D_k$. Étant donné que $D_{N-1} = \dfrac{D_1}{F_{N-2}}$, pour $D_{N-1}$ soit petit il faut que $F_{N-1}$ soit grand. Comme on doit avoir $\dfrac{D_1}{D_2} \ge \dfrac{1}{2}$ (c-à-d $F_1 \ge F_2/2$), on choisit $F_2 = 2$, $F_1 = 1$.
+La suite $F_n$ est déterminée dès qu'on choisit $F_2$ et par la suite des $D_k$. Étant donné que $D_{N-1} = \dfrac{D_1}{F_{N-1}}$, pour que $D_{N-1}$ soit petit il faut que $F_{N-1}$ soit grand. On choisit $F_1 = 1$ et $F_2 = 2$.
 
-$(F_n)_{n \ge 3}$ est appelée la suite de Fibonacci qui vérifie la relation de récurrence : $F_n = F_{n-1} + F_{n+2}$, $F_1 = 1$, $F_2 = 2$.
-
-<!-- TODO: page 15's recurrence "F_n = F_{n-1} + F_{n+2}" as literally written repeats a probable transcription slip already present on the handwritten slide itself (should read F_{n-2}, consistent with the derivation above and with the classic Fibonacci recurrence); transcribed exactly as it appears rather than silently corrected. -->
+$(F_n)_{n \ge 3}$ est appelée la suite de Fibonacci qui vérifie la relation de récurrence : $F_n = F_{n-1} + F_{n-2}$, $F_1 = 1$, $F_2 = 2$.
 
 **Remarques**
 
-1. La détermination des premiers points dépend de $N$ : $\dfrac{D_1}{D_2} = \dfrac{F_{N-1}}{F_{N-2}}$. Ne pose pas de problème car $N$ est fixé à l'avance. En effet si $D_1 = 1$ : la largeur de l'intervalle de départ. Si la précision souhaitée est de $10^{-3}$ : $\dfrac{D_{N-1}}{D_1} = \dfrac{1}{F_{N-1}} = 10^{-3}$, ce qui donne $N = 16$.
+1. La détermination des premiers points dépend de $N$ : $\dfrac{D_1}{D_2} = \dfrac{F_{N-1}}{F_{N-2}}$. Ne pose pas de problème car $N$ est fixé à l'avance. En effet si $D_1 = 1$ : la largeur de l'intervalle de départ. Pour une précision au plus égale à $10^{-3}$, il faut $\dfrac{D_{N-1}}{D_1} = \dfrac{1}{F_{N-1}} \le 10^{-3}$, ce qui donne $N = 17$.
 
 Selon le calcul de $F_n$ on a la table suivante :
 
@@ -350,21 +350,21 @@ Autrement dit, on construit une suite $(x_n)_{n\ge0}$ avec l'espoir que $x_n \xr
 
 Ces procédés de calculs sont appelés algorithmes (à chaque méthode de résolution est associé un algo). Un algorithme peut être vu comme une application $F$ d'un espace $U$ dans lui-même tq : pour $x_0 \in U$, $x_{k+1} = F(x_k)$, $k = 1, 2, ...$
 
-Pour être plus général, on peut définir un modèle dans lequel des algorithmes (ou des classes d'algorithmes) sont représentés par des applications multivoques ; c-à-d des applications de $\mathbb{R}^n$ dans $\mathcal{P}(\mathbb{R}^n)$.
+Pour être plus général, on peut définir un modèle dans lequel des algorithmes (ou des classes d'algorithmes) sont représentés par des applications multivoques ; c-à-d des applications de $\mathbb{R}^n$ dans $\mathcal{P}(\mathbb{R}^n)$, qui associent à un point courant l'ensemble de ses itérés suivants possibles.
 
 $$F : \mathbb{R}^n \longrightarrow \mathcal{P}(\mathbb{R}^n), \qquad x \longmapsto \text{un sous-ensemble de } \mathbb{R}^n$$
 
-À l'étape $k$, $F(x_k) = \{F(x_1), F(x_2), ..., F(x_{k-1})\}$. Ceci va nous permettre d'introduire la notion de la convergence globale.
+À l'étape $k$, on choisit un itéré suivant $x_{k+1} \in F(x_k)$. Ceci va nous permettre d'introduire la notion de la convergence globale.
 
 ### III.1 La notion de convergence globale
 
-**Définition** : Un algorithme décrit par une application multivoque $F$, est globalement convergent si $\forall$ le point de départ $x_0$ (donné), la suite $(x_k)_{k\ge0}$ engendrée par la fonction $F$ [$x_{k+1}\in F(x_k)$] converge vers un point satisfaisant une condition nécessaire d'optimalité.
+**Définition** : Un algorithme décrit par une application multivoque $F$ est globalement convergent si, pour tout point de départ $x_0$, toute suite produite par la règle $x_{k+1}\in F(x_k)$ converge vers un point satisfaisant une condition nécessaire d'optimalité.
 
-**Exemple** : $x_k$ converge vers un point stationnaire ($\exists\ \text{cond. ex si } f'(\bar{x}) = 0$, $\bar{x}$ est 1 pt stationnaire sur lequel $f$ atteint un extremum).
+**Exemple** : $x_k$ converge vers un point stationnaire. Pour une fonction différentiable, tout extremum local intérieur est stationnaire ; la réciproque n'est pas vraie en général.
 
 **Remarque** : La notion de la convergence globale exprime la sûreté de fonctionnement de l'algorithme.
 
-À $F$ on peut associer l'ensemble de ses points fixes $F(u)$ défini par : $F(u) = \{x \in U\ /\ F(x) = x\}$.
+À $F$ on peut associer l'ensemble de ses points fixes : $\operatorname{Fix}(F) = \{x \in U \mid x \in F(x)\}$. Pour une application à valeur unique, cette condition devient $F(x)=x$.
 
 Un point fixe $\bar{x}$ est dit attractif s'il admet un voisinage $V(\bar{x})\ /\ \forall x \in V(\bar{x})\ \lim_{k\to\infty} F^k(x) = \bar{x}$.
 
