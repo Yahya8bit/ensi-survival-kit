@@ -15,9 +15,29 @@ import TabItem from '@theme/TabItem';
 
 *ENSI — II-2*
 
+:::info Vous allez apprendre
+
+- pourquoi la multiprogrammation impose une gestion de la mémoire ;
+- choisir une politique d'allocation contiguë et suivre ses fragments ;
+- traduire une adresse segmentée ou paginée ;
+- suivre un défaut de page et comparer les politiques de remplacement.
+
+:::
+
 ## Introduction et motivations
 
-<!-- TODO: unclear in source, verify against original PDF — the "Architecture Typique d'un micro-ordinateur mono-core" diagram (©1999 Tralvex Yeap) did not extract as text -->
+```mermaid
+flowchart LR
+    CPU[Microprocesseur<br/>Unité centrale de traitement]
+    RAM[Mémoire]
+    IO[Sous-système d'E/S]
+    CPU <-->|Bus de données| RAM
+    CPU <-->|Bus de données| IO
+    CPU -->|Bus d'adresses et de contrôle| RAM
+    CPU -->|Bus d'adresses et de contrôle| IO
+```
+
+Le processeur communique avec la mémoire centrale et les E/S par les bus de données, d'adresses et de contrôle. La gestion mémoire organise ce qui réside dans la mémoire centrale et protège les espaces des processus.
 
 **Mémoire Centrale** : la mémoire physique sur un système se divise en deux catégories :
 
@@ -93,7 +113,7 @@ Dans beaucoup de cas, il n'est pas possible de faire tenir tous les processus en
 
 - Cas 1 : taille(partition) = taille(processus) : aucune perte de mémoire
 - Cas 2 : taille(partition) > taille(processus) → FRAGMENTATION INTERNE — perte de mémoire
-- Cas 3 : taille(partition) < taille(processus) → FRAGMENTATION EXTERNE
+- Cas 3 : taille(partition) < taille(processus) : le processus ne peut pas être chargé dans cette partition. Ce n'est pas, à lui seul, de la fragmentation externe ; celle-ci désigne des espaces libres séparés qui ne forment pas un bloc contigu suffisant.
 
 Inconvénient : Fragmentation — phénomène de gruyère. Comment charger un processus de taille 6 Ko ? Récupérer les fragments et faire un tassement (bas/haut) :
 
@@ -167,7 +187,24 @@ La mémoire est formée d'un ensemble de zones libres et de zones occupées (all
 
 En utilisant le système binaire, donnez à chaque fois l'état de la mémoire après l'exécution des demandes ci-dessus.
 
-<!-- TODO: unclear in source, verify against original PDF — the worked solution for the Buddy System exercise (memory-state diagram after each step) did not extract as text -->
+:::tip Exemple — trace Buddy System binaire
+
+Chaque demande est arrondie au plus petit bloc de puissance de deux qui la contient : P1 → 32 Ko, P2 → 16 Ko, P3 → 4 Ko et P4 → 32 Ko. En lisant la mémoire de l'adresse 0 à 128 Ko :
+
+| Étape | État de la mémoire |
+|---|---|
+| initiale | `libre 128` |
+| P1 (25 Ko) | `P1 32 \| libre 32 \| libre 64` |
+| P2 (12 Ko) | `P1 32 \| P2 16 \| libre 16 \| libre 64` |
+| P3 (4 Ko) | `P1 32 \| P2 16 \| P3 4 \| libre 4 \| libre 8 \| libre 64` |
+| fin P2 | `P1 32 \| libre 16 \| P3 4 \| libre 4 \| libre 8 \| libre 64` |
+| P4 (28 Ko) | `P1 32 \| libre 16 \| P3 4 \| libre 4 \| libre 8 \| P4 32 \| libre 32` |
+| fin P1 | `libre 32 \| libre 16 \| P3 4 \| libre 4 \| libre 8 \| P4 32 \| libre 32` |
+| fin P3 | `libre 64 \| P4 32 \| libre 32` |
+
+Les fusions finales sont possibles parce que les blocs libérés sont des compagnons de même taille : 4 + 4, puis 8 + 8, 16 + 16 et enfin 32 + 32.
+
+:::
 
 ### Faiblesses de l'allocation contiguë
 
@@ -194,6 +231,16 @@ En utilisant le système binaire, donnez à chaque fois l'état de la mémoire a
 
 Il faut convertir l'adresse segmentée, générée au niveau du processeur, en une adresse physique équivalente : Adresse physique = adresse implantation segment + déplacement.
 
+```mermaid
+flowchart LR
+    A[Adresse logique<br/>&lt;segment, déplacement&gt;] --> T[Table des segments]
+    T --> B{déplacement < limite ?}
+    B -->|oui| P[adresse physique = base + déplacement]
+    B -->|non| E[erreur de protection]
+```
+
+La table fournit la base et la limite du segment. Le déplacement doit être inférieur à la limite avant que la MMU ne calcule l'adresse physique.
+
 Allouer un segment S de taille Taille(S) : trouver une zone libre telle que Taille(Zone libre) ≥ Taille(S). Allocations et libérations successives des segments peuvent créer également un problème de fragmentation.
 
 ### Pagination
@@ -204,6 +251,15 @@ Allouer un segment S de taille Taille(S) : trouver une zone libre telle que Tail
 - Charger un programme en mémoire centrale consiste à placer les pages dans n'importe quelle case disponible.
 - Une adresse générée par le processeur est de la forme `<Nº Page, Déplacement>`.
 - La table des pages du processus permet de traduire l'adresse paginée en adresse physique.
+
+| Page du processus P | Case physique |
+|---:|---:|
+| 1 | 2 |
+| 2 | 6 |
+| 3 | 5 |
+| 4 | 8 |
+
+Les pages du même processus peuvent donc occuper des cases non adjacentes ; la table est le lien qui rend cet éclatement transparent au programme.
 
 ### Le swap
 
@@ -270,7 +326,29 @@ Chaque table des pages contient les champs nécessaires au transcodage, avec not
 
 </details>
 
-<!-- TODO: unclear in source, verify against original PDF — the page table diagram used for this exercise (mapping virtual to physical pages) did not extract as text -->
+Lors d'une référence, le chemin suivi par la MMU et le SE est le suivant :
+
+```mermaid
+sequenceDiagram
+    participant P as Processus
+    participant MMU
+    participant SE
+    participant MC as Mémoire centrale
+    participant D as Disque
+    P->>MMU: 1. adresse virtuelle
+    alt page présente
+        MMU->>MC: adresse physique (case, offset)
+        MC-->>P: donnée / instruction
+    else défaut de page
+        MMU->>SE: 2. déroutement (page absente)
+        SE->>D: 3. localiser la page
+        D-->>MC: 4. ramener la page dans une case libérée
+        SE->>MMU: 5. mettre à jour la table
+        MMU-->>P: 6. redémarrer l'instruction
+    end
+```
+
+Le déplacement ne change jamais pendant la traduction : seule la partie « numéro de page » devient un numéro de case physique.
 
 ### Algorithmes de remplacement
 
@@ -296,7 +374,20 @@ A la suite d'un défaut de page, le SE doit retirer une page de la MC pour libé
 - ✓ Facile à implanter
 - ✗ On peut retirer une page très référencée → trop de défauts de pages
 
-<!-- TODO: unclear in source, verify against original PDF — the worked "Exemple" for FIFO page replacement did not extract as text -->
+:::tip Exemple — FIFO avec trois cases
+
+Pour la suite de références `A B C A B D A D B C B`, FIFO donne :
+
+| Référence | A | B | C | A | B | D | A | D | B | C | B |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Case 1 | A | A | A | A | A | D | D | D | D | C | C |
+| Case 2 | — | B | B | B | B | B | A | A | A | A | A |
+| Case 3 | — | — | C | C | C | C | C | C | B | B | B |
+| Défaut de page | ✓ | ✓ | ✓ |  |  | ✓ | ✓ |  | ✓ | ✓ |  |
+
+Il y a **7 défauts de page** : trois chargements initiaux puis quatre remplacements. FIFO évince `A` au premier défaut `D` parce que `A` est la page chargée depuis le plus longtemps, même si elle vient d'être utilisée.
+
+:::
 
 **Algorithme Optimal** : choisir comme victime la page qui sera référencée le plus tard possible.
 
@@ -306,6 +397,8 @@ A la suite d'un défaut de page, le SE doit retirer une page de la MC pour libé
 
 *Exemple : reprendre l'exemple 1 (ABCABDADBCB) en appliquant Optimal.*
 
+Avec les mêmes trois cases, Optimal fait 5 défauts : après `A B C`, la référence `D` évince `C` (sa prochaine utilisation est la plus éloignée), puis la référence `C` évince une page qui ne sera plus référencée. Cet optimum est une borne de comparaison, car le SE ne connaît pas les futures références.
+
 **Algorithme LRU (Least Recently Used)** : remplacer la page la moins récemment utilisée (accédée) — remplacer la page qui est restée inutilisée le plus de temps.
 
 - ✓ Une bonne approximation de l'algorithme optimal
@@ -313,6 +406,8 @@ A la suite d'un défaut de page, le SE doit retirer une page de la MC pour libé
 - ✗ Très coûteux, nécessite des dispositifs matériels particuliers (compteur pour chaque référence)
 
 *Exemple : A B C D A B C D A B C D*
+
+Pour cette suite cyclique de quatre pages avec seulement trois cases, LRU produit 12 défauts : chaque nouvelle référence est précisément celle qui a été évincée comme la moins récemment utilisée. Cela illustre le coût possible d'une capacité insuffisante malgré une politique plus informée que FIFO.
 
 **Algorithme NRU (Not Recently Used)** : marquer les pages référencées. A chaque page sont associés deux bits R et M :
 
@@ -347,7 +442,28 @@ On parle souvent de PTE (Page Table Entries) pour définir les entrées qu'on pe
 - P indique les opérations permises sur cette page (Read, Write, Execute)
 - Page Frame Number correspond au numéro de case physique
 
-<!-- TODO: unclear in source, verify against original PDF — the "Table de pages à un niveau" and "Table de pages à deux niveaux" diagrams (with worked example) did not extract as text -->
+### Tables de pages à un et deux niveaux
+
+```mermaid
+flowchart LR
+    VA[Adresse virtuelle<br/>numéro de page | offset] --> PT[Table des pages]
+    PT --> PF[Numéro de case — PTE]
+    PF --> PA[Adresse physique<br/>numéro de case | même offset]
+```
+
+Dans une table à un niveau, le numéro de page indexe directement une PTE. L'offset est recopié sans modification dans l'adresse physique.
+
+```mermaid
+flowchart LR
+    VA[Adresse virtuelle<br/>index maître | index secondaire | offset] --> M[Table maître]
+    M --> S[Table secondaire sélectionnée]
+    S --> PTE[PTE : numéro de case]
+    PTE --> PA[Adresse physique<br/>numéro de case | même offset]
+```
+
+Une table à deux niveaux évite d'allouer d'emblée une grande table plate pour les plages virtuelles inutilisées. Dans l'exemple du PDF (adresses sur 32 bits, pages de 4 Ko et PTE de 4 octets), les 20 bits du numéro de page sont partagés en deux index de 10 bits : chaque table contient donc $2^{10} = 1024$ entrées.
+
+**Étapes suivantes :** applique ces traces à des suites de références différentes : le chapitre suivant sur les fichiers réutilise la même idée d'accès à une ressource limitée et de choix d'une politique de remplacement.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
