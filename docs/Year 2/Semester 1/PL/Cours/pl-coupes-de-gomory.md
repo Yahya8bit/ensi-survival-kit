@@ -19,7 +19,7 @@ import TabItem from '@theme/TabItem';
 
 <!-- TODO: page 2 is a geometric figure (a lattice-point grid with "Contrainte 1", "Contrainte 2", "Coupe 1", "Coupe 2" lines and the optimal point of the continuous relaxation marked) illustrating that successive Gomory cuts shrink the feasible polyhedron toward the integer hull without excluding any integer point — genuine plotted figure, described here rather than re-rendered; see PDF tab. -->
 
-Le principe consiste à ajouter progressivement des contraintes linéaires (« coupes ») qui excluent la solution optimale non entière de la relaxation continue, sans jamais exclure de point entier admissible, jusqu'à obtenir une solution optimale entière.
+Lorsque la relaxation continue est réalisable et admet un optimum fini, le principe consiste à ajouter progressivement des contraintes linéaires (« coupes ») qui excluent la solution optimale non entière de la relaxation continue, sans jamais exclure de point entier admissible. Le PLNE peut être infaisable. La convergence finie des coupes fractionnaires pures suppose des données rationnelles et les hypothèses d'un algorithme exact de coupe et de pivotage.
 
 ## II. Méthode des coupes de Gomory
 
@@ -36,6 +36,8 @@ PE
 \end{aligned}
 \right.
 $$
+
+**Cadre de cette méthode** : Cette présentation utilise les coupes fractionnaires de Gomory pour un problème **pur entier**, et non des coupes mixtes. On suppose $A \in \mathbb{Z}^{m \times n}$ et $b \in \mathbb{Z}^m$ ; après la mise sous forme standard, les variables supplémentaires (slacks) sont entières dès que les variables de décision sont entières. Ainsi, toutes les variables qui apparaissent dans une ligne utilisée pour construire une coupe sont entières pour toute solution entière réalisable.
 
 **La relaxation continue de PE** :
 
@@ -69,8 +71,10 @@ $$x_{B_i} + \sum_j \alpha_j^i x_{N_j} = \bar{b}_i \qquad (1)$$
 
 **Définition : Partie entière et partie fractionnaire**
 
-- $E(a)$ = plus grand entier $\le a$
-- $Frac(a) = a - E(a) > 0$
+- $E(a) = \lfloor a \rfloor$ = plus grand entier $\le a$
+- $Frac(a) = a - \lfloor a \rfloor$, avec $0 \le Frac(a) < 1$
+
+Par exemple, $Frac\left(-\dfrac{1}{7}\right)=\dfrac{6}{7}$.
 
 De (1) on a :
 
@@ -91,6 +95,8 @@ De $(3) - (2)$ on déduit : $-\sum_j Frac(\alpha_j^i)\,x_{N_j} \le -Frac(\bar{b}
 $$\sum_j Frac(\alpha_j^i)\,x_{N_j} \ge Frac(\bar{b}_i) \qquad (4)$$
 
 **(4) est une Coupe de Gomory.**
+
+À la solution courante du tableau, $x_N=0$ ; le membre gauche de (4) vaut donc $0$, tandis que $Frac(\bar{b}_i)>0$ puisque la ligne a été choisie avec un second membre non entier. La solution optimale fractionnaire courante viole donc la coupe, alors que la relation (3) montre que toute solution entière réalisable la satisfait.
 
 ## III. Application
 
@@ -142,7 +148,7 @@ $$
 |-------|------|-------|-------|-------|-------|
 | $Z$   | 63   | 0     | 0     | -28/11| -15/11|
 | $x_2$ | 7/2  | 0     | 1     | 7/22  | 1/22  |
-| $x_1$ | 9/2  | 1     | 0     | 1/22  | 3/22  |
+| $x_1$ | 9/2  | 1     | 0     | -1/22 | 3/22  |
 
 Solution non entière : $x_1 = \dfrac{9}{2}$, $x_2 = \dfrac{7}{2}$ et $Z = 63$
 
@@ -156,11 +162,13 @@ On considère une variable d'écart $e_1$ : $-\dfrac{7}{22}y_1 - \dfrac{1}{22}y_
 
 Puis on rajoute cette contrainte au tableau optimal $T_1$. On obtient $T_2$ :
 
+Le tableau $T_1$ est optimal pour la relaxation, donc ses coûts réduits vérifient $\bar{c}_N \le 0$. Ajouter la coupe laisse ces coûts réduits inchangés et donne à $e_1$ un coût réduit nul : la faisabilité duale est conservée. En revanche, le second membre de la nouvelle ligne est négatif ; la faisabilité primale est perdue, ce qui est exactement le cadre de l'algorithme dual de simplexe.
+
 |       |      | $x_1$ | $x_2$ | $y_1$  | $y_2$  | $e_1$ |
 |-------|------|-------|-------|--------|--------|-------|
 | $Z$   | 63   | 0     | 0     | -28/11 | -15/11 | 0     |
 | $x_2$ | 7/2  | 0     | 1     | 7/22   | 1/22   | 0     |
-| $x_1$ | 9/2  | 1     | 0     | 1/22   | 3/22   | 0     |
+| $x_1$ | 9/2  | 1     | 0     | -1/22  | 3/22   | 0     |
 | $e_1$ | -1/2 | 0     | 0     | -7/22  | -1/22  | 1     |
 
 Après application de l'algorithme dual de simplexe sur $e_1$, **tableau optimal obtenu $T_3$** :
@@ -173,6 +181,8 @@ Après application de l'algorithme dual de simplexe sur $e_1$, **tableau optimal
 | $y_1$ | 11/7 | 0     | 0     | 1     | 1/7   | -22/7 |
 
 Solution non entière : $x_1 = \dfrac{32}{7}$, $x_2 = 3$ et $Z = 59$
+
+Dans cet exemple, la ligne de $x_2$ donne $e_1=3-x_2$. Ainsi, $e_1$ est entier pour toute solution entière réalisable ; la ligne de $x_1$ peut donc bien être utilisée pour construire une seconde coupe fractionnaire pure.
 
 **La coupe 2** : $Frac\left(\dfrac{32}{7}\right) \le Frac\left(\dfrac{1}{7}\right)y_2 + Frac\left(\dfrac{-1}{7}\right)e_1$
 
@@ -196,10 +206,10 @@ Après application de l'algorithme dual de simplexe sur $e_2$, **tableau optimal
 
 |       |    | $x_1$ | $x_2$ | $y_1$ | $y_2$ | $e_1$ | $e_2$ |
 |-------|----|-------|-------|-------|-------|-------|-------|
-| $Z$   | 55 | 0     | 0     | 0     | 0     | -2    | 0     |
-| $x_2$ | 3  | 0     | 1     | 0     | 0     | 1     | 1     |
+| $Z$   | 55 | 0     | 0     | 0     | 0     | -2    | -7    |
+| $x_2$ | 3  | 0     | 1     | 0     | 0     | 1     | 0     |
 | $x_1$ | 4  | 1     | 0     | 0     | 0     | -1    | 1     |
-| $y_1$ | 1  | 0     | 0     | 1     | 0     | -4    | -7    |
+| $y_1$ | 1  | 0     | 0     | 1     | 0     | -4    | 1     |
 | $y_2$ | 4  | 0     | 0     | 0     | 1     | 6     | -7    |
 
 **Solution optimale entière du PLNE** : $x_1 = 4$, $x_2 = 3$ et $Z = 55$
@@ -232,13 +242,12 @@ x_1 + \dfrac{1}{7}y_2 - \dfrac{1}{7}e_1 = \dfrac{32}{7}
 \;\Rightarrow\;
 \begin{cases}
 e_1 = 3 - x_2 \\
-y_2 = 5 - x_1 - x_2
+y_2 = 35 - 7x_1 - x_2
 \end{cases}
 $$
 
-La coupe 2 : $\dfrac{4}{7} \le \dfrac{1}{7}y_1 + \dfrac{6}{7}e_1$ ce qui donne $x_1 + x_2 \le 7$.
+La coupe 2 : $\dfrac{4}{7} \le \dfrac{1}{7}y_2 + \dfrac{6}{7}e_1$ ce qui donne $x_1 + x_2 \le 7$.
 
-<!-- TODO: page 13's second-coupe substitution uses y2 = 5 - x1 - x2 but the coupe inequality shown right below it references y1 (not y2, which was eliminated one step earlier) — transcribed exactly as displayed on the slide; verify against the original if reproducing this derivation. -->
 
 <!-- TODO: page 14 is a geometric figure showing the feasible polyhedron with "Contrainte 1", "Contrainte 2", "Coupe 1", "Coupe 2" and both the continuous-relaxation optimum and the final PLNE optimum marked — genuine plotted figure, described here rather than re-rendered; see PDF tab. -->
 
