@@ -13,6 +13,13 @@ import TabItem from '@theme/TabItem';
 
 # Chapitre 3 : Ordonnancement des Processus — II2-ENSI
 
+:::info Vous allez apprendre
+- Identifier les moments où l'ordonnanceur doit choisir un processus.
+- Distinguer les politiques préemptives et non préemptives.
+- Calculer les temps de séjour et d'attente à partir d'un diagramme de Gantt.
+- Comparer FIFO, SJF, Round Robin et SRTF sur les exemples du cours.
+:::
+
 ## Motivations
 
 - Lorsqu'un ordinateur est multiprogrammé, il possède fréquemment plusieurs processus/threads en concurrence pour l'obtention de temps processeur.
@@ -25,6 +32,16 @@ import TabItem from '@theme/TabItem';
 - Lorsqu'un processus se termine → un autre processus doit être choisi parmi les processus prêts.
 - Lorsqu'un processus bloque sur des E/S, un sémaphore ou autre → un autre processus doit être sélectionné pour être exécuté.
 - Lorsqu'une interruption d'E/S se produit → il faut prendre une décision d'ordonnancement parmi les processus qui étaient bloqués en attente d'E/S.
+
+```mermaid
+flowchart LR
+    E[Événement : création, fin,<br/>blocage ou fin d'E/S] --> F[File des processus prêts]
+    F --> S[Ordonnanceur]
+    S --> D[Dispatcher]
+    D --> U[UC / CPU]
+```
+
+À chaque événement, l'ordonnanceur choisit dans la file des prêts ; le dispatcher effectue ensuite le changement de contexte nécessaire pour remettre le choix sur l'UC.
 
 ## Objectifs de l'ordonnanceur
 
@@ -44,6 +61,15 @@ Une file d'attente, soit FA, des processus prêts :
 - Principe de chaînage d'une FA : avant / arrière / mixte
 - Plusieurs processus sont mis dans une FA, et le service demandé leur est fourni tour à tour, en fonction de critères de gestion spécifiques à la FA.
 
+```mermaid
+flowchart LR
+    A[BCP A] --> B[BCP B] --> C[BCP C] --> D[BCP D]
+    D -.-> A
+    C --> CPU[processus élu vers l'UC]
+```
+
+La politique d'ordonnancement détermine quel BCP est retiré ou consulté en premier ; la file elle-même contient donc des références vers les BCP, pas les programmes complets.
+
 ## Types d'ordonnancement
 
 **Ordonnancement non préemptif (sans réquisition)**
@@ -57,6 +83,11 @@ Une file d'attente, soit FA, des processus prêts :
 - Sélectionne un processus et le laisse s'exécuter pendant un délai déterminé.
 - si le processus est toujours en cours d'exécution à l'issue de ce délai, il est suspendu et l'ordonnancement sélectionne un autre processus à exécuter.
 
+| Sans réquisition | Avec réquisition |
+| --- | --- |
+| Le processus garde l'UC jusqu'à son blocage ou sa libération volontaire. | Le processus peut perdre l'UC à la fin de son quantum ou lorsqu'un choix plus prioritaire s'impose. |
+| Pas de décision pendant les interruptions d'horloge. | Les interruptions d'horloge peuvent déclencher une décision. |
+
 ## Ordonnancement non préemptif (sans réquisition)
 
 ### FIFO (First In First Out)
@@ -66,7 +97,17 @@ Une file d'attente, soit FA, des processus prêts :
 - Même priorité pour les processus (aucun privilège entre les processus)
 - Facile à implanter, mais peu efficace (le choix n'est pas lié à l'utilisation de l'UC)
 
-<!-- TODO: unclear in source, verify against original PDF — this slide's Gantt-chart diagram (visualizing 4 processes) did not extract as text; only the formula below survives -->
+| Processus | Durée estimée | Date d'arrivée |
+| --- | ---: | ---: |
+| P1 | 24 | 0 |
+| P2 | 8 | 1 |
+| P3 | 12 | 2 |
+| P4 | 3 | 3 |
+
+```text title="FIFO — diagramme de Gantt"
+P1                      P2      P3          P4
+0-----------------------24-------32-----------44---47
+```
 
 Exemple — Temps de traitement moyen = [(24 − 0) + (32 − 1) + (44 − 2) + (47 − 3)] / 4 = 35,25
 
@@ -87,11 +128,28 @@ En général, en considérant un lot de quatre processus dont les temps respecti
 
 Le temps moyen de séjour est t = (4a+3b+2c+d)/4
 
+:::note Résultat — optimalité de SJF
+Lorsque tous les processus sont disponibles simultanément et que leurs durées sont connues, SJF minimise le temps moyen de séjour parmi les ordonnancements non préemptifs.
+:::
+
+<details>
+<summary>Pourquoi l'ordre croissant est optimal</summary>
+
+Considérons deux travaux consécutifs de durées $x$ puis $y$, avec $x > y$. Leur contribution au total des temps de séjour est $(t+x) + (t+x+y)$. En les échangeant, elle devient $(t+y) + (t+y+x)$, plus petite de $x-y$. Tout ordre contenant une telle inversion peut donc être amélioré ; l'ordre croissant des durées est optimal.
+
+</details>
+
 ### Exemple comparatif FIFO / SJF
 
-Considérons cinq travaux A, B, C, D et E, dont les temps d'exécution et leurs arrivages respectifs sont donnés (table source non extraite — voir PDF). Faire un schéma qui illustre l'exécution et calculer le temps de séjour de chaque processus, le temps moyen de séjour, le temps d'attente et le temps moyen d'attente en utilisant FIFO puis SJF.
+Considérons les cinq travaux suivants. Calculer les temps de séjour et d'attente avec FIFO puis SJF.
 
-<!-- TODO: unclear in source, verify against original PDF — the table of arrival/execution times for processes A-E did not extract as text -->
+| Processus | Temps d'exécution | Temps d'arrivée |
+| --- | ---: | ---: |
+| A | 3 | 0 |
+| B | 6 | 1 |
+| C | 4 | 4 |
+| D | 2 | 6 |
+| E | 1 | 7 |
 
 **FIFO :**
 
@@ -105,12 +163,40 @@ Considérons cinq travaux A, B, C, D et E, dont les temps d'exécution et leurs 
 - Le temps d'attente est calculé en soustrayant le temps d'exécution du temps de séjour.
 - Le temps moyen d'attente est (0+2+5+7+8)/5 = 4.4
 
+```text title="FIFO — A, B, C, D, E"
+A       B                   C           D       E
+0-------3-------------------9-----------13------15-16
+```
+
+| Processus | Séjour | Attente |
+| --- | ---: | ---: |
+| A | $3-0=3$ | $3-3=0$ |
+| B | $9-1=8$ | $8-6=2$ |
+| C | $13-4=9$ | $9-4=5$ |
+| D | $15-6=9$ | $9-2=7$ |
+| E | $16-7=9$ | $9-1=8$ |
+
+Ainsi, le temps moyen de séjour est $7{,}6$ et le temps moyen d'attente est $4{,}4$.
+
 **SJF :**
 
 - Pour la stratégie SJF nous aurons la séquence d'exécution A, B, E, D, C.
 - Le temps moyen d'attente est (0+2+2+4+8)/5 = 3.2
 
-<!-- TODO: unclear in source, verify against original PDF — SJF's "temps moyen de séjour" value slide did not extract the number -->
+```text title="SJF — A, B, E, D, C"
+A       B                   E   D       C
+0-------3-------------------9---10------12----------16
+```
+
+| Processus | Séjour | Attente |
+| --- | ---: | ---: |
+| A | $3-0=3$ | $3-3=0$ |
+| B | $9-1=8$ | $8-6=2$ |
+| E | $10-7=3$ | $3-1=2$ |
+| D | $12-6=6$ | $6-2=4$ |
+| C | $16-4=12$ | $12-4=8$ |
+
+Le temps moyen de séjour est $(3+8+3+6+12)/5=6{,}4$ ; le temps moyen d'attente est $3{,}2$.
 
 ## Ordonnancement préemptif (avec réquisition)
 
@@ -124,6 +210,15 @@ Algorithme du Tourniquet : l'un des plus utilisés et des plus fiables.
 - S'il n'a pas fini : le processus passe en queue du tourniquet et au suivant !
 
 Exemple : le quantum de temps, Q, est égal à 2 unités ; quel est le temps de traitement moyen ?
+
+```mermaid
+flowchart LR
+    P1[P1<br/>3 unités] --> P2[P2<br/>4 unités] --> P3[P3<br/>2 unités] --> P4[P4<br/>3 unités]
+    P4 --> P5[P5<br/>3 unités] --> P6[P6<br/>5 unités] --> P7[P7<br/>4 unités] --> P8[P8<br/>2 unités]
+    P8 --> P1
+```
+
+Le tourniquet illustre la rotation des processus prêts ; chaque passage accorde ici $Q=2$ unités au processus placé en tête de file.
 
 Temps de séjour moyen = [(17−0) + (19−1) + (6−2) + (20−3) + (21−4) + (26−5) + (25−6) + (16−7)] / 8 = 15,25
 
@@ -141,7 +236,29 @@ Calculer le temps de séjour de chaque processus A et B, le temps moyen de séjo
 - Round Robin (quantum = 10 unités de temps)
 - Round Robin (quantum = 3 unités de temps)
 
-<!-- TODO: unclear in source, verify against original PDF — the worked Gantt-chart solutions for both quantum values did not extract as text (only the final SRTF comparison numbers below survived, under "SRTF") -->
+```text title="Round Robin — quantum 10"
+A                             B           A
+0-----------------------------10----------14----------19
+```
+
+| Processus | Séjour | Attente |
+| --- | ---: | ---: |
+| A | $19-0=19$ | $19-15=4$ |
+| B | $14-2=12$ | $12-4=8$ |
+
+Temps moyen de séjour : $15{,}5$ ; temps moyen d'attente : $6$ ; **3 changements de contexte**.
+
+```text title="Round Robin — quantum 3"
+A       B       A       B   A
+0-------3-------6-------9---10-------------------------19
+```
+
+| Processus | Séjour | Attente |
+| --- | ---: | ---: |
+| A | $19-0=19$ | $19-15=4$ |
+| B | $10-2=8$ | $8-4=4$ |
+
+Temps moyen de séjour : $13{,}5$ ; temps moyen d'attente : $4$ ; **5 changements de contexte**.
 
 ### RR (Round Robin) avec priorités
 
@@ -150,6 +267,18 @@ Calculer le temps de séjour de chaque processus A et B, le temps moyen de séjo
 - Si un processus dans FAi épuise son quantum de temps Qi (0 ≤ i ≤ n-2), il sera placé dans la FAi+1 (moins prioritaire)
 - Une FAi (0 ≤ i ≤ n-1) ne peut être servie que si toutes les FAj (0 ≤ j < i) sont vides
 - un processus qui a traversé toutes les FA sans épuiser son temps de traitement reste dans la FA la moins prioritaire.
+
+```mermaid
+flowchart LR
+    Arrivée --> FA0[FA0 : Q0<br/>priorité la plus haute]
+    FA0 -->|quantum épuisé| FA1[FA1 : Q1]
+    FA1 -->|quantum épuisé| FAn[FA n-1 : Q n-1<br/>priorité la plus basse]
+    FA0 --> CPU[CPU]
+    FA1 --> CPU
+    FAn --> CPU
+```
+
+Une file $FA_i$ n'est servie que si toutes les files plus prioritaires sont vides ; le support indique $Q_0 \le Q_1 \le \cdots \le Q_{n-1}$.
 
 ### SRTF (Shortest Remaining Time First)
 
@@ -160,11 +289,37 @@ Calculer le temps de séjour de chaque processus A et B, le temps moyen de séjo
 
 Exemple : Temps de séjour moyen = [(20 − 0) + (9 − 2) + (14 − 3) + (6 − 4)] / 4 = 9,5
 
+| Processus | Durée estimée | Date d'arrivée |
+| --- | ---: | ---: |
+| P1 | 8 | 0 |
+| P2 | 5 | 2 |
+| P3 | 5 | 3 |
+| P4 | 2 | 4 |
+
+```text title="SRTF — diagramme de Gantt"
+P1  P2  P4  P2      P3          P1
+0---2---4---6-------9-----------14---------20
+```
+
 **Comparaison (reprise de l'exemple A/B — A : 15 unités, arrivée 0 ; B : 4 unités, arrivée 2) :**
 
 - Round Robin (quantum = 10 unités de temps) : Temps moyen de séjour = 15,5 — Temps moyen d'attente = 6 — 3 changements de contexte
 - Round Robin (quantum = 3 unités de temps) : Temps moyen de séjour = 13,5 — Temps moyen d'attente = 4 — 5 changements de contexte
 - SRTF : Temps moyen de séjour = 11,5 — Temps moyen d'attente = 2 — 3 changements de contexte
+
+```text title="SRTF — A : 15 (arrivée 0), B : 4 (arrivée 2)"
+A       B           A
+0-------2-----------6----------------------------------19
+```
+
+| Processus | Séjour | Attente |
+| --- | ---: | ---: |
+| A | $19-0=19$ | $19-15=4$ |
+| B | $6-2=4$ | $4-4=0$ |
+
+Le résultat SRTF est donc : temps moyen de séjour $11{,}5$, temps moyen d'attente $2$, et **3 changements de contexte**.
+
+**Prochaine étape** : [la synchronisation](./se2-ch4-synchronisation) traite la coordination des threads lorsque l'ordonnancement les fait progresser concurremment.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
