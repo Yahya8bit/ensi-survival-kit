@@ -15,6 +15,14 @@ import TabItem from '@theme/TabItem';
 
 *II2-ENSI*
 
+:::info Vous allez apprendre
+
+- à choisir entre diagrammes de séquence, de communication, d'états-transitions et d'activités ;
+- à lire l'ordre, les gardes et le parallélisme dans une interaction ;
+- à modéliser le cycle de vie d'un objet, puis le déroulement d'un cas d'utilisation.
+
+:::
+
 ## Perspectives d'un système
 
 - **Statique** (ce que le système EST)
@@ -129,7 +137,15 @@ sequenceDiagram
 
 Un objet actif initie et contrôle le flux d'activités. Graphiquement, la ligne pointillée verticale d'un objet actif est remplacée par un double trait vertical.
 
-<!-- TODO: unclear in source, verify against original PDF page 234 — this slide illustrates "Représentation d'un objet actif (à gauche) et d'une exécution sur un objet passif (à droite)" as a diagram; no further text extracted. -->
+```mermaid
+sequenceDiagram
+    participant actif as o1:Obj (actif)
+    participant passif as o2:Obj (passif)
+    actif->>passif: 1: foo()
+    passif-->>actif: retour
+```
+
+Dans le document source, la double ligne de vie de `o1` signale l'objet actif. `o2` est passif : son rectangle d'activation ne dure que pendant le traitement de `foo()`.
 
 ## Mode d'interaction procédural (i.e. synchrone)
 
@@ -159,13 +175,15 @@ Un objet actif initie et contrôle le flux d'activités. Graphiquement, la ligne
 sequenceDiagram
     participant um as unMembre:EmprunteurDeLivre
     participant mb as mb:MembreBiblio
-    participant ll as leLivre:Livre
-    participant ex as :Exemplaire exemplaire
+    participant exemplaire as exemplaire:Exemplaire
+    participant livre as leLivre:Livre
     um->>mb: emprunter(exemplaire)
-    mb-->>um: 1:okPourEmprunter
-    ex->>ex: 2:emprunter (message réflexif)
-    ex->>ll: 2.1:estEmprunté
+    mb->>mb: 1: okPourEmprunter
+    mb->>exemplaire: 2: emprunter
+    exemplaire->>livre: 2.1: estEmprunté
 ```
+
+La numérotation reflète la pile d'appels : `2.1` est envoyé pendant le traitement de `2`.
 
 ## Autres notations pour des interactions avancées
 
@@ -198,7 +216,7 @@ sequenceDiagram
     o->>o: 1.b: bar()
 ```
 
-Branchement : Lorsque les messages n'ont pas de garde mutuellement exclusive, on en déduit qu'ils sont concurrents.
+Branchement : lorsque les messages n'ont pas de gardes mutuellement exclusives, on en déduit qu'ils sont concurrents : le traitement de `foo()` et celui de `bar()` peuvent être lancés en parallèle.
 
 ## Mode d'interaction concurrent
 
@@ -212,7 +230,7 @@ sequenceDiagram
     participant o1 as o1:Obj
     participant o2 as o2:Obj
     o1->>o2: 1: foo()
-    o1->>o2: 2: bar()
+    o2->>o1: 2: bar()
 ```
 
 ## Exemples de scénarios
@@ -358,7 +376,7 @@ L'opérateur "break" est utilisé pour représenter des scénarii d'exception. L
 
 L'équivalent de ce diagramme de séquence sans l'opérateur `break` correspond aux deux diagrammes de séquence suivants :
 
-<!-- TODO: unclear in source, verify against original PDF page 255 — the two equivalent diagrams referenced here are images with no extractable OCR text. -->
+Sans `break`, il faut représenter séparément le scénario normal de saisie du code et le scénario « consulter l'aide ». Le fragment permet de conserver ces deux possibilités dans un seul diagramme, en indiquant explicitement que la seconde interrompt le flot normal.
 
 ## Les fragments d'interaction — opérateur `par`
 
@@ -425,8 +443,6 @@ sequenceDiagram
 
 ## Le diagramme de séquence système — les principaux concepts
 
-<!-- TODO: unclear in source, verify against original PDF page 265 — this slide's body text was extracted with scrambled word order across two paragraphs (multi-column slide OCR artifact): "Les d'utilisation temps acteur «lifeline». acteurs verticale du et : cas ... " and "Le pendant Sur représenté ligne point les de diagrammes vie laquelle de graphiquement de contrôle l'objet. une de entité (barre séquence, en (acteur/système) d'activation) plaçant ce un point rectangle : de il effectue illustre contrôle au-dessus une la peut période action. de être la ▪ On séquence entité peut du diagramme. aussi système. inscrire Ces commentaires des commentaires peuvent sur être le diagramme reliés à toute de". Best-effort reading reconstructed below based on standard sequence-diagram terminology; verify against original page image before relying on exact wording. -->
-
 - Les acteurs et le système : on retrouve dans le diagramme une ligne de vie associée à chaque acteur et au système, ils interagissent avec le système et à chaque cas d'utilisation est associée une ligne de vie « lifeline » verticale du temps.
 - Ligne de vie : une entité (acteur/système) est représentée graphiquement en plaçant un rectangle au-dessus de la ligne de vie.
 - Barre d'activation : illustre la période de contrôle pendant laquelle l'objet effectue une action. Sur les diagrammes de séquence, il peut être un point de contrôle.
@@ -447,25 +463,18 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant Billetterie as :Billetterie
-    participant Menu as :Menu
-    participant Loggin as :Loggin
-    participant Imprimante as :Imprimante
-    Billetterie->>Menu: Exprimer demande
-    Menu->>Billetterie: retraitBillets() {res., retrait}
-    Billetterie->>Menu: afficher()
-    Menu->>Loggin: [retrait] Identifiez-vous
-    Loggin->>Loggin: Numéro client [numéro OK]
-    Loggin->>Billetterie: [OK] accepter(numClient) — Traiter commande
-    Billetterie->>Imprimante: imprimerBillet(res, numClient)
-    Imprimante-->>Billetterie: billets
-    Billetterie->>Billetterie: identifier(numRes)
-    Billetterie->>Billetterie: rechercher(numRes)
-    Billetterie->>Loggin: payer(somme)
-    Loggin->>Loggin: valider(carte) — Payer par carte [carte OK]
+    participant client as Client
+    participant billetterie as :Billetterie
+    client->>billetterie: Exprimer demande {res., retrait}
+    billetterie->>client: [retrait] Identifiez-vous
+    client->>billetterie: Numéro client
+    billetterie->>billetterie: [numéro OK] Traiter commande
+    billetterie->>client: payer
+    client->>billetterie: Payer par carte
+    billetterie-->>client: billets
 ```
 
-<!-- TODO: unclear in source, verify against original PDF page 267 — this "Billetterie" example sequence diagram is one of the most heavily garbled slides in the deck; the message ordering above is a best-effort reconstruction from fragments and should be verified against the original page image before being relied on. -->
+La même diapositive développe ensuite cette boîte noire en interactions entre `:Menu`, `:Loggin` et `:Imprimante` : c'est la différence entre le DSS du cas d'utilisation et le diagramme de séquence de conception.
 
 ## Diagrammes de communication
 
@@ -521,13 +530,11 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    Marie -->|père| Fred
-    Pierre -->|mère| Fred
+    Pierre ---|père| Fred
+    Marie ---|mère| Fred
     Fred -->|"1: cashRequest($25)"| Marie
     Marie -->|"2: cashReceived($25)"| Fred
 ```
-
-<!-- TODO: unclear in source, verify against original PDF page 273 — the exact link direction/roles between Marie, Pierre and Fred ("père"/"mère") is a best-effort reading; verify against original. -->
 
 **Équivalent au diagramme de séquence** :
 
@@ -550,13 +557,11 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    Carre["afficher() :Carré"] -->|"message initiateur"| Segment["4 :Segment"]
-    Segment -->|"1 *(i=1..4):afficher() — boucle"| Origine["origine:Point"]
-    Origine -->|"1.1: position()"| Segment
+    Acteur["acteur"] -->|"afficher()"| Carre[":Carré"]
+    Carre -->|"1 *(i=1..4): afficher()"| Segment[":Segment"]
+    Segment -->|"1.1: position()"| Origine["origine:Point"]
     Segment -->|"1.2: position()"| Destination["destination:Point"]
 ```
-
-<!-- TODO: unclear in source, verify against original PDF page 275 — this communication-diagram example's exact link topology ("séquence imbriquée", numéro de séquence, opération) was reconstructed from garbled fragments; verify against original. -->
 
 ## Exemple (2) : création et destruction dynamiques d'objets
 
@@ -571,22 +576,16 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    Objet1[": ascenseur — Objet 1"] -->|"1 : message"| Objet2[": cabine — Objet 2"]
-    Objet2 -->|"2 : message"| Objet3[": porte — Objet 3"]
-    Objet2 -->|"4 : message"| Objet4[": lumière"]
-    Objet4 -->|"5 : message"| Objet2
-    Objet3 -->|"3 : message"| Objet2
+    Ascenseur[": ascenseur"] -->|"1 : monter"| Cabine[": cabine"]
+    Cabine -->|"2 : allumer"| Lumiere[": lumière"]
+    Cabine -->|"3 : fermer"| Porte[": porte"]
 ```
-
-`1 : monter` / `2 : allumer` / `3 : fermer`
-
-<!-- TODO: unclear in source, verify against original PDF page 277-278 — the exact numbering/direction of the "ascenseur/cabine/porte/lumière" communication diagram was reconstructed from garbled fragments; verify against original. -->
 
 ## Encore un exemple
 
 ```mermaid
 flowchart LR
-    Ascenseur[":Ascenseur"] -->|"monter_étage(n)"| Ascenseur
+    Acteur["acteur"] -->|"monter_étage(n)"| Ascenseur[":Ascenseur"]
     Ascenseur -->|"1.1: monter(n)"| Cabine[":Cabine"]
     Cabine -->|"1.1.1.a: allumer()"| Lumiere[":Lumière"]
     Cabine -->|"1.1.1.b: fermer()"| Porte[":Porte"]
@@ -611,7 +610,7 @@ flowchart LR
     Loggin -->|"4.2 : refuser(numClient)"| x
 ```
 
-<!-- TODO: unclear in source, verify against original PDF page 279 — this example mixes the generic "x:ClasseA / y:ClasseB / z:ClasseB" notation with a concrete "Client/Menu/Loggin" billeterie example in the same slide; the pairing was ambiguous in the OCR extraction, reproduced as a best-effort reading, verify against original. -->
+Le diagramme de droite applique les mêmes conventions à la billetterie : le client envoie `1: retraitBillets()` à `:Menu`, `:Menu` envoie `2: afficher()` à `:Loggin`, puis le client fournit `3: identifier(numClient)` ; `:Loggin` répond par `4.1: accepter(numClient)` ou `4.2: refuser(numClient)`.
 
 ## Diagrammes de communication — conventions
 
@@ -631,14 +630,12 @@ stateDiagram-v2
     [*] --> Disponible
     Disponible --> Verrouillé : verrouiller
     Verrouillé --> Disponible : déverrouiller
+    Verrouillé --> Disponible : délai écoulé
     Verrouillé --> Vendu : achète
     Disponible --> Vendu : attribué_sur_abonnement
-    Vendu --> [*] : délai écoulé
 ```
 
 *Diagramme d'état d'un billet de spectacle à vendre sur Internet*
-
-<!-- TODO: unclear in source, verify against original PDF page 281 — the exact transitions between "Disponible", "Verrouillé", "Vendu" and their triggering events ("attribué_sur_abonnement", "déverrouiller", "délai écoulé", "verrouiller", "achète") were reconstructed from a garbled fragment order; verify against original. -->
 
 ## Principaux concepts
 
@@ -706,9 +703,7 @@ stateDiagram-v2
     NePeutEtreEmprunte --> NePeutEtreEmprunte : est_retourné(e)
 ```
 
-*Diagramme d'état d'un livre* — Cette transition est importante pour marquer que `retourner()` est bel et bien un message attendu et compris par cet automate dans cet état.
-
-<!-- TODO: unclear in source, verify against original PDF page 291 — the exact self-transitions vs. cross-transitions for "est_retourné(e)" in each state were reconstructed from a garbled fragment order; verify against original. -->
+*Diagramme d'état d'un livre* — La transition réflexive marque que `est_retourné(e)` est bien un événement attendu et compris dans cet état.
 
 ## Gardes
 
@@ -738,11 +733,37 @@ Les actions peuvent prendre des arguments… les paramètres effectifs des évé
 
 ## Transition réflexive sur un état
 
-<!-- TODO: unclear in source, verify against original PDF page 296 — this slide is a diagram illustrating a self-transition (transition réflexive) with no extractable OCR text beyond the title. -->
+Une transition peut avoir le même état comme source et comme cible : c'est une **transition réflexive** (ou auto-transition). Elle est utile lorsqu'une action doit être exécutée tout en revenant au même état.
+
+```mermaid
+stateDiagram-v2
+    Arret --> EnMarche : bouton « on » pressé
+    EnMarche --> Arret : bouton « off » pressé
+    EnMarche --> EnMarche : tic horloge / émettre bip()
+```
+
+La transition réflexive quitte puis ré-entre dans l'état : les actions `exit` puis `entry`, si elles existent, sont donc exécutées.
 
 ## Actions d'un état
 
-<!-- TODO: unclear in source, verify against original PDF pages 297-298 — these two slides are diagrams illustrating actions attached to a state with no extractable OCR text beyond the title. -->
+Une action d'état est un traitement interne atomique associé à un état. Son déclenchement peut être l'entrée, la sortie ou la survenue d'un événement.
+
+Un état peut ainsi comporter :
+
+- une action d'entrée, exécutée à chaque entrée ;
+- une action de sortie, exécutée à chaque sortie ;
+- des actions internes sur événements.
+
+```text
+NomÉtat
+───────────────
+entry / actionEntrée
+exit / actionSortie
+événement1 / action1
+événementN / actionN
+```
+
+Les actions d'entrée et de sortie factorisent les traitements communs. Une transition interne, elle, n'a pas les mêmes effets qu'une transition réflexive : elle ne déclenche pas les actions d'entrée et de sortie.
 
 ## Actions d'entrée et de sortie
 
@@ -761,9 +782,124 @@ stateDiagram-v2
     Emprunte --> SurLesRayons : retourner()
 ```
 
-*Diagramme d'état d'un exemplaire de livre* — Ordre d'exécution des actions ?
+*Diagramme d'état d'un exemplaire de livre.* Pour une transition externe, on exécute d'abord l'action de sortie de l'état source, puis l'action portée par la transition, puis l'action d'entrée de l'état cible.
 
-<!-- TODO: unclear in source, verify against original PDF page 299 — this appears to be the last extracted page of the deck; if the original PDF continues beyond this slide, the remainder was not captured by the OCR extraction. -->
+## Activité d'un état et types de transitions
+
+Une activité `do / ...` est réalisée tant que l'objet reste dans l'état ; son achèvement peut déclencher une transition de complétion. Le support distingue :
+
+- une **transition externe**, qui change d'état et exécute les actions de sortie, de transition puis d'entrée ;
+- une **transition interne**, qui traite l'événement sans quitter l'état ;
+- une **transition de complétion**, automatique à la fin de l'activité de l'état, souvent protégée par une garde.
+
+```text
+Saisie mot de passe
+────────────────────────────────────────
+entry / set echo to star; password.reset()
+exit  / set echo normal
+digit / handle character
+help  / display help()
+```
+
+Dans cet exemple, `digit` et `help` sont des transitions internes ; `clear` peut conduire à une transition externe.
+
+## États composites
+
+Un état composite est un état spécialisé composé de sous-états, qui peuvent être **séquentiels** ou **concurrents**. Lorsqu'il est actif, au moins un de ses sous-états l'est aussi.
+
+- Une transition qui entre dans un état composite arrive implicitement dans son état initial.
+- Atteindre son état final déclenche implicitement une transition de complétion sortante.
+- En entrant dans des composites imbriqués, les actions d'entrée sont exécutées du plus externe au plus interne ; à la sortie, les actions de sortie sont exécutées du plus interne au plus externe.
+
+### Sous-états séquentiels
+
+```mermaid
+stateDiagram-v2
+    [*] --> Inactif
+    Inactif --> Identification : insérer_carte
+    Identification --> Inactif : [identification_échouée]
+    Identification --> Sélection : [identification_réussie] / initialiser_sélection()
+    Sélection --> Confirmation : clic_acheter
+    Confirmation --> Sélection : clic_recommencer
+    Confirmation --> Vente : clic_confirmer
+    Vente --> [*] : achat d'un billet / éjecter_carte()
+```
+
+Le diagramme représente le composite « achat d'un billet » : un seul sous-état est actif à la fois.
+
+### Sous-états concurrents
+
+Dans un composite concurrent, plusieurs régions sont actives simultanément. Un `fork` lance les régions et un `join` les synchronise. Par exemple, un cours non terminé peut faire progresser en parallèle le chemin des laboratoires/projet et celui de l'examen final ; la réussite exige alors `note >= 60`.
+
+:::tip
+
+Utilisez un état composite lorsque le détail interne reste pertinent au comportement de l'objet. Utilisez plutôt un diagramme d'activités pour le flot d'une tâche ou d'un cas d'utilisation.
+
+:::
+
+## Référence et historique d'états
+
+Un sous-diagramme peut être référencé pour décomposer un comportement. L'état historique `H` mémorise le dernier sous-état visité d'un composite : une transition vers `H` reprend ce sous-état, plutôt que de revenir à l'état initial.
+
+## Diagrammes d'états-transitions — buts
+
+Les diagrammes d'états-transitions servent à illustrer des cas d'utilisation et à décrire finement le comportement des classes. Ils complètent les diagrammes d'interaction : ils répondent à « dans quel état est cet objet et comment réagit-il ? » plutôt qu'à « quels objets échangent quels messages ? ».
+
+## Diagramme d'activités
+
+Un diagramme d'activités décrit les séquences d'activités qui composent :
+
+- un processus d'affaires ou de production ;
+- un cas d'utilisation, au niveau de l'analyse ;
+- un algorithme ou une opération, au niveau de la conception.
+
+Il exprime des flots séquentiels et concurrents. C'est une variante de diagramme d'états dans laquelle les états représentent des activités : le passage à l'activité suivante se produit automatiquement dès que l'activité courante est terminée, sans attendre d'événement.
+
+### Notation et éléments de contrôle
+
+Un diagramme d'activités associe des activités avec des transitions séquentielles, alternatives, des itérations et des synchronisations. Il comporte un état initial et un état final ; les *swimlanes* répartissent les activités selon leur responsable.
+
+```mermaid
+flowchart TD
+    debut((Début)) --> Mesurer[Mesurer la température]
+    Mesurer -->|[trop froid]| Chauffer[Chauffer]
+    Mesurer -->|[trop chaud]| Refroidir[Refroidir]
+    Chauffer --> fin((Fin))
+    Refroidir --> fin
+```
+
+Les gardes sur les sorties du losange représentent des alternatives. Une barre épaisse joue le rôle de `fork` pour séparer des activités et de `join` pour attendre leur synchronisation.
+
+### Exemple : commander un ordinateur
+
+```mermaid
+flowchart TD
+    debut((Début)) --> Config[Afficher la configuration courante]
+    Config --> Formulaire[Afficher le formulaire de vente]
+    Formulaire --> Saisie[Saisir la demande de commande]
+    Saisie -->|[temps non expiré]| Details[Saisir les détails de la vente]
+    Saisie -->|[temps expiré]| fin((Fin))
+    Details -->|[commande incomplète]| Saisie
+    Details -->|[ok]| Enregistrer[Enregistrer la commande]
+    Enregistrer --> Courriel[Envoyer un courriel de confirmation]
+    Courriel --> fin
+```
+
+Ce diagramme conserve le niveau du cas d'utilisation : il ne détaille pas les objets internes, contrairement à un diagramme de séquence de conception.
+
+### Construire un diagramme d'activités
+
+1. Délimitez la portée : un cas d'utilisation, une partie de celui-ci, un *workflow* ou une méthode.
+2. Ajoutez les états de départ et de terminaison.
+3. Ajoutez les activités correspondant aux étapes ou processus principaux.
+4. Reliez-les par les transitions séquentielles, conditionnelles, itératives et les synchronisations nécessaires.
+5. Identifiez les *swimlanes* puis placez chaque activité chez son responsable.
+
+## Autres diagrammes dynamiques UML
+
+Le support mentionne aussi le diagramme global d'interaction et le diagramme de timing. Le premier organise des interactions avec la structure de contrôle d'un diagramme d'activités ; le second met l'accent sur l'évolution des états ou valeurs au cours du temps.
+
+Pour poursuivre, passez aux [diagrammes de conception architecturale](./acoo-diag-conception-architecturale.md), où les comportements décrits ici sont reliés à la structure de conception.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
