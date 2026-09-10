@@ -30,9 +30,9 @@ $$50x_1 + 31x_2 \le 250$$
 $$3x_1 - 2x_2 \ge -4$$
 $$x_1, x_2 \ge 0 \text{ et entiers}$$
 
-<!-- TODO: page 4 is a geometric figure (feasible triangle with integer lattice points, the continuous optimum (1.95, 4.92) with objectif 5.0628, and the integer optimum (5, 0) with objectif 5 marked) — genuine plotted figure illustrating that the continuous and integer optima can be far apart; described here rather than re-rendered, see PDF tab. -->
+<!-- TODO: page 4 is a geometric figure (feasible triangle with integer lattice points, the continuous optimum (1.95, 4.92) and the integer optimum (5, 0) with objectif 5 marked) — genuine plotted figure illustrating that the continuous and integer optima can be far apart; described here rather than re-rendered, see PDF tab. -->
 
-- Point optimal continu $(1.95, 4.92)$, objectif $5.0628$
+- Point optimal continu $\left(\dfrac{376}{193}, \dfrac{950}{193}\right) \approx (1.95, 4.92)$, objectif $Z = \dfrac{984}{193} \approx 5.0984$
 - Point optimal entier $(5, 0)$, objectif $5$
 
 **Constat** : PL et PLNE sont TRÈS différentes — Optimisation continue convexe / Optimisation discrète.
@@ -120,9 +120,7 @@ Nous allons voir comment résoudre les PLNE :
 
 ### Résolution des PL01 - Exemple de base
 
-$$-\min(-Z) = -9x_1 - 5x_2 - 6y_1 - y_2$$
-
-<!-- TODO: page 15 of the source shows the objective as "-min(-Z) = -9x1 - 5x2 - 6y1 - y2" (coefficient -1 on y2), which breaks the pattern set on page 11/12 where y2's coefficient is 4 (i.e. -4y2 expected here); transcribed exactly as shown on the slide rather than silently corrected — verify against the original if reproducing this derivation. -->
+$$-\min(-Z) = -9x_1 - 5x_2 - 6y_1 - 4y_2$$
 
 $$\text{s.c. :}$$
 $$y_1 + y_2 \le 1$$
@@ -183,6 +181,8 @@ On dit que la valeur optimale de la relaxation continue est une **borne** supér
 - Encadrement de la valeur optimale (borne inférieure, borne supérieure)
 - Énumération limitée dans le but d'obtenir un encadrement de plus en plus fin
 
+Chaque nœud enfant est obtenu à partir de la relaxation du nœud parent en ajoutant les contraintes de branchement accumulées ; sa région réalisable est donc incluse dans celle de son parent.
+
 ### B&B - Exemple de base
 
 Dans la solution de la relaxation continue : $(x_1, x_2, y_1, y_2) = (5/6, 1, 0, 1)$, $x_1$ n'est pas entier. On va « brancher » selon les deux valeurs possibles de $x_1$ : 0 et 1.
@@ -239,34 +239,34 @@ flowchart TD
     S2 -->|x2=1| S4
 ```
 
-**Conclusion actuelle** : Valeur meilleure solution connue : $-9$. Meilleure borne inférieure connue : $-16$. On ne peut élaguer ni S3 ni S4. On « repart » avec S4 qui a la plus petite borne inférieure. On branche sur $y_1$.
+**Conclusion actuelle** : Valeur meilleure solution connue : $-9$. Meilleure borne inférieure connue : $-16$. On ne peut élaguer ni S3 ni S4. On « repart » avec S4 qui a la plus petite borne inférieure. Comme $y_2=0.5$ est fractionnaire, on branche sur $y_2$.
 
-**Sous-ensemble S5** : $x_1=1$, $x_2=1$ et $y_1=0$. Solution de la relaxation continue : $(x_1,x_2,y_1,y_2)=(1,1,0,0.5)$ et $-Z=-16$.
+**Sous-ensemble S5** : $x_1=1$, $x_2=1$ et $y_2=0$. Solution de la relaxation continue : $(x_1,x_2,y_1,y_2)=\left(1,1,\dfrac45,0\right)$ et $-Z=-18.8$.
 
-**Sous-ensemble S6** : $x_1=1$, $x_2=1$ et $y_1=1$ : impossible. S6 peut donc être élagué.
+**Sous-ensemble S6** : $x_1=1$, $x_2=1$ et $y_2=1$ : impossible. S6 peut donc être élagué.
 
 ```mermaid
 flowchart TD
     S["S<br/>opt ≥ -16.5"]
     S1["S1<br/>Opt= -9 (élagué)"]
     S2["S2<br/>opt ≥ -16.2"]
-    S3["S3<br/>opt ≥ -13.8 (élagué)"]
+    S3["S3<br/>opt ≥ -13.8"]
     S4["S4<br/>opt ≥ -16"]
-    S5["S5<br/>opt ≥ -16"]
+    S5["S5<br/>opt ≥ -18.8"]
     S6["S6<br/>impossible (élagué)"]
     S -->|x1=0| S1
     S -->|x1=1| S2
     S2 -->|x2=0| S3
     S2 -->|x2=1| S4
-    S4 -->|y1=0| S5
-    S4 -->|y1=1| S6
+    S4 -->|y2=0| S5
+    S4 -->|y2=1| S6
 ```
 
-**Conclusion actuelle** : Valeur meilleure solution connue : $-9$. Meilleure borne inférieure connue : $-16$. On peut repartir soit avec S3 soit avec S5 ; on repart avec S5 qui a la plus petite borne inférieure et on branche sur $y_2$.
+**Conclusion actuelle** : Valeur meilleure solution connue : $-9$. Meilleure borne inférieure connue : $-18.8$. On peut repartir soit avec S3 soit avec S5 ; on repart avec S5 qui a la plus petite borne inférieure. Comme $y_1=\dfrac45$ est fractionnaire, on branche sur $y_1$.
 
-**Sous-ensemble S7** : $x_1=1, x_2=1, y_1=0$ et $y_2=0$. Solution unique entière et $-Z=-14 < -9$ donc **Nouvelle solution courante**.
+**Sous-ensemble S7** : $x_1=1, x_2=1, y_2=0$ et $y_1=0$. Solution unique entière et $-Z=-14 < -9$ donc **Nouvelle solution courante**.
 
-**Sous-ensemble S8** : $x_1=1, x_2=1, y_1=0$ et $y_2=1$ : impossible. S8 peut donc être élagué.
+**Sous-ensemble S8** : $x_1=1, x_2=1, y_2=0$ et $y_1=1$ : impossible. S8 peut donc être élagué.
 
 ```mermaid
 flowchart TD
@@ -275,7 +275,7 @@ flowchart TD
     S2["S2<br/>opt ≥ -16.2"]
     S3["S3<br/>opt ≥ -13.8 (élagué : borne > sol. courante)"]
     S4["S4<br/>opt ≥ -16"]
-    S5["S5<br/>opt ≥ -16"]
+    S5["S5<br/>opt ≥ -18.8"]
     S6["S6<br/>impossible (élagué)"]
     S7["S7<br/>Opt= -14 (élagué : sol. optimale connue)"]
     S8["S8<br/>impossible (élagué)"]
@@ -283,45 +283,40 @@ flowchart TD
     S -->|x1=1| S2
     S2 -->|x2=0| S3
     S2 -->|x2=1| S4
-    S4 -->|y1=0| S5
-    S4 -->|y1=1| S6
-    S5 -->|y2=0| S7
-    S5 -->|y2=1| S8
+    S4 -->|y2=0| S5
+    S4 -->|y2=1| S6
+    S5 -->|y1=0| S7
+    S5 -->|y1=1| S8
 ```
 
 **Conclusion** : on peut s'arrêter car tous les nœuds ont été élagués. On prouve ainsi que la solution optimale est : $x_1=1, x_2=1, y_1=0$ et $y_2=0$. Solution unique entière avec $Z=14$.
 
 ### Gain par rapport à l'énumération complète
 
-<!-- TODO: page 46 overlays the B&B exploration path (bold blue) on the full 16-leaf enumeration tree from page 17, showing visually that only 5 branch nodes were explored instead of all 16 leaves — genuine tree diagram, described in prose rather than re-rendered; see PDF tab. -->
+<!-- TODO: page 46 overlays the B&B exploration path (bold blue) on the full 16-leaf enumeration tree from page 17 — genuine tree diagram, described in prose rather than re-rendered; see PDF tab. -->
 
-Le Branch & Bound n'a exploré que les nœuds S1 à S8 (5 branchements) au lieu des 16 feuilles de l'énumération complète.
+Le Branch & Bound n'a exploré que les nœuds S1 à S8, soit 4 décisions de branchement, au lieu des 16 feuilles de l'énumération complète.
 
 ## Algorithme B&B (min) - Résumé
 
-**Initialisation**
+**Initialisation** : calculer une solution entière réalisable de valeur $Z^*$ ou poser $Z^*=+\infty$, puis créer le nœud racine.
 
-- Calculer une solution admissible de valeur $Z^*$ ou poser $Z^*=+\infty$
-- Résoudre la relaxation continue et mettre à jour éventuellement $Z^*$
-- Appliquer les tests d'élagage
+**Pour chaque nœud non élagué** :
 
-**Tant qu'il reste des nœuds non élagués**
+1. Résoudre sa relaxation continue. Si elle est infaisable, élaguer le nœud.
+2. Si son optimum satisfait toutes les contraintes d'intégralité, il fournit une solution entière réalisable : mettre à jour $Z^*$ si sa valeur est meilleure, puis élaguer le nœud.
+3. Sinon, si une solution courante existe et si la borne inférieure de ce nœud est supérieure ou égale à $Z^*$, élaguer le nœud.
+4. Sinon, choisir une variable entière de valeur fractionnaire et créer les deux nœuds fils par branchement.
 
-- Choisir un nœud non élagué
-- Brancher sur une des variables
-- Pour chacun des 2 nouveaux nœuds, résoudre la relaxation continue et mettre à jour éventuellement $Z^*$
-- Appliquer les tests d'élagage
-
-**Fin tant que**
-
-La solution courante $Z^*$ est optimale.
+Lorsque tous les nœuds sont élagués, la solution courante $Z^*$ est optimale.
 
 ### Résumé - suite
 
-Un nœud est élagué si :
+Pour ce problème de minimisation, la valeur optimale de la relaxation continue d'un nœud est une borne inférieure ; une solution entière courante est une borne supérieure. Un nœud est donc élagué si :
 
-- La relaxation continue n'a pas de solution
-- La valeur optimale de la relaxation continue $\ge Z^*$
+- sa relaxation continue est infaisable ;
+- son optimum de relaxation satisfait les contraintes d'intégralité ;
+- une solution courante existe et la valeur optimale de sa relaxation continue est $\ge Z^*$.
 
 La mise en place de l'algorithme nécessite de préciser :
 
