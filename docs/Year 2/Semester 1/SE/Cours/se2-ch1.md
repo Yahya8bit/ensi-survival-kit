@@ -80,7 +80,7 @@ import TabItem from '@theme/TabItem';
 
 - Utilisateur = l'humain devant la machine
   - Suivant le contexte : utilisateur final ou développeur
-  - Interagit directement … avec le matériel
+  - Interagit avec la machine, typiquement via les applications
 - Applications = les logiciels avec lesquels veut interagir l'utilisateur final
   - Messagerie, traitement de texte, lecteur de musique, etc.
 - Matériel = la machine physique
@@ -88,13 +88,11 @@ import TabItem from '@theme/TabItem';
   - Logiciel d'infrastructure : noyau + pilotes + services, etc.
   - Entre le matériel et les applications
 
-<!-- TODO: unclear in source, verify against original PDF (slide deck text extraction reorders some bullet fragments) — best-effort reconstruction below, see task summary -->
-
-```
-User
-  Application
-Operating System
-Hardware
+```mermaid
+flowchart TB
+    U[Utilisateur] <--> A[Application]
+    A <--> O[Système d'exploitation]
+    O <--> H[Matériel]
 ```
 
 ### Définition
@@ -112,7 +110,8 @@ Hardware
 - fournir certains services de base aux applications
   - IHM, stockage persistant, accès internet, gestion du temps
 - permettre la portabilité des programmes
-  - pouvoir lancer un même exécutable sur différents matériels
+  - une API normalisée facilite la portabilité du **code source**, mais une recompilation ou une réédition de liens peut rester nécessaire
+  - un exécutable binaire dépend généralement de l'ISA, de l'ABI et de la plate-forme cible ; l'exécuter sur une plate-forme incompatible demande une couche compatible, par exemple une virtualisation ou une émulation
 
 **Gestionnaire de ressources**
 
@@ -182,11 +181,16 @@ Hardware
 - Deux modes d'exécution :
   - Le mode superviseur (noyau, maître, …), mode privilégié qui autorise notamment l'appel à des instructions interdites en mode utilisateur (manipulation des interruptions).
   - Ce mode assure la protection du système d'exploitation assisté par le matériel
-- Le passage du mode utilisateur vers le mode superviseur est soit provoqué par un appel système, soit par une exception (déroutement en cas d'opération illicite), soit par l'arrivée d'une interruption
-- Une interruption est provoquée par un signal provenant du monde extérieur au processeur, et modifiant le comportement de celui-ci.
-- Le passage entre les modes utilisateur/noyau s'accompagne de commutations de contexte (sauvegarde du contexte utilisateur - changement de mode d'exécution - restauration du contexte utilisateur).
+- Un appel système, une exception ou une interruption transfère le contrôle vers le noyau et peut faire passer le processeur en mode superviseur.
+- Ce transfert ne constitue pas nécessairement une commutation de processus : celle-ci n'a lieu que si le noyau ou l'ordonnanceur choisit ensuite d'exécuter un autre processus.
 
-### Différentes sources d'interruptions
+### Interruptions, exceptions et appels système
+
+- **Interruption matérielle** : événement asynchrone signalé par le matériel au processeur.
+- **Exception ou trap** : événement synchrone provoqué par l'instruction en cours d'exécution (par exemple division par zéro ou instruction invalide).
+- **Appel système** : demande volontaire et contrôlée d'un programme au noyau.
+
+### Sources d'interruptions matérielles
 
 - Minuteur système, ou System Timer
   - interruptions périodiques, typiquement 100Hz ou 1000Hz
@@ -196,8 +200,6 @@ Hardware
   - clavier, souris, disque, GPU, réseau, etc
 - Pannes matérielles
   - température excessive, coupure de courant, etc
-- Évènements logiciels exceptionnels
-  - Erreurs fatales : division par zéro, instruction invalide, etc
 
 ### Architecture d'une machine typique
 
@@ -250,7 +252,7 @@ while True do:
 repeat
 ```
 
-Note : à la fin de la routine de traitement, une instruction `RETI` repassera le CPU en mode restreint.
+Note : à la fin de la routine de traitement, une instruction de retour d'interruption telle que `RETI` restaure le contexte sauvegardé et l'état de privilège antérieur : le processeur revient donc en mode utilisateur **ou** en mode noyau selon le contexte interrompu.
 
 **Mécanisme d'interruptions : déroulement**
 
@@ -271,8 +273,8 @@ restauration des registres  <--  instruction "retour d'interruption"
   - chaque IRQ porte un numéro identifiant le périphérique d'origine
 - **ISR = Interrupt Service Routine**
   - un fragment de programme (= séquence d'instructions) exécuté à chaque occurrence de l'évènement matériel associé
-  - se termine toujours par une instruction `RETI` « retour d'interruption »
-  - pendant une ISR, il peut y avoir de nouvelles IRQ temporairement mises en attente (permet au programmeur d'être « seul au monde »)
+  - se termine par une instruction de retour d'interruption, telle que `RETI`, qui restaure le contexte interrompu
+  - la mise en attente, l'activation, la priorité ou l'imbrication de nouvelles IRQ pendant une ISR dépendent de l'architecture et de la politique du SE
 - **Table des Vecteurs d'Interruptions**
   - tableau de pointeurs indiquant l'adresse de chaque ISR
   - le CPU utilise le numéro d'IRQ pour savoir où sauter
