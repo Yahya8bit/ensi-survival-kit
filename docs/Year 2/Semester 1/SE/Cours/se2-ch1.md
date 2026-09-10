@@ -15,6 +15,13 @@ import TabItem from '@theme/TabItem';
 
 *ENSI — chiraz.houaidia@ensi-uma.tn*
 
+:::info Vous allez apprendre
+- Situer le système d'exploitation entre les applications et le matériel.
+- Distinguer les principales interfaces, le noyau et les deux modes d'exécution.
+- Suivre le traitement d'une interruption sans le confondre avec une commutation de processus.
+- Relier les interruptions périodiques au partage du processeur.
+:::
+
 ## Approche du cours
 
 - Cours intégré (semestre 3) de 45 Heures (3h/semaine)
@@ -95,12 +102,15 @@ flowchart TB
     O <--> H[Matériel]
 ```
 
+L'utilisateur agit sur l'application ; l'application demande des services au SE, qui pilote le matériel. Chaque interface est donc conceptuellement à double sens.
+
 ### Définition
 
-- Un système d'exploitation est le logiciel qui fait fonctionner une machine.
-- C'est le logiciel qui exploite l'universalité de la machine et qui la transforme en un système opératoire apte à accomplir des tâches spécifiques.
-- L'environnement d'un utilisateur se construit par des couches logicielles successives basées sur la couche matérielle.
-- Le passage par un système d'exploitation est nécessaire.
+:::info Définition — système d'exploitation
+Un système d'exploitation est le logiciel qui fait fonctionner une machine. Il exploite l'universalité de la machine et la transforme en un système opératoire apte à accomplir des tâches spécifiques.
+
+L'environnement d'un utilisateur se construit par des couches logicielles successives basées sur la couche matérielle ; le passage par un système d'exploitation est nécessaire.
+:::
 
 ### Rôle de l'OS : les deux fonctions essentielles
 
@@ -148,9 +158,54 @@ flowchart TB
 
 *Appels système : exemples — source : Silberschatz, Operating Systems Concepts Essentials (2011), p 59*
 
+### Structure globale
+
+```mermaid
+flowchart TB
+    A[Applications<br/>compilateur, éditeur, chargeur, débogueur]
+    I[Interfaces : appels système/API<br/>et commandes GUI, CLI, batch]
+    subgraph S1[Services du SE]
+        direction LR
+        IPC[IPC]
+        P[Gestion de la protection]
+        F[Gestion des objets externes<br/>fichiers]
+    end
+    subgraph S2[Services du SE]
+        direction LR
+        O[Ordonnancement]
+        M[Gestion de la mémoire]
+        E[Gestion des E/S]
+        SO[Sockets]
+    end
+    IT[Mécanismes d'interruption]
+    H[Machine physique<br/>processeur, mémoire, disque, clavier, écran, modem, souris, imprimante]
+    A --- I --- S1 --- S2 --- IT --- H
+```
+
+Les interfaces séparent les applications des services du SE. Les mécanismes d'interruption relient ensuite ces services à la machine physique.
+
+### Structure à niveaux
+
+```mermaid
+flowchart BT
+    H[Matériel<br/>CPU, mémoire, disques, terminaux]
+    K[SE Unix<br/>processus, mémoire, système de fichiers, E/S]
+    L[Bibliothèque standard<br/>open, close, read, write, fork]
+    P[Programmes utilitaires<br/>shell, compilateurs, éditeurs]
+    U[Utilisateurs]
+    H -->|interface d'appels système| K
+    K -->|interface de bibliothèque| L
+    L --> P
+    P -->|interface utilisateur| U
+```
+
+Les programmes utilisateur s'appuient sur la bibliothèque et les appels système pour atteindre les services du noyau ; le noyau accède au matériel. La frontière entre programmes utilisateur et noyau correspond aux deux modes d'exécution présentés plus loin.
+
 ### Le noyau du système
 
-**Définition : Noyau ou kernel** — Le noyau c'est la partie de l'OS qui n'est pas une application.
+:::info Définition — noyau
+Le noyau (*kernel*) est la partie du système d'exploitation qui n'est pas une application.
+:::
 
 - **Monolithique** : « Tout en un » seul morceau
   - Plus facile à écrire
@@ -203,22 +258,31 @@ flowchart TB
 
 ### Architecture d'une machine typique
 
+```mermaid
+flowchart TB
+    C1[CPU1] <--> SB[Bus système]
+    C2[CPU2] <--> SB
+    C3[CPU3] <--> SB
+    M[Mémoire centrale] <--> SB
+    B[Pont E/S] <--> SB
+    B <--> IB[Bus E/S]
+    IB <--> UC[Contrôleur USB]
+    IB <--> DC[Contrôleur de disque]
+    IB <--> NA[Adaptateur réseau]
+    UC <--> U[Bus USB : souris, clavier]
+    DC <--> D[Disque]
+    NA <--> N[Réseau]
 ```
-CPU1 CPU2 CPU3 --- System bus --- main memory
-                 |
-        I/O bridge --- I/O bus --- disk controller --- disk
-                                 --- network adapter --- network
-USB bus: mouse, keyboard --- USB controller
-```
+
+Le bus système relie processeurs, mémoire et pont d'E/S ; le pont relie ensuite les contrôleurs de périphériques par le bus d'E/S.
 
 ### Applications = CPU en « mode restreint »
 
-**Définition : restricted mode = slave mode = user mode**
+:::info Définition — mode restreint
+*Restricted mode* = *slave mode* = *user mode* : vue partielle de la machine (un CPU et une mémoire), où certaines instructions et adresses sont interdites. Ce mode permet d'exécuter du code applicatif sans lui donner accès à toutes les ressources de la machine.
+:::
 
-- Vue partielle de la machine : 1 CPU + 1 mémoire
-- Certaines instructions interdites, certaines adresses interdites
-- Utile pour exécuter sereinement du code applicatif
-- Instructions disponibles : opérations AL, accès mémoire, sauts
+Instructions disponibles : opérations AL, accès mémoire, sauts.
 
 ```
 ADD R1 <- R3, R4
@@ -256,15 +320,19 @@ Note : à la fin de la routine de traitement, une instruction de retour d'interr
 
 **Mécanisme d'interruptions : déroulement**
 
+```mermaid
+sequenceDiagram
+    participant P as Programme principal
+    participant C as Processeur
+    participant I as ISR
+    P->>C: requête d'interruption
+    C->>C: sauvegarde les registres
+    C->>I: charge dans PC l'adresse de l'ISR
+    I->>C: RETI
+    C->>P: restaure le contexte interrompu
 ```
-Programme principal          Routine de traitement d'interruption
-requête d'interruption  -->  sauvegarder les registres
-                              charger dans PC l'adresse de début de la routine
-                              ISR: ...
-                                   ...
-                                   RETI
-restauration des registres  <--  instruction "retour d'interruption"
-```
+
+Le processeur sauvegarde d'abord l'état interrompu, exécute la routine, puis `RETI` restaure cet état. Ce retour ne choisit pas à lui seul un autre processus.
 
 **Mécanisme d'interruptions : vocabulaire**
 
@@ -283,12 +351,24 @@ restauration des registres  <--  instruction "retour d'interruption"
 
 ### Démarrage du système (séquence)
 
-1. Au démarrage c'est le Bios qui est exécuté et qui charge aussitôt le noyau du système d'exploitation dans la mémoire (*Kernel is loaded from disk*).
-2. Une fois que c'est fait, le bios effectue un saut vers l'adresse du noyau dans la RAM pour débuter son exécution (*Kernel starts*).
-3. Le noyau peut ainsi créer son premier processus P0. Il procède comme le bios, il charge le processus dans la mémoire puis il lui cède la main au moyen d'un saut (*P0 starts*).
-4. Que se passe-t-il si P0 entre dans une boucle infinie (c'est après tout du code) ? … Le noyau ne pourra jamais reprendre le contrôle …
-5. La solution c'est de générer des interruptions périodiques permettant au noyau de reprendre la main de façon régulière et empêcher ainsi les processus qui ont tendance à monopoliser le processeur.
-6. Grâce à ces interruptions périodiques, le noyau reprend son rôle d'arbitre pour partager le temps entre plusieurs processus (P0, P1, …).
+```mermaid
+sequenceDiagram
+    participant B as BIOS
+    participant K as Noyau
+    participant P as P0
+    B->>K: charge le noyau en mémoire
+    B->>K: saute à son adresse en RAM
+    K->>P: charge le premier processus
+    K->>P: lui cède le processeur
+    loop interruptions périodiques
+        P->>K: interruption du minuteur
+        K->>P: retour d'interruption
+    end
+```
+
+Si P0 entre dans une boucle infinie, les interruptions périodiques permettent néanmoins au noyau de reprendre régulièrement la main. Il peut alors arbitrer le temps processeur entre P0, P1, et les autres processus.
+
+**Prochaine étape** : [gestion des processus](./se2-ch2-processus) — un processus, son contexte et ses états rendent ce partage du processeur possible.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
