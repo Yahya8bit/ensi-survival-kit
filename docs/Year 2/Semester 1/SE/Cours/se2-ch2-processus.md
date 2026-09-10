@@ -15,6 +15,13 @@ import TabItem from '@theme/TabItem';
 
 *ENSI — chiraz.houaidia@ensi-uma.tn*
 
+:::info Vous allez apprendre
+- Distinguer un programme d'un processus et identifier son contexte.
+- Lire les états d'un processus et les causes de leurs transitions.
+- Comprendre quand une entrée dans le noyau devient une commutation de contexte.
+- Utiliser les notions essentielles de `fork`, `exec`, `wait` et `waitpid` sous Unix.
+:::
+
 ## Plan
 
 - Notion de processus
@@ -44,8 +51,9 @@ import TabItem from '@theme/TabItem';
 
 **Qu'est-ce qu'un processus ?**
 
-- Entité dynamique représentant l'exécution d'un programme sur un processeur
-- créé à un instant donné, a un état qui évolue au cours du temps et qui disparaît, en général, au bout d'un temps fini
+:::info Définition — processus
+Un processus est une entité dynamique représentant l'exécution d'un programme. Il est créé à un instant donné, son état évolue au cours du temps et il disparaît en général au bout d'un temps fini.
+:::
 
 Deux types de processus :
 
@@ -56,8 +64,6 @@ Code de retour d'un processus :
 
 - `=0` : fin normale
 - `!=0` : comportement anormal
-
-<!-- TODO: unclear in source, verify against original PDF — slide shows a "Début/Fin/Etat/Temps" timeline diagram that did not extract cleanly -->
 
 Un processus a besoin de ressources (mémoire, CPU, données, unités d'E/S) pour s'exécuter → Abstraction du SE pour :
 
@@ -94,9 +100,13 @@ Un processus est associé à un contexte qui lui est propre :
 
 ## Processus en mémoire
 
-Contexte d'un processus : ensemble d'informations nécessaires à la gestion d'un programme en cours d'exécution (code + données).
+:::info Définition — contexte d'un processus
+Ensemble d'informations nécessaires à la gestion d'un programme en cours d'exécution : code, données et état d'exécution.
+:::
 
-**BCP – Bloc de contrôle de Processus (PCB – Process control block)** : Structure de données associée à l'exécution de chaque programme.
+:::info Définition — BCP / PCB
+Le **bloc de contrôle de processus** (*Process Control Block*, PCB) est la structure de données associée à l'exécution d'un programme ; il regroupe notamment les informations nécessaires à gérer et reprendre le processus.
+:::
 
 ## Modes d'exécution de processus
 
@@ -138,7 +148,7 @@ Deux processus P1 et P2 en mémoire centrale (prêts à s'exécuter). Comment me
 
 - Un SE doit, en général, traiter plusieurs processus en même temps
 - Entrelacement des exécutions (simuler une exécution parallèle)
-- A tout moment le SE ne traite qu'un seul processus à la fois, il l'interrompt et passe au suivant
+- Un cœur de CPU n'exécute qu'un seul flot matériel d'instructions à la fois : sur une machine à un seul cœur, un seul processus/thread s'exécute à un instant donné ; sur une machine multicœur, plusieurs peuvent s'exécuter simultanément sur des cœurs distincts.
 - La commutation étant très rapide → Illusion d'un traitement simultané
 
 Les processus peuvent rendre la main eux-mêmes quand :
@@ -155,7 +165,27 @@ Mais le système peut aussi leur prendre de force (Preemption) :
 - Garantie que tous les processus pourront s'exécuter un peu de temps en temps
 - Même si certains sont « méchants » et ne rendent jamais la main (boucle infinie)
 
-<!-- TODO: unclear in source, verify against original PDF — "Etat d'un processus" slides (2 slides, likely a state diagram: New/Ready/Running/Waiting/Terminated) did not extract as text -->
+## États d'un processus
+
+```mermaid
+stateDiagram-v2
+    [*] --> Nouveau
+    Nouveau --> Pret: allocation des ressources
+    Pret --> ActifUtilisateur: élu par l'ordonnanceur
+    ActifUtilisateur --> Pret: quantum écoulé / préemption
+    ActifUtilisateur --> Bloque: attente d'un événement ou d'une ressource
+    Bloque --> Pret: événement attendu arrivé
+    ActifUtilisateur --> ActifNoyau: appel système ou interruption
+    ActifNoyau --> ActifUtilisateur: retour au processus
+    ActifUtilisateur --> Suspendu: SIGSTOP
+    Suspendu --> Pret: SIGCONT
+    ActifUtilisateur --> Zombie: terminaison du processus fils
+    Zombie --> [*]: statut récupéré
+```
+
+Le passage de **prêt** à **actif** correspond à la sélection par l'ordonnanceur. Un processus actif redevient prêt lors d'une préemption ou à la fin de son quantum ; il devient bloqué lorsqu'il attend une E/S, une ressource ou un événement, puis redevient prêt quand cet événement survient.
+
+L'entrée en mode noyau (`ActifUtilisateur → ActifNoyau`) est provoquée par un appel système ou une interruption ; elle ne signifie pas à elle seule qu'un autre processus sera exécuté. L'état `Zombie` désigne ici un fils terminé dont le statut reste à récupérer.
 
 ## Principes d'ordonnancement
 
@@ -176,6 +206,20 @@ Commutation de processus = commutation des contextes de processus. Enchaînement
 - Le nouveau processus peut alors être exécuté à partir de l'état où il se trouvait lorsqu'il a été lui-même interrompu
 
 Cette commutation de contexte ne peut s'effectuer que lorsque le processeur se trouve dans un état interruptible.
+
+```mermaid
+sequenceDiagram
+    participant P1 as Processus P1
+    participant K as Noyau
+    participant P2 as Processus P2
+    P1->>K: interruption, appel système ou blocage
+    K->>K: sauvegarde l'état de P1 dans PCB1
+    K->>K: ordonnanceur / dispatcher choisit P2
+    K->>P2: charge l'état de P2 depuis PCB2
+    P2->>P2: reprend son exécution
+```
+
+Une entrée dans le noyau ne déclenche donc pas automatiquement une commutation : elle peut simplement être suivie du retour vers P1. Il y a commutation seulement lorsque le noyau sauvegarde un contexte et restaure celui d'un **autre** processus, comme P2 ici.
 
 Pour pouvoir retarder, et dans certains cas annuler, la prise en compte d'une interruption on utilise le masquage et le désarmement :
 
@@ -265,12 +309,13 @@ int main(void) {
 
 ### Héritage du processus fils
 
-Le processus fils hérite de beaucoup d'attributs du père mais n'hérite pas :
+Le processus fils reçoit un nouveau PID et conserve dans son PPID l'identifiant de son père. Il hérite ou copie une grande partie de l'état du père selon les sémantiques Unix ; certains attributs restent propres au fils :
 
-- De l'identification de son père
+- Son propre PID est nouveau
 - Des temps d'exécution qui sont initialisés à 0
-- De la priorité du père ; la sienne est initialisée à une valeur standard
 - Des verrous sur les fichiers détenus par le père
+
+L'héritage de la politique et de la priorité d'ordonnancement dépend de la plate-forme et de sa politique : il ne faut pas le présenter comme une non-hérédité universelle ni comme une réinitialisation systématique.
 
 Le fils travaille sur les données du père s'il accède seulement en lecture. S'il accède en écriture à une donnée, celle-ci est alors recopiée dans son espace local.
 
@@ -281,18 +326,23 @@ Un processus se termine lorsque :
 - exit normal : dernière instruction (volontaire) `void exit(int status)`
 - exit d'erreur (volontaire)
 - Erreur fatale/Violation de protection (involontaire)
-- Tué par un autre processus via `int kill(int pid, int status)` (involontaire)
+- Signal envoyé par un autre processus via `int kill(pid_t pid, int sig)`
+
+`kill()` envoie le signal `sig` au processus ou groupe désigné par `pid`. Il ne termine la cible que si le signal et son action entraînent effectivement cette terminaison.
 
 Note : certains processus ne se terminent pas avant l'arrêt de la machine — nommés "demons" (daemon) ou serveurs, ils réalisent des fonctions système (login user, impression, serveur web, …).
 
 ### Mauvaise terminaison d'un processus
 
-- Si le processus père termine son exécution avant son fils, ce dernier devient un **processus orphelin**, qui sera attaché au processus initiateur (`init`).
-- Si le processus fils meurt (se termine, son contexte disparaît) avant que son père ne se termine, celui-ci devient un **processus zombie**.
+- Si le processus père termine son exécution avant son fils, ce dernier devient un **processus orphelin** et est adopté par un processus chargé de le recueillir (traditionnellement `init`).
+
+:::info Définition — processus zombie
+Un **zombie** est un processus fils qui a terminé, mais dont le statut de terminaison n'a pas encore été récupéré (*reaped*) par son père. Son entrée reste alors disponible pour que le père puisse récupérer ce statut.
+:::
 
 ### Synchronisation Père-Fils — les primitives `wait` et `waitpid`
 
-Ces deux primitives permettent l'élimination des processus zombis et la synchronisation d'un processus sur la terminaison de ses descendants avec récupération des informations relatives à cette terminaison. Elles provoquent la suspension du processus appelant jusqu'à ce que l'un de ses processus fils se termine. La primitive `waitpid` permet de sélectionner un processus particulier parmi les processus fils (pid).
+`wait()` attend puis récupère le statut d'un fils terminé éligible. `waitpid()` permet de sélectionner plus précisément le fils concerné ; avec l'option `WNOHANG`, elle peut retourner sans bloquer si aucun fils demandé n'est encore prêt à être récupéré. Ces primitives éliminent les zombies et permettent la synchronisation père-fils.
 
 ```c
 #include <sys/types.h>
@@ -307,12 +357,18 @@ pid_t waitpid(pid_t pid, int *etat, int options);
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/wait.h>
+
 int main(void) {
-    printf("%d Bonjour \n", getpid());
-    fork();
-    printf("%d Au revoir \n", getpid());
-    sleep(2);
+    pid_t p = fork();
+    if (p == 0) {
+        _exit(0);              // le fils se termine immédiatement
+    }
+    if (p < 0) return 1;
+
+    sleep(2);                  // le père reste vivant : le fils est zombie
     system("ps -la");
+    waitpid(p, NULL, 0);       // récupère le statut du fils
     return 0;
 }
 ```
@@ -358,7 +414,7 @@ Non, car un processus est une image d'un programme en exécution.
 <details>
 <summary>Correction</summary>
 
-Oui, car une fois terminé le chargement d'un programme en mémoire un processus est créé.
+Non dans le modèle Unix : `fork()` crée un nouveau processus, tandis que `exec*()` remplace l'image exécutable du processus courant. `exec*()` ne crée pas un nouveau processus à lui seul.
 
 </details>
 
@@ -370,6 +426,8 @@ Oui, car une fois terminé le chargement d'un programme en mémoire un processus
 Non, car en pseudo-parallélisme les processus perdent la main au profit du système d'exploitation qui allouera le CPU pour un processus éligible.
 
 </details>
+
+**Prochaine étape** : [les threads](./se2-ch2-threads) — les processus peuvent contenir plusieurs flots d'exécution partageant certaines ressources.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
