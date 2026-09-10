@@ -15,15 +15,33 @@ import TabItem from '@theme/TabItem';
 
 *II2-ENSI*
 
+:::info Vous allez apprendre
+- distinguer les modèles de classes et d'objets, ainsi que leurs instances et leurs liens ;
+- lire les rôles, cardinalités et directions de navigation d'une association UML ;
+- choisir entre association, agrégation, composition, classe associative et association qualifiée ;
+- interpréter la généralisation comme héritage et comme inclusion ensembliste.
+:::
+
 ## Perspectives d'un système
 
 - **Statique** (ce que le système EST)
 - **Fonctionnel** (ce que le système FAIT)
 - **Dynamique** (comment le système EVOLUE)
 
-<!-- TODO: unclear in source, verify against original PDF page 139 — this slide contains a "4+1 views" diagram (Vue des processus, Vue logique statique (Structure des objets), Vue logique dynamique (Comportement), Vue logique, Vue des composants, Vue de déploiement, Besoins des utilisateurs = vue des cas d'utilisation) whose layout did not extract reliably; reproduced as extracted fragments below rather than reconstructed by guess -->
+```mermaid
+flowchart TB
+    UC([Besoins des utilisateurs<br/>vue des cas d'utilisation])
+    Logique[Vue logique<br/><br/>Vue logique statique<br/>(structure des objets)<br/><br/>Vue logique dynamique<br/>(comportement)]
+    Processus[Vue des processus]
+    Composants[Vue des composants]
+    Deploiement[Vue de déploiement]
+    UC --- Logique
+    UC --- Processus
+    UC --- Composants
+    UC --- Deploiement
+```
 
-Vue des processus — MOTIVATION — Vue logique statique (Structure des objets) — Vue logique dynamique (Comportement) — Vue logique — Besoins des utilisateurs = vue des cas d'utilisation — Vue des composants — Vue de déploiement
+La vue des cas d'utilisation relie les besoins des utilisateurs aux vues logique, des processus, des composants et de déploiement. Ce chapitre traite la partie **logique statique** de cette vue.
 
 ## Modèle structurel
 
@@ -79,8 +97,6 @@ classDiagram
     Entreprise "*" -- "*" Personne : Emploi
 ```
 
-<!-- TODO: unclear in source, verify against original PDF page 144 — original attribute values shown as "undefined : undefined" for Date-début/Date-fin appear to be a placeholder rendering artifact in the source slide itself rather than an OCR error; reproduced faithfully as Date-début / Date-fin without the "undefined" placeholder text, verify against original -->
-
 ## Principe d'abstraction
 
 Une abstraction fait ressortir les caractéristiques d'une structure qui la distinguent de tous les autres types de structures du domaine et donc procure des frontières conceptuelles rigoureusement définies par rapport au point de vue de l'observateur.
@@ -105,8 +121,6 @@ L'abstraction est une ignorance sélective.
 
 ## Encapsulation (…)
 
-<!-- TODO: unclear in source, verify against original PDF page 149 — this slide's opening paragraph was extracted with word order scrambled (multi-column slide OCR artifact): "Le même dynamique une principe entité. élément (c.a.d. d'encapsulation informatique, les données consiste les et aspects les fonctions) à regrouper, statique spécifiques et dans un à Cet élément informatique est appelé : « objet »". Best-effort reading below; verify against original page image. -->
-
 Le principe d'encapsulation consiste à regrouper dans un même élément informatique les aspects statique et dynamique spécifiques à une entité (c.a.d. les données et les fonctions). Cet élément informatique est appelé : « objet ».
 
 - Les [structures de] données définies dans un objet sont appelées les attributs de l'objet ;
@@ -117,8 +131,6 @@ On a donc la relation fondamentale : `OBJET = attributs + méthodes`
 `data1 data2…. fonction1 fonction2….`
 
 ## Encapsulation (…)
-
-<!-- TODO: unclear in source, verify against original PDF page 150 — this slide's body text was extracted with heavily scrambled word order (multi-column slide OCR artifact: "En entité], plus • • Le l'objet; niveau externe, correspond à la partie visible de il l'objet] publics de est ses constitué méthodes »), visibles à savoir des de et attributs spécifications l'extérieur les prototypes publics. (appelé: des et les éléments « déclarations éléments [de Ce l'extérieur. niveau représente donc l'interface de l'objet avec Le l'objet; visibles (appelés niveau il uniquement « est éléments interne constitué correspond privés de des l'intérieur »). éléments à l'implémentation de de cet l'objet objet de Ce niveau représente donc le corps de l'objet." followed by "l'encapsulation du regroupement permet des éléments de définir statique deux niveaux et dynamique de perception [d'une : Le niveau externe : perception de l'objet depuis l'extérieur Le niveau interne : perception de l'objet depuis l'intérieur"). Best-effort reading reconstructed below based on standard OO encapsulation terminology; verify against original page image before relying on exact wording. -->
 
 L'encapsulation du regroupement des éléments statique et dynamique d'une entité permet de définir deux niveaux de perception :
 
@@ -149,8 +161,6 @@ classDiagram
 ```
 
 *(Approche objet : Classe, Héritage, Encapsulation, Polymorphisme)*
-
-<!-- TODO: unclear in source, verify against original PDF page 152 — this slide's diagram groups "Héritage", "Encapsulation", "Polymorphisme" around a central "Classe" box in a specific layout that did not extract reliably; reproduced as a description rather than reconstructed by guess -->
 
 ## Objets et classes
 
@@ -314,17 +324,16 @@ Au maximum un lien d'un type donné entre deux objets donnés (*).
 ```mermaid
 classDiagram
     class ines["Ines : Personne"]
+    class sondes["Sondes : Personne"]
     class souha["Souha : Personne"]
     class hedi["Hédi : Personne"]
-    ines <--> souha : APourAmie
-    souha --> hedi : EstEnfantDe
+    ines --> sondes : APourAmie
+    ines --> hedi : EstEnfantDe
     hedi --> souha : EstPèreDe
 ```
 
 - Contrainte importante pour comprendre les "classes associatives"
 - (*) Contrainte pouvant être relâchée via `{nonunique}` en UML 2.0 ... voir plus loin les concepts avancés
-
-<!-- TODO: unclear in source, verify against original PDF page 156-157 — this slide's example objects ("Ines", "Sondes"/"Souha") and relation names (APourAmie, EstEnfantDe, EstPèreDe) were extracted with an ambiguous OCR fragment ("Sondes : Personne" appears where a second "Ines"-like name might be expected, and the layout marks one arrangement "OK"); reproduced as a best-effort reconstruction, verify against original page image. -->
 
 ## Rôles
 
@@ -410,13 +419,13 @@ classDiagram
     }
     class Distributeur
     Client "1..4" -- "0..*" Compte : titulaires
+    Client "1" -- "0..*" CarteBleue : signataire
+    CarteBleue "*" -- "1" Compte
     Compte "1..*" -- "1" Banque
-    Banque "1" -- "0..*" Consortium : signataire
-    Consortium "1..*" -- "1..*" CarteBleue
+    Banque "1..*" -- "0..*" Consortium
+    Consortium "1" -- "0..*" Distributeur
     CarteBleue "0..*" --> "1..*" Distributeur : EstAcceptéPar
 ```
-
-<!-- TODO: unclear in source, verify against original PDF pages 159-161 — this exercise's two large slides are extremely garbled in the OCR extraction (repeated/interleaved fragments of "Compte", "Banque", "Consortium", "CarteBleue", "Distributeur", "Client" object instances and cardinalities such as "1..4", "0..*", "1..*"). The class diagram above reflects the same model reproduced cleanly in the "Exercice de lecture d'un diagramme de classes" section further below (page ~176); the corresponding object-diagram instances (c1, c2, c3, t1, t2, t3, ali, salah, sana, sophie, fred, etc.) could not be reliably reconstructed and are omitted here — verify against original page images if this object diagram is needed. -->
 
 ## Diagramme de classes : relations entre classes
 
@@ -425,21 +434,25 @@ classDiagram
 
 ```mermaid
 classDiagram
-    class classe1["classe 1"]
-    class classe2["classe 2"]
-    class classe3["classe 3"]
-    class classe4["classe 4"]
-    class voiture
-    class camion
-    class avion
-    classe4 "1" -- "1..*" classe1 : constructeur / véhicule
-    classe4 "1" -- "1..*" classe3 : moteur
-    classe2 <|-- voiture
-    classe2 <|-- camion
-    classe2 <|-- avion
+    class Classe1
+    class Classe2
+    class Classe3
+    class Classe4
+    class Constructeur
+    class Véhicule
+    class Moteur
+    class Voiture
+    class Camion
+    class Avion
+    Classe1 -- Classe2 : association
+    Classe2 <|-- Classe3
+    Classe4 o-- Classe3 : agrégation
+    Constructeur "1" -- "1..*" Véhicule
+    Véhicule o-- "1..*" Moteur
+    Véhicule <|-- Voiture
+    Véhicule <|-- Camion
+    Véhicule <|-- Avion
 ```
-
-<!-- TODO: unclear in source, verify against original PDF page 162 — this slide illustrates both "agrégation" (classe1-classe4) and generalization (classe2 -> voiture/camion/avion) side by side; exact pairing between "classe 2" and the vehicle subclasses is a best-effort reading, verify against original. -->
 
 ## Associations (entre classes)
 
@@ -551,28 +564,37 @@ classDiagram
 
 Un box peut être loué par au maximum un seul contrat à la fois. Un contrat concerne la location d'un ou plusieurs box (au minimum un). Un box est vide ou contient au maximum un véhicule. Un véhicule est autorisé à rester non loué. Un contrat concerne au moins un locataire mais ne peut souscrire qu'un seul locataire à la fois. Un locataire doit avoir souscrit un ou plusieurs contrats.
 
-<!-- TODO: unclear in source, verify against original PDF page 175 — this cardinality-reading exercise text was extracted with heavily scrambled word order across the "box/contrat/véhicule/locataire" sentences (multi-column slide OCR artifact); reproduced above as a best-effort reconstruction, verify against original page image before relying on exact wording. -->
-
 ## Diagrammes d'objets
 
 ```mermaid
-classDiagram
-    class Compte
-    class Banque
-    class Consortium
-    class CarteBleue
-    class Distributeur
-    class Client
-    Client "titulaires" -- "signataire" Compte
-    Compte -- Banque
-    Banque -- Consortium
-    Consortium -- CarteBleue
-    CarteBleue --> Distributeur : EstAcceptéPar
+flowchart LR
+    Fred[fred : Client] ---|titulaires| C4[c4 : Compte]
+    Fred ---|signataire| CB1[: CarteBleue]
+    CB1 --- C4
+    C4 --- B1[: Banque]
+    B1 --- K1[: Consortium]
+    K1 --- D1
+    CB1 -->|EstAcceptéPar| D1[: Distributeur]
+
+    Ali[ali : Client] ---|titulaires| C1[c1 : Compte]
+    Ali ---|signataire| CB2[: CarteBleue]
+    Salah[salah : Client] ---|titulaires| C2[c2 : Compte]
+    Salah ---|titulaires| C3[c3 : Compte]
+    Sana[sana : Client] ---|titulaires| C3
+    Sana ---|signataire| CB3[: CarteBleue]
+    Sophie[sophie : Client]
+    C1 --- B2[: Banque]
+    C2 --- B2
+    C3 --- B3[: Banque]
+    B2 --- K2[: Consortium]
+    B3 --- K2
+    K2 --- D2
+    CB2 -->|EstAcceptéPar| D2[: Distributeur]
+    CB3 --- C3
+    CB3 -->|EstAcceptéPar| D2
 ```
 
-*(Instances : c1, c2, c3, c4 : Compte ; fred, ali, salah, sana, sophie : Client ; : Banque ; : Consortium ; : CarteBleue ; : Distributeur)*
-
-<!-- TODO: unclear in source, verify against original PDF page 175 — the exact set of links between the individual object instances (fred/ali/salah/sana/sophie, c1-c4) could not be reliably reconstructed from the heavily interleaved OCR text; reproduced as a simplified class-level summary above, not a literal object diagram — verify against original page image. -->
+Cet instantané illustre la différence entre le modèle de classes et un état concret : plusieurs clients, comptes, cartes, banques et consortiums peuvent être reliés simultanément tout en respectant les cardinalités du modèle.
 
 ## Exercice de lecture d'un diagramme de classes
 
@@ -594,9 +616,11 @@ classDiagram
     }
     class Distributeur
     Client "1..4" -- "0..*" Compte : titulaires
+    Client "1" -- "0..*" CarteBleue : signataire
+    CarteBleue "*" -- "1" Compte
     Compte "1..*" -- "1" Banque
-    Banque "1" -- "0..*" Consortium : signataire
-    Consortium "1..*" -- "1..*" CarteBleue
+    Banque "1..*" -- "0..*" Consortium
+    Consortium "1" -- "0..*" Distributeur
     CarteBleue "0..*" --> "1..*" Distributeur : EstAcceptéPar
 ```
 
@@ -619,8 +643,8 @@ Description d'un système de fichiers :
 classDiagram
     class Utilisateur
     class Repertoire["Répertoire"]
-    Utilisateur "1..1" -- "0..*" Repertoire : "Est propriétaire de >"
-    Repertoire "0..1" -- "1..*" Repertoire : "Contient > (Contenant / Contenus)"
+    Utilisateur "1..1" -- "1..*" Repertoire : "Est propriétaire de >"
+    Repertoire "0..1 contenant" -- "0..* contenus" Repertoire : "Contient >"
     Utilisateur "1..*" -- "1..*" Repertoire : "Peut accéder à > (utilisateur autorisé)"
 ```
 
@@ -702,15 +726,12 @@ classDiagram
     Roue "0..1" *-- "1" Jante
 ```
 
-**Remarque** : Agrégation : les composants ont la même durée de vie qu'ils peuvent être créés après le composite, mais leurs durées de vie peuvent être créées avant la mort du composite.
+**Remarque** : la composition exprime une relation d'appartenance forte et une coïncidence des durées de vie après la création des composants.
 
-- i. Les composants peuvent être créés avant ou après le composite
-- ii. Les composants peuvent être enlevés
-- iii. Relation d'appartenance forte, coïncidence des durées de vie
+- Les composants peuvent être créés après le composite.
+- Les composants peuvent être enlevés avant la mort du composite.
 
 Dépend de la situation modélisée ! (Ex : vente de voitures vs. casse)
-
-<!-- TODO: unclear in source, verify against original PDF page 187 — the "Remarque" paragraph on this slide was extracted with scrambled word order ("Les composants composants de : ils vie avec ont la peuvent peuvent relation même durée être être d'appartenance créés enlevés de vie après avant forte le la composite, mais coïncidence après des"); the reading above is a best-effort reconstruction, verify against original page image. -->
 
 ## Composition
 
@@ -904,9 +925,7 @@ classDiagram
 
 `<<enumeration>> Titre` : Secretaire, President, Tresorier
 
-Exemples : Anis — Tresorier, sylvia — President, ahmed — Secretaire, Taha — Secretaire
-
-<!-- TODO: unclear in source, verify against original PDF page 205 — the exact pairing of names (Anis, sylvia, ahmed, Taha) to roles (Tresorier, President, Secretaire) in this qualified-association example is ambiguous in the garbled OCR extraction; reproduced as a best-effort reading, verify against original. -->
+Dans l'exemple, `ass1` a pour membres Anis et sylvia ; le qualifieur associe le titre **Trésorier** à sylvia, **Président** à ahmed et **Secrétaire** à Taha. `ass2` associe aussi Taha au titre **Président**.
 
 ## Cardinalité des associations qualifiées
 
@@ -1058,6 +1077,8 @@ Instances : `c1`, `c2`, `c3`, `c4` : Compte ; `ce1`, `ce2`, `ce3` : CompteEpargn
 - **Objet**
 - **Lien**
 - **Inclusion ensembliste**
+
+**Prochaine étape** : le [modèle dynamique](./acoo-analyse-modele-dynamique.md) complète cette vue statique en décrivant comment les objets évoluent et interagissent au cours du temps.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
