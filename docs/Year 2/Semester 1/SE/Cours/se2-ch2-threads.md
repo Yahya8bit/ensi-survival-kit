@@ -15,6 +15,13 @@ import TabItem from '@theme/TabItem';
 
 *ENSI — II2*
 
+:::info Vous allez apprendre
+- Distinguer les ressources d'un processus de celles de chacun de ses threads.
+- Lire les états d'un thread et les transitions représentées dans le cours.
+- Expliquer pourquoi un serveur multithreadé reste réactif lorsqu'une requête bloque.
+- Utiliser `pthread_create`, `pthread_join`, `pthread_exit` et `pthread_self`.
+:::
+
 ## Motivations
 
 Inconvénients des processus classiques (processus lourds) :
@@ -28,12 +35,53 @@ Inconvénients des processus classiques (processus lourds) :
 
 ## Notion de Thread
 
-Thread / processus léger / activité / fil d'exécution — définitions :
+:::info Définition — thread
+Un **thread** (processus léger, activité ou fil d'exécution) est l'unité d'exécution à laquelle le SE alloue le processeur. C'est un sous-processus — une procédure ou fonction — qui appartient à un processus et peut s'exécuter indépendamment du `main`.
+:::
 
-- Abstraction du SE pour l'allocation du processeur – unité d'exécution
-- Sous-processus (procédure/fonction) lié/appartient à un processus lourd (s'exécutant indépendamment du `main`)
-- Processus classique (`fork` unix) ne comporte qu'un seul thread → Processus monothreadé (`main` en C)
-- Les threads permettent de dérouler plusieurs suites d'instructions, en parallèle (sur plusieurs CPUs ou cores), à l'intérieur du même processus → Processus multithreadé
+Un processus classique créé par `fork()` ne comporte qu'un seul thread : il est **monothreadé** (`main` en C). Un processus **multithreadé** contient plusieurs flots d'instructions : ils peuvent réellement s'exécuter en parallèle sur plusieurs CPU/cœurs, ou être entrelacés sur un seul cœur.
+
+```mermaid
+flowchart TB
+    subgraph P[Processus]
+        direction TB
+        R[Ressources partagées<br/>code · données · fichiers · identité]
+        subgraph T1[Thread 1]
+            direction TB
+            Reg1[registres]
+            Pile1[pile]
+        end
+        subgraph T2[Thread 2]
+            direction TB
+            Reg2[registres]
+            Pile2[pile]
+        end
+        R --- T1
+        R --- T2
+    end
+```
+
+Chaque thread possède donc son **contexte d'exécution** (registres, compteur ordinal et pile), tandis que les threads du même processus partagent le code, les données, les fichiers et l'identité. C'est précisément ce partage qui rend les threads plus légers que les processus, mais qui rend aussi nécessaire la synchronisation.
+
+```mermaid
+flowchart LR
+    subgraph Mono[Processus monothreadé]
+        direction TB
+        MRes[code · données · fichiers]
+        MCtx[registres + pile]
+        MMain[thread : main]
+        MRes --- MCtx --- MMain
+    end
+    subgraph Multi[Processus multithreadé]
+        direction TB
+        XRes[code · données · fichiers]
+        XRes --- X1[registres + pile<br/>thread 1]
+        XRes --- X2[registres + pile<br/>thread 2]
+        XRes --- X3[registres + pile<br/>thread 3]
+    end
+```
+
+Dans le processus monothreadé, le seul fil déroule le code à partir de `main()`. Chaque thread supplémentaire d'un processus multithreadé démarre à la fonction indiquée lors de sa création.
 
 **Multi-threading :**
 
@@ -75,6 +123,25 @@ Algorithme :
   - Servir requête R2 (peut bloquer ici)
   - Renvoyer réponse au client
 
+```mermaid
+sequenceDiagram
+    participant C1 as Client 1
+    participant M as Thread principal
+    participant T1 as Thread fils R1
+    participant C2 as Client 2
+    participant T2 as Thread fils R2
+    C1->>M: requête R1
+    M->>T1: allouer le thread de service
+    T1->>T1: servir R1 (peut bloquer)
+    C2->>M: requête R2
+    M->>T2: allouer le thread de service
+    T2->>T2: servir R2
+    T2->>C2: réponse R2
+    T1->>C1: réponse R1
+```
+
+Si le service de `R1` attend une E/S lente, le thread principal peut recevoir `R2` et son thread de service peut avancer. L'ordre des réponses n'est donc pas nécessairement celui des requêtes.
+
 ## Propriétés d'un Thread
 
 Un processus léger est caractérisé par :
@@ -92,7 +159,20 @@ Un processus léger est caractérisé par :
 - **Bloqué** : le thread est en attente sur une synchronisation ou sur la fin d'une opération (entrée/sortie par exemple).
 - **Terminé** : le thread a terminé son exécution ou a été annulé. Les ressources du thread vont être libérées et le thread disparaîtra.
 
-<!-- TODO: unclear in source, verify against original PDF — the states are illustrated by a state-transition diagram across several slides that did not extract as text -->
+```mermaid
+stateDiagram-v2
+    direction LR
+    Prêt --> En_exécution: activation
+    En_exécution --> Prêt: interruption (préemptive)
+    En_exécution --> Bloqué: attente d'une ressource
+    Bloqué --> En_exécution: ressource libérée
+    Bloqué --> Prêt: attente satisfaite
+    Prêt --> Terminé: annulé
+    Bloqué --> Terminé: annulé
+    En_exécution --> Terminé
+```
+
+Le diagramme reprend les quatre états et les flèches du support. Une annulation peut donc terminer un thread prêt ou bloqué ; lorsque l'attente d'une ressource est satisfaite, le support montre un retour vers `Prêt`, et lorsqu'une ressource est libérée il montre aussi la reprise vers `En exécution`.
 
 ## Types des Threads
 
@@ -101,6 +181,22 @@ Un processus léger est caractérisé par :
 - tous les processus légers d'un processus lourd se partagent la même entité noyau pour leur exécution
 - ça peut être réalisé sous forme de bibliothèque sans modification du noyau du système d'exploitation
 - l'application gère les threads (librairie) => Le noyau ignore l'existence de threads
+
+```mermaid
+flowchart TB
+    subgraph P[Processus lourd]
+        U1[thread utilisateur 1]
+        U2[thread utilisateur 2]
+        U3[thread utilisateur 3]
+    end
+    U1 --> KN[une entité noyau]
+    U2 --> KN
+    U3 --> KN
+    KN --> N[Noyau]
+    N --> CPU[un processeur]
+```
+
+Tous les threads utilisateur sont multiplexés sur la même entité noyau : le noyau voit cette entité, pas les threads individuels.
 
 **Avantages**
 
@@ -119,6 +215,25 @@ Un processus léger est caractérisé par :
 - chaque processus léger est pris en charge par une entité noyau
 - Les processus légers sont totalement implantés dans le noyau du système d'exploitation
 
+```mermaid
+flowchart TB
+    subgraph P[Processus lourd]
+        K1[thread 1]
+        K2[thread 2]
+        K3[thread 3]
+    end
+    K1 --> E1[entité noyau 1]
+    K2 --> E2[entité noyau 2]
+    K3 --> E3[entité noyau 3]
+    E1 --> N[Noyau]
+    E2 --> N
+    E3 --> N
+    N --> CPU1[processeur 1]
+    N --> CPU2[processeur 2]
+```
+
+Ici, le noyau connaît et ordonnance les threads individuellement ; il peut donc placer des entités différentes sur des processeurs distincts.
+
 **Avantages**
 
 - Les blocages des processus légers se font dans le noyau par le biais d'un blocage de l'entité noyau.
@@ -135,6 +250,28 @@ Un processus léger est caractérisé par :
 - Plusieurs processus légers en niveau utilisateur ont à leur disposition plusieurs entités noyau.
 - Lorsqu'une entité noyau est bloquée en attente d'une synchronisation ou d'une entrée/sortie, le noyau informe la bibliothèque de niveau utilisateur. Un autre processus léger est engendré pour maintenir le nombre de processus légers en cours d'exécution.
 
+```mermaid
+flowchart TB
+    subgraph P[Processus lourd]
+        H1[thread utilisateur 1]
+        H2[thread utilisateur 2]
+        H3[thread utilisateur 3]
+        H4[thread utilisateur 4]
+    end
+    H1 --> HE1[entité noyau 1]
+    H2 --> HE1
+    H3 --> HE2[entité noyau 2]
+    H4 --> HE3[entité noyau 3]
+    HE1 --> N[Noyau]
+    HE2 --> N
+    HE3 --> N
+    N --> P1[processeur 1]
+    N --> P2[processeur 2]
+    N --> P3[processeur 3]
+```
+
+Plusieurs threads utilisateur disposent de plusieurs entités noyau. Si l'une attend une synchronisation ou une E/S, le noyau informe la bibliothèque utilisateur afin qu'un autre thread puisse être exécuté.
+
 **Avantages**
 
 - L'implantation en niveau utilisateur garantit des temps de commutation et de synchronisation très courts et favorise l'extension du système (scalability).
@@ -149,7 +286,108 @@ Un processus léger est caractérisé par :
 
 ## Principales fonctions de manipulation
 
-<!-- TODO: unclear in source, verify against original PDF page for "Principales fonctions de manipulation" and Exemples 1/2/3 — slides contain a table/code screenshot (likely pthread_create/pthread_join/pthread_exit signatures and example programs) that did not extract as text -->
+| Fonction POSIX | Rôle |
+| --- | --- |
+| `pthread_create(&tid, attr, fonction, arg)` | Crée un thread qui commence dans `fonction(arg)`. |
+| `pthread_exit(etat)` | Termine **le thread appelant** et fournit éventuellement une valeur de retour. À la différence de `exit()`, il ne termine pas automatiquement les autres threads du processus. |
+| `pthread_self()` | Renvoie l'identifiant du thread courant, l'équivalent conceptuel de `getpid()` pour un processus. |
+| `pthread_join(tid, &etat)` | Attend la fin du thread identifié par `tid` et peut récupérer sa valeur de retour. |
+
+Les exemples ci-dessous emploient les primitives du tableau. Pour compiler un programme POSIX threads : `cc -pthread fichier.c -o programme`.
+
+### Exemple 1 — deux flots d'exécution
+
+Deux threads affichent l'alphabet en minuscules et en majuscules, tandis que le thread principal attend leur fin avec `pthread_join()`.
+
+```c title="Deux threads"
+#include <pthread.h>
+#include <stdio.h>
+
+static void *minuscule(void *arg) {
+    (void)arg;
+    for (char c = 'a'; c <= 'z'; c++) putchar(c);
+    putchar('\n');
+    return NULL;
+}
+
+static void *majuscule(void *arg) {
+    (void)arg;
+    for (char c = 'A'; c <= 'Z'; c++) putchar(c);
+    putchar('\n');
+    return NULL;
+}
+
+int main(void) {
+    pthread_t thread[2];
+    pthread_create(&thread[0], NULL, minuscule, NULL);
+    pthread_create(&thread[1], NULL, majuscule, NULL);
+    pthread_join(thread[0], NULL);
+    pthread_join(thread[1], NULL);
+    return 0;
+}
+```
+
+Les caractères et les deux lignes peuvent s'entrelacer : le système ne promet pas l'ordre d'exécution des threads. Les `join` empêchent seulement le processus de se terminer avant eux.
+
+### Exemple 2 — donnée globale partagée
+
+Le support crée deux threads qui incrémentent tous les deux `x`. C'est un exemple volontairement dangereux : `x++` n'est pas une opération atomique.
+
+```c title="Course critique sur x"
+#include <pthread.h>
+#include <stdio.h>
+
+#define N 10000
+static int x = 0;
+
+static void *incrementer(void *arg) {
+    (void)arg;
+    for (int c = 0; c <= N; c++) x++;
+    return NULL;
+}
+
+int main(void) {
+    pthread_t thread[2];
+    pthread_create(&thread[0], NULL, incrementer, NULL);
+    pthread_create(&thread[1], NULL, incrementer, NULL);
+    pthread_join(thread[0], NULL);
+    pthread_join(thread[1], NULL);
+    printf("x = %d (attendu : %d)\n", x, 2 * (N + 1));
+    return 0;
+}
+```
+
+La valeur affichée peut être inférieure à la valeur attendue : deux threads peuvent lire la même ancienne valeur avant qu'un seul écrive. La correction par mutex sera étudiée dans le chapitre sur la synchronisation.
+
+### Exemple 3 — passer un argument au thread
+
+Chaque création reçoit l'adresse d'un élément différent du tableau `id`; la fonction `hello` reconvertit ensuite `void *` en `int *`.
+
+```c title="Argument d'un thread"
+#include <pthread.h>
+#include <stdio.h>
+
+static void *hello(void *arg) {
+    int *id = arg;
+    printf("thread %d : hello world\n", *id);
+    return NULL;
+}
+
+int main(void) {
+    pthread_t thread[3];
+    int id[3] = {1, 2, 3};
+
+    for (int i = 0; i < 3; i++)
+        pthread_create(&thread[i], NULL, hello, &id[i]);
+    for (int i = 0; i < 3; i++)
+        pthread_join(thread[i], NULL);
+    return 0;
+}
+```
+
+Le tableau `id` reste vivant jusqu'aux `join`, donc chaque thread peut lire l'entier qui lui a été confié. Passer l'adresse de la variable de boucle `i` aurait au contraire créé une course sur une même variable partagée.
+
+**Prochaine étape** : [l'ordonnancement](./se2-ch3-ordonnancement) choisit quel thread prêt reçoit le processeur et pendant combien de temps.
 
 </TabItem>
 <TabItem value="pdf" label="PDF">
