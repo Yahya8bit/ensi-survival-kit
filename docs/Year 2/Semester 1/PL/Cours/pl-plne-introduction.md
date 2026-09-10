@@ -25,11 +25,11 @@ Dans ce cours on s'intéressera à la programmation en nombres entiers.
 
 ## Définitions
 
-**Définition 1** : Un **programme en nombres entiers** est un programme dont les variables sont contraintes à ne prendre que des valeurs entières.
+**Définition 1** : Un **programme en nombres entiers** (PLNE pur) est un programme dont toutes les variables de décision sont contraintes à ne prendre que des valeurs entières.
 
-**Définition 2** : Si les variables sont contraintes à prendre les valeurs 0 ou 1, on parle alors d'un **programme binaire**. Noté PL01.
+**Définition 2** : Si les variables de décision concernées sont contraintes à prendre les valeurs 0 ou 1, on parle alors d'un **programme binaire** (PL01).
 
-**Définition 3** : Un **programme mixte en nombres entiers** est un programme dont certaines variables sont contraintes à ne prendre que des valeurs entières.
+**Définition 3** : Un **programme mixte en nombres entiers** est un programme dont certaines variables de décision sont entières et les autres continues.
 
 ## PLNE : Exemple 1
 
@@ -57,6 +57,8 @@ On associe à chaque construction (d'une usine ou d'un entrepôt dans chacun des
 **Variables** :
 
 $$x_j = \begin{cases} 1 : \text{si la décision } j \text{ est approuvée (oui)} \\ 0 : \text{si la décision } j \text{ est approuvée (non)} \end{cases}$$
+
+Ici, $x_1$ correspond à l'usine à V1, $x_2$ à l'usine à V2, $x_3$ à l'entrepôt à V1 et $x_4$ à l'entrepôt à V2.
 
 **Objectif** : Maximiser la valeur estimée totale.
 
@@ -131,6 +133,10 @@ PR
 \right.
 \qquad\text{(Le cas continu — Programme linéaire en nombres réels)}
 $$
+
+La relaxation continue enlève uniquement les contraintes d'intégralité et conserve toutes les autres contraintes. Toute solution entière réalisable du PLNE est donc réalisable pour $PR$ : la région réalisable de $PR$ contient celle du PLNE. Par conséquent, l'optimum de la relaxation est une borne supérieure de l'optimum entier pour un problème de maximisation, et une borne inférieure pour un problème de minimisation.
+
+> Arrondir une solution optimale de la relaxation ne garantit en général ni sa réalisabilité, ni son optimalité pour le problème entier.
 
 <!-- TODO: pages 9 and 10 are geometric figures (the feasible polygon X_ad with the integer lattice points marked, showing the PLNE optimum vs. the PR optimum, and then the convex hull P of the integer points) — genuine plotted figures illustrating that the relaxation's optimum need not be integer while the convex hull of integer points gives the exact PLNE optimum via simplex; described here rather than re-rendered, see PDF tab. -->
 
