@@ -25,9 +25,31 @@ import TabItem from '@theme/TabItem';
 
 ## Introduction
 
-<!-- TODO: unclear in source, verify against original PDF — the introductory example code snippet ("le code suivant" incrementing a shared variable i) did not extract as text -->
+:::info À retenir
+
+Ce chapitre distingue deux besoins complémentaires : **synchroniser** les accès concurrents à une ressource et **communiquer** des données entre processus. Les protocoles ci-dessous supposent que les primitives indiquées sont atomiques.
+
+:::
 
 Soit le code suivant : que sera la valeur finale de `i` ? L'incrémentation est-elle une opération atomique ?
+
+```c
+#define N 10000
+int i = 0;                    // variable globale partagée
+
+void *increment(void *arg) {
+  for (int j = 0; j < N; ++j) i++;
+  return NULL;
+}
+
+int main(void) {
+  pthread_t t1, t2;
+  pthread_create(&t1, NULL, increment, NULL);
+  pthread_create(&t2, NULL, increment, NULL);
+  pthread_join(t1, NULL);
+  pthread_join(t2, NULL);
+}
+```
 
 Des exemples d'exécutions prouvent que l'incrémentation n'est pas atomique.
 
@@ -37,7 +59,7 @@ Des exemples d'exécutions prouvent que l'incrémentation n'est pas atomique.
 
 - **Ressource critique (RC)** : une ressource qui ne doit être utilisée que par un seul processus à la fois.
 - **Section critique (SC)** : partie de code qui cause des conflits d'utilisation de ressources critiques.
-- **Processus en exclusion mutuelle** : plusieurs processus qui doivent utiliser simultanément une ressource critique.
+- **Processus en exclusion mutuelle** : plusieurs processus qui doivent utiliser une même ressource critique ; le protocole impose qu'un seul y accède à la fois.
 
 ### Section critique (SC)
 
@@ -67,12 +89,32 @@ Une bonne solution au problème de section critique doit satisfaire :
 
 Opération atomique "hardware" utilisée pour écrire 1 dans un emplacement mémoire et retourner son ancienne valeur.
 
-<!-- TODO: unclear in source, verify against original PDF — the "Équivalent en code C" slide for TAS did not extract as text -->
+```c
+/* Spécification conceptuelle : les trois lignes forment UNE opération atomique. */
+int TAS(int *val) {
+  int temp = *val;
+  *val = 1;
+  return temp;
+}
+```
+
+Ce n'est donc pas une fonction C ordinaire sûre en concurrence : l'atomicité est fournie par l'instruction matérielle (ou une primitive atomique de la bibliothèque).
 
 - Si `val` contient 1, TAS retourne 1 et le processus ne peut pas entrer en SC.
 - Si `val` contient 0, TAS retourne 0 et le processus peut entrer en SC (les autres trouveront 1 dans `val`).
 
-**Solution au problème de SC pour N processus** — voir PDF pour le schéma / la preuve (vérifier les critères d'une solution SC).
+**Solution au problème de SC pour N processus** :
+
+```text
+lock = 0                         // ressource partagée
+
+processus Pi, en boucle :
+    while TAS(&lock) != 0: pass  // attente active
+    section_critique()
+    lock = 0
+```
+
+Une seule invocation de `TAS` peut observer `0` et le remplacer par `1` : l'exclusion mutuelle est assurée. En revanche, ce verrou tournant ne garantit pas l'attente bornée : un processus peut être dépassé indéfiniment.
 
 ### Solutions logicielles — attente active
 
@@ -80,7 +122,14 @@ Attente active = un processus vérifie continuellement si une condition est vrai
 
 **Première solution pour 2 processus P0 et P1 (incorrecte !)**
 
-<!-- TODO: unclear in source, verify against original PDF — pseudo-code for this first attempt did not extract as text -->
+```text
+turn = 0                         // variable partagée
+
+processus Pi, avec i ∈ {0,1} :
+    while turn != i: pass
+    section_critique()
+    turn = (i + 1) mod 2
+```
 
 - Exclusion Mutuelle => OK
 - Avancement => Non ! => si P0 est plus lent que P1, P1 atteint la boucle "while" avant P0 => P1 ne peut pas entrer en SC bien qu'elle soit libre !!
@@ -95,6 +144,19 @@ Un processus positionne son flag à 1 et attend que le flag de l'autre processus
 **Solution 3 : combiner les 2 solutions précédentes == Algorithme de Peterson**
 
 Un processus positionne son flag et donne la chance à l'autre processus d'entrer en SC. Le processus qui exécute l'instruction de la ligne 8 en premier accèdera à sa SC.
+
+```text
+flag[0] = flag[1] = 0;  turn = 0
+
+processus Pi, avec j = (i + 1) mod 2 :
+    flag[i] = 1
+    turn = j
+    while flag[j] == 1 and turn == j: pass
+    section_critique()
+    flag[i] = 0
+```
+
+Sous l'hypothèse du modèle à mémoire séquentiellement cohérent, ce protocole à deux processus assure l'exclusion mutuelle, l'avancement et l'attente bornée. Sur les processeurs modernes, une implémentation réelle requiert aussi les barrières mémoire appropriées ; on préfère en pratique les mutex de la plate-forme.
 
 *Exercice : prouver que c'est une solution correcte (par l'absurde).*
 
@@ -118,7 +180,34 @@ Solutions de blocage : les verrous (Blocage ou échec/réessayer), Sémaphores, 
 
 Objectif : assurer l'exclusion mutuelle – MUTEX. Cas des threads : l'un obtient le verrou, les autres seront bloqués ou en échec.
 
-<!-- TODO: unclear in source, verify against original PDF — the lock example/state diagram (slides numbered 1-8) and the "exemple" code slide did not extract as text -->
+```mermaid
+sequenceDiagram
+    participant A as Thread A
+    participant M as mutex
+    participant B as Thread B
+    A->>M: lock()
+    Note over A,M: A détient le mutex
+    B->>M: lock()
+    Note over B,M: B attend
+    A->>M: unlock()
+    M-->>B: B obtient le mutex
+```
+
+Exemple Pthread — la section critique est seulement l'incrémentation :
+
+```c
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+int i = 0;
+
+void *increment(void *arg) {
+  for (int j = 0; j < 10000; ++j) {
+    pthread_mutex_lock(&lock);
+    i++;
+    pthread_mutex_unlock(&lock);
+  }
+  return NULL;
+}
+```
 
 **Fonctions Pthread (verrous)**
 
@@ -171,7 +260,18 @@ Sem ingred[3] = ([3] 1);
 - Réalisation des sections critiques
 - Synchronisation conditionnelle : il existe une relation de précédence `P1<P0`
 
-<!-- TODO: unclear in source, verify against original PDF — "Réalisation des sections critiques : exemple" code slide did not extract as text -->
+**Exclusion mutuelle avec un sémaphore binaire** :
+
+```text
+Sem mutex = 1
+
+processus Pi, en boucle :
+    P(mutex)
+    section_critique()
+    V(mutex)
+```
+
+**Précédence** : pour imposer `fsquare` avant `fdouble`, initialiser `Sem precedent = 0`, terminer `fsquare` par `V(precedent)` et commencer `fdouble` par `P(precedent)`.
 
 **Exercices** (voir PDF pour les fichiers sources cités) :
 
@@ -219,7 +319,16 @@ Quel est le plus coûteux ? Coût de blocage contre le coût de manipulation des
 - Le dernier processus qui termine la phase 1 doit réveiller l'un des autres ou tous les autres processus.
 - Il serait plus adéquat que le réveil soit en cascade => je réveille l'un des processus bloqués qui réveillera, à son tour, l'un des processus bloqués.
 
-<!-- TODO: unclear in source, verify against original PDF — the two "squelette d'une solution" pseudo-code slides did not extract as text -->
+Pour deux processus, deux sémaphores privés suffisent :
+
+```text
+Sem arrivee1 = 0, arrivee2 = 0
+
+P1 : phase1(); V(arrivee1); P(arrivee2); phase2()
+P2 : phase1(); V(arrivee2); P(arrivee1); phase2()
+```
+
+Chaque processus annonce son arrivée avant d'attendre l'autre : aucun signal n'est perdu.
 
 N.B : la variable `count` doit être protégée des accès concurrents (par lock ou sémaphore...).
 
@@ -237,7 +346,19 @@ Cas d'un tampon borné à N cases, exclusion mutuelle au tampon.
 - Si toutes les cases sont vides, le consommateur se bloque => utiliser un sémaphore `plein=0`
 - Si toutes les cases sont pleines, le producteur se bloque => utiliser un sémaphore `vide=N`
 
-<!-- TODO: unclear in source, verify against original PDF — the pseudo-code slide for the bounded-buffer producer/consumer solution did not extract as text -->
+```text
+Sem mutex = 1, plein = 0, vide = N
+
+producteur :                       consommateur :
+    produire_objet()                   P(plein)
+    P(vide)                            P(mutex)
+    P(mutex)                           retirer_objet()       // SC
+    deposer_objet()       // SC         V(mutex)
+    V(mutex)                           V(vide)
+    V(plein)                           consommer_objet()
+```
+
+`vide` compte les emplacements libres, `plein` les objets disponibles et `mutex` protège les indices et le tampon. Les attentes sur `vide`/`plein` sont placées avant la prise de `mutex`, afin de ne pas retenir le mutex pendant un blocage.
 
 *Exercice : exécuter le programme `ProdCons.c` plusieurs fois et interpréter les résultats. Modifier le programme de telle façon à avoir plusieurs producteurs et plusieurs consommateurs.*
 
@@ -267,6 +388,24 @@ Processus lecteur :
 
 Processus rédacteur : se bloque s'il y a un autre rédacteur dans la SC => il doit aussi se bloquer s'il y a des lecteurs. Solution : ajouter un autre sémaphore pour donner la priorité aux lecteurs. Un rédacteur qui arrive se bloque si un autre rédacteur est dans la SC (écriture) ou s'il y a encore des lecteurs.
 
+La version présentée dans le PDF utilise `mutex2` pour sérialiser les rédacteurs qui attendent `wrt` :
+
+```text
+int nblect = 0
+Sem mutex = 1, wrt = 1, mutex2 = 1
+
+lecteur :                         redacteur :
+    P(mutex)                          P(mutex2)             // file des rédacteurs
+    nblect++                           P(wrt)
+    if nblect == 1: P(wrt)             ecrire()
+    V(mutex)                           V(wrt)
+    lire()                             V(mutex2)
+    P(mutex)
+    nblect--
+    if nblect == 0: V(wrt)
+    V(mutex)
+```
+
 *Exercice : solution au problème des Lecteurs/Rédacteurs avec priorité des rédacteurs par rapport aux lecteurs.*
 
 ## Les moniteurs
@@ -286,6 +425,12 @@ La synchronisation est décrite de façon explicite à l'aide de variables condi
 - Variable condition : type spécial de donnée qui sert de FA de processus qui attendent sur cette condition
 - N'accepte que trois opérations possibles (structure d'un moniteur — voir PDF)
 
+| Opération | Effet |
+|---|---|
+| `empty(C)` | teste si la file d'attente associée à `C` est vide |
+| `Cwait(C)` | bloque l'appelant et libère le moniteur |
+| `Csignal(C)` | réactive un appelant en attente sur `C`, s'il y en a un ; sinon le signal est perdu |
+
 **Remarques — implantation des moniteurs avec des sémaphores**
 
 Similitudes/différences entre P/C.wait et V/C.signal :
@@ -296,7 +441,20 @@ Similitudes/différences entre P/C.wait et V/C.signal :
 - A chaque variable condition est assigné un sémaphore et un compteur
 - `Wait = V(mutex)` et `P(semCond)`
 
-<!-- TODO: unclear in source, verify against original PDF — the worked "Solution Prod/cons avec moniteur", "Solution RDV avec moniteur" et "Solution lecteurs/rédacteurs avec moniteur" slides did not extract as text (marked "À faire en classe" in source) -->
+Exemple de RDV dans un moniteur (réveil en cascade) :
+
+```text
+monitor RDV
+    int count = 0
+    condition tousLa
+
+    procedure toRDV()
+        count++
+        if count < N: Cwait(tousLa)
+        Csignal(tousLa)
+```
+
+Le moniteur protège implicitement `count`; chaque processus exécute `phase1(); toRDV(); phase2();`.
 
 ## Partie II — Synchronisation des threads
 
@@ -304,7 +462,7 @@ Similitudes/différences entre P/C.wait et V/C.signal :
 
 - Les verrous (Locks) — déjà fait : assurent l'exclusion mutuelle
 - Les sémaphores — déjà fait
-- Les variables conditionnelles : assurent l'exclusion mutuelle (mais problème : interblocage) — s'utilisent avec un verrou pour éviter l'interblocage
+- Les variables conditionnelles : expriment l'attente d'un prédicat ; elles s'utilisent avec un mutex, qui fournit l'exclusion mutuelle
 - Les barrières : une barrière bloque un ensemble de threads jusqu'à ce que tous les autres aient atteint la barrière
 
 ### Variables conditionnelles
@@ -317,7 +475,14 @@ Similitudes/différences entre P/C.wait et V/C.signal :
   - ou `pthread_cond_broadcast(&cond);` => tous les threads en attente sur la condition sont réveillés — ils sont alors à nouveau en compétition pour le mutex (pour le réacquérir)
 - Destruction d'une variable condition : `pthread_cond_destroy(&cond);`
 
-L'attente est toujours associée à un verrou (mutex). Le verrou mutex est libéré au moment de la mise en attente (blocage).
+L'attente est toujours associée à un verrou (mutex). `pthread_cond_wait` libère atomiquement le mutex au moment du blocage puis le réacquiert avant de retourner. Il faut donc attendre dans une boucle qui reteste le prédicat :
+
+```c
+pthread_mutex_lock(&mutex);
+while (!condition) pthread_cond_wait(&cond, &mutex);
+/* condition vraie : section protégée */
+pthread_mutex_unlock(&mutex);
+```
 
 *Exercice 1 : implémentation du problème producteur/consommateur (tampon borné) avec les variables conditionnelles => solution : `ThreadSynCondprodConsTB.c`.*
 
@@ -333,7 +498,31 @@ Une barrière détient un thread jusqu'à ce que tous les autres threads de cett
 
 Si compteur < nombre total des threads, les threads exécutent `pthread_cond_wait(&cond, &mutex);`. Le dernier thread qui entre dans la barrière réveille tous les autres par `pthread_cond_broadcast(&cond);`.
 
-<!-- TODO: unclear in source, verify against original PDF — the "API Pthread" barrier function-signature slides did not extract as text (likely pthread_barrier_init / pthread_barrier_wait / pthread_barrier_destroy) -->
+Le PDF construit une barrière avec un mutex, une condition et un compteur. Pour qu'elle soit réellement réutilisable, il faut distinguer les passages successifs par une génération :
+
+```c
+typedef struct {
+  pthread_mutex_t count_lock;
+  pthread_cond_t ok_to_proceed;
+  unsigned count;
+  unsigned generation;
+} barrier_t;
+
+void barrier(barrier_t *b, int nthreads) {
+  pthread_mutex_lock(&b->count_lock);
+  unsigned generation = b->generation;
+  ++b->count;
+  if (b->count == nthreads) {
+    b->count = 0;
+    ++b->generation;
+    pthread_cond_broadcast(&b->ok_to_proceed);
+  } else {
+    while (generation == b->generation)
+      pthread_cond_wait(&b->ok_to_proceed, &b->count_lock);
+  }
+  pthread_mutex_unlock(&b->count_lock);
+}
+```
 
 *Exercice : RDV avec barrière — solution : `RdvNprocessesWithBarrier.c`.*
 
@@ -413,9 +602,7 @@ Unix est un système basé sur le passage de messages : un pipe permet à 2 proc
 - Deux types de pipes (SGF) :
   - Les pipes anonymes : entre processus avec lien de parenté.
   - Les pipes nommés (FIFO) : entre processus sans lien de parenté.
-- Unix offre 2 primitives d'émission et de réception :
-  - `Write(int desc, char *buf, int taille);` : non bloquante
-  - `Read(int desc, char *buf, int taille);` : bloquante
+- Les appels système usuels sont `write(desc, buf, taille)` et `read(desc, buf, taille)`. Avec les descripteurs bloquants par défaut, `read` attend si le pipe est vide et `write` peut attendre si son tampon est plein. Le drapeau `O_NONBLOCK` modifie ce comportement.
 
 *Exercice : un processus père écrit (write) des lettres dans le tube que le fils va lire (read). Voir la solution `pipeanonyme.c`.*
 
@@ -429,7 +616,7 @@ Unix est un système basé sur le passage de messages : un pipe permet à 2 proc
 
 **Pipes nommés — utilisation (FIFO)**
 
-Pour pouvoir lire ou écrire dedans, il faut que le tube nommé soit ouvert à la fois en lecture et en écriture. Si ce n'est pas le cas, les opérations de lecture/écriture sont bloquantes.
+Pour établir la communication, une extrémité doit ouvrir la FIFO en lecture et l'autre en écriture. Sans pair correspondant, l'ouverture peut bloquer (sauf avec `O_NONBLOCK`); une lecture après fermeture de tous les écrivains renvoie une fin de fichier.
 
 1. Créer le pipe nommé
 2. Ouvrir le pipe en lecture et en écriture
