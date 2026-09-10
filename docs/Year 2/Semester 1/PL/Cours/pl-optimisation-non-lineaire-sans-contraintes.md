@@ -53,7 +53,7 @@ $$
 
 où $H$, appelée fonction de pénalisation, est définie par : $\forall x \in \mathbb{R}^n$, $H(x) = \sum_{i=1}^m h(g_i(x))$.
 
-Si l'ensemble des solutions admissibles de $(P)$ est $Ad = \{x \mid g_i(x) \le 0\}$ $\Rightarrow x \in Ad \Rightarrow H(x) \ne 0$ et par la suite $\forall x \in Ad$, $\varphi(x) = f(x)$.
+Si l'ensemble des solutions admissibles de $(P)$ est $Ad = \{x \mid g_i(x) \le 0\}$, alors $x \in Ad \Rightarrow H(x) = 0$ et, par la suite, $\forall x \in Ad$, $\varphi(x) = f(x)$.
 
 Donc résoudre $(P) \equiv$ à résoudre $(PP)$.
 
@@ -75,7 +75,7 @@ $$
 Il s'agit donc de trouver un point $x^*$ de $\mathbb{R}^n$ tel que :
 
 - $\forall x \in \mathbb{R}^n\ f(x^*) \le f(x)$ : c-à-d un **minimum global** de $f$ sur $\mathbb{R}^n$.
-- $\forall x \in \mathbb{R}^n\ f(x^*) < f(x)$ : c-à-d un **minimum global unique** de $f$ sur $\mathbb{R}^n$.
+- $\forall x \in \mathbb{R}^n$, $x \ne x^*\ \Rightarrow\ f(x^*) < f(x)$ : c-à-d un **minimum global unique** de $f$ sur $\mathbb{R}^n$.
 - $\exists\ V(x^*) \subset \mathbb{R}^n\ /\ \forall x \in V(x^*)\ f(x^*) \le f(x)$ : c-à-d un **minimum local** de $f$ sur $V(x^*)$.
 
 <!-- TODO: page 2's illustration (a curve labeled with a local max, a global max, a local min, and a global min) is a genuine sketch of the four notions above, described in prose here rather than re-rendered; see PDF tab. -->
@@ -108,7 +108,7 @@ $$\nabla f(x) = \begin{pmatrix} \partial f/\partial x_1(x) \\ \partial f/\partia
 
 Soit $x^*$ un minimum local de $f$. Le développement de Taylor au voisinage de $x^*$ donne :
 
-$$(DT) \quad f(x) = f(x^*) + \nabla f(x^*)(x-x^*) + \frac{1}{2}(x-x^*)^t \nabla^2 f(x^*)(x-x^*) + \lVert x-x^*\rVert^2\,\theta(x-x^*)$$
+$$(DT) \quad f(x) = f(x^*) + \nabla f(x^*)^t(x-x^*) + \frac{1}{2}(x-x^*)^t \nabla^2 f(x^*)(x-x^*) + \lVert x-x^*\rVert^2\,\theta(x-x^*)$$
 
 avec $\theta(x-x^*) \to 0$ quand $x \to x^*$.
 
@@ -130,7 +130,7 @@ $$\nabla f(x) = \begin{pmatrix} \partial f/\partial x \\ \partial f/\partial y \
 
 $$\nabla^2 f(x) = \begin{pmatrix} \partial^2f/\partial x^2 & \partial^2f/\partial x\partial y \\ \partial^2f/\partial x\partial y & \partial^2f/\partial y^2 \end{pmatrix} = \begin{pmatrix} 2 & 0 \\ 0 & -18y \end{pmatrix} \;\Rightarrow\; \nabla^2 f(0,0) = \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix}$$
 
-$(v_1,v_2)\,\nabla^2 f(0,0)\begin{pmatrix}v_1\\v_1\end{pmatrix} = 2v_1^2 \ge 0$.
+$(v_1,v_2)\,\nabla^2 f(0,0)\begin{pmatrix}v_1\\v_2\end{pmatrix} = 2v_1^2 \ge 0$.
 
 Par contre $f$ peut prendre une valeur négative dans un voisinage de $(0,0)$.
 
@@ -188,7 +188,7 @@ On suppose que $f$ est continue et différentiable. La 1ère condition d'optimal
 
 On peut résoudre ce système à l'aide de la méthode de Newton : (1) pour assurer la convergence il faut choisir le point de départ proche de $x^*$. (2) nécessite l'évaluation de la dérivée seconde en chaque point.
 
-Pour ce genre de problèmes d'optimisation, les méthodes les plus utilisées ce sont les méthodes itératives. C-à-d on engendre une suite de points $x_0, x_1, ..., x_k$ qui converge vers un optimum local de $f$. À chaque étape $x_{k+1}$ est calculé par $x_{k+1} = x_k + \lambda_k d_k$ où $d_k$ est une direction de déplacement qui peut être :
+Pour ce genre de problèmes d'optimisation, les méthodes les plus utilisées sont itératives : elles engendrent une suite de points $x_0, x_1, ..., x_k$ visant un point stationnaire de $f$. Des hypothèses supplémentaires sont nécessaires pour conclure à un optimum local. À chaque étape $x_{k+1}$ est calculé par $x_{k+1} = x_k + \lambda_k d_k$ où $d_k$ est une direction de déplacement qui peut être :
 
 - soit le gradient de $f$ en $x_k$ : $d_k = -\nabla f(x_k)$ (descente),
 - soit calculée à partir du gradient,
@@ -213,9 +213,9 @@ $$x_{k+1} = x_k - \lambda_k \frac{\nabla f(x_k)}{\lVert \nabla f(x_k)\rVert} \qq
 **La convergence** :
 
 - **Méthode 1** : Méthode à pas constant. $\lambda_k = \lambda = $ constante.
-- **Méthode 2** : Méthode de la série divergente (Polyak, 1966). $\lambda_k = \dfrac{1}{k}$, ici $\lambda_k \xrightarrow[k\to+\infty]{} 0$ et $\sum_{k=0}^{+\infty}\lambda_k = +\infty$.
+- **Méthode 2** : Méthode de la série divergente (Polyak, 1966). Pour $k\ge1$, $\lambda_k = \dfrac{1}{k}$ ; alors $\lambda_k \xrightarrow[k\to+\infty]{} 0$ et $\sum_{k=1}^{+\infty}\lambda_k = +\infty$.
 - **Méthode 3** : Méthode de la série convergente (Shor 1968, Coffin 1977). $\lambda_k = \lambda_0\alpha^k$, $0<\alpha<1$.
-- **Méthode 4** : Méthode de relaxation (Held, Wolfe, Crowder 1974). $\lambda_k = \rho\,\dfrac{f(x_k)-\bar f}{\lVert \gamma_k\rVert}$ où $\bar f$ = estimation de la valeur optimale $f(x_0)$ ; $\rho$ : coefficient de relaxation strictement positif ($0<\rho\le2$) ; $\gamma_k$ : le sous-gradient de $f$ au point $x_k$.
+- **Méthode 4** : Méthode de relaxation (Held, Wolfe, Crowder 1974). $\lambda_k = \rho\,\dfrac{f(x_k)-\underline f}{\lVert \gamma_k\rVert^2}$, où $\underline f\le f^*$ est une borne inférieure connue de la valeur optimale ; $\rho$ est un coefficient de relaxation strictement positif ($0<\rho\le2$) et $\gamma_k$ est un sous-gradient de $f$ au point $x_k$.
 
 ### II.2 Interprétation géométrique du gradient — Courbes de niveau
 
@@ -225,17 +225,17 @@ Les courbes de niveau d'une fonction $f$ sont les lieux où $f$ est constante, i
 
 **Courbe de niveau et gradient** : Là où le gradient est non nul, il est perpendiculaire à la courbe de niveau. Autrement dit, la tangente à la courbe de niveau est perpendiculaire au gradient.
 
-**Plan tangent au graphe (cas $\mathbb{R}^2$)** : on rappelle que l'équation de la tangente au graphe au pt $(a,f(a))$ est $y = f(a) + (x-a)f'(a)$. Si $f$ est à 2 variables, l'équation du plan tangent au pt $(a,b,f(a,b))$ est $z = f(a,b) + (x-a)\dfrac{\partial f}{\partial x}(a,b) + (y-a)\dfrac{\partial f}{\partial y}(a,b)$.
+**Plan tangent au graphe (cas $\mathbb{R}^2$)** : on rappelle que l'équation de la tangente au graphe au pt $(a,f(a))$ est $y = f(a) + (x-a)f'(a)$. Si $f$ est à 2 variables, l'équation du plan tangent au pt $(a,b,f(a,b))$ est $z = f(a,b) + (x-a)\dfrac{\partial f}{\partial x}(a,b) + (y-b)\dfrac{\partial f}{\partial y}(a,b)$.
 
 **Théorème (Interprétation géométrique du Gradient)** : Soient $x_0 \in A \subset \mathbb{R}^n$ et $f: A \to \mathbb{R}$ une fonction continûment différentiable en $x_0$ telle que $\nabla f(x_0) \ne 0$. Le gradient de $f$ en $x_0$ est nécessairement orthogonal au plan tangent en $x_0$ à la courbe de niveau qui passe par ce point.
 
 **Illustration** (supposons $A \subset \mathbb{R}^2$, $f:A\to\mathbb{R}$) : soit $f(x) = f(x_0) = k$. Prenons un point $x_a = x_0 + \Delta x\ /\ f(x_a) = f(x_0+\Delta x) = f(x_0) = k$ (un pt se trouvant sur la courbe). C-à-d un déplacement $\Delta x$ qui conduit, à partir de $x_0$, à un point $x_a\ /\ f(x_a) = f(x_0) = k$.
 
-La formule de Taylor à l'ordre 1 : $f(x_a) = f(x_0+\Delta x) = f(x_0) + \nabla f(x_0)\,\Delta x + O(\Delta x)$
+La formule de Taylor à l'ordre 1 : $f(x_a) = f(x_0+\Delta x) = f(x_0) + \nabla f(x_0)^t\Delta x + o(\lVert\Delta x\rVert)$
 
-$$\Rightarrow 0 = \nabla f(x_0)\cdot\frac{\Delta x}{\lVert \Delta x\rVert} + \frac{O(\Delta x)}{\lVert \Delta x\rVert}$$
+$$\Rightarrow 0 = \nabla f(x_0)\cdot\frac{\Delta x}{\lVert \Delta x\rVert} + \frac{o(\lVert\Delta x\rVert)}{\lVert \Delta x\rVert}$$
 
-$$\Rightarrow \lim_{\Delta x\to0} \nabla f(x_0)\cdot\frac{\Delta x}{\lVert \Delta x\rVert} + \frac{O(\Delta x)}{\lVert \Delta x\rVert} = \nabla f(x_0)\cdot u = 0$$
+$$\Rightarrow \lim_{\Delta x\to0} \nabla f(x_0)\cdot\frac{\Delta x}{\lVert \Delta x\rVert} + \frac{o(\lVert\Delta x\rVert)}{\lVert \Delta x\rVert} = \nabla f(x_0)\cdot u = 0$$
 
 où $\dfrac{\Delta x}{\lVert \Delta x\rVert}\xrightarrow[\Delta x\to0]{} u$ : vecteur unité qui est tangent à la courbe au pt $x_0$.
 
@@ -260,9 +260,8 @@ Dans cette méthode $\lambda_k$ est choisi de façon à minimiser la fonction $g
 3. Rechercher $\lambda_k$ tel que $f(x_k+\lambda_k d_k) = \min_{\lambda\ge0} f(x_k+\lambda d_k)$.
 4. Faire $x_{k+1} = x_k + \lambda_k d_k$.
 5. **Test d'arrêt** :
-   - $\max_{1\le i\le n}\left|\dfrac{\partial f}{\partial x_i}\right| < \varepsilon$ ($\varepsilon$ donné) (ici on assure que $\nabla f(\bar x)=0$)
-   - $\lVert \nabla f\rVert^2 = \sum_{i=1}^n\left(\dfrac{\partial f}{\partial x_i}\right)^2 < \varepsilon$ ($\varepsilon$ donné)
-   - $|f(x_{k+1})-f(x_k)| < \varepsilon$ ($\varepsilon$ donné) — à partir d'un certain rang $f(x_k)$ se rapproche de sa limite, c-à-d atteint le min.
+   - $\max_{1\le i\le n}\left|\dfrac{\partial f}{\partial x_i}(x_k)\right| < \varepsilon$ ou $\lVert \nabla f(x_k)\rVert^2 < \varepsilon$ indiquent une **stationnarité approchée**, non l'égalité exacte $\nabla f(x_k)=0$ ;
+   - $|f(x_{k+1})-f(x_k)| < \varepsilon$ indique une possible stagnation numérique, sans certifier à lui seul l'atteinte d'un minimum.
 
 **Remarque** : à titre de précaution, on peut fixer à priori le nombre d'itérations maximal.
 
@@ -286,7 +285,7 @@ $\Rightarrow$ la relation que vérifie $\lambda$ est : $\lambda_k = -\dfrac{\nab
 
 <!-- TODO: page 16 has a hand-drawn illustration of nested elliptical level curves with a zig-zag steepest-descent path from x0 toward the minimum — genuine sketch, described in prose here rather than re-rendered; see PDF tab. -->
 
-**Convergence de la méthode de la plus forte pente. Théorème** : Si $f$ est continûment différentiable avec la propriété [$f$ est coercive : $f(x) \to +\infty$ quand $\lVert x\rVert \to +\infty$], alors, pour tout point de départ $x_0$, la méthode de la plus forte pente converge vers un point stationnaire de $f$.
+**Convergence de la méthode de la plus forte pente.** Sous les hypothèses usuelles d'une recherche linéaire assurant une diminution suffisante et d'un gradient localement lipschitzien sur l'ensemble de niveau initial, les valeurs $f(x_k)$ décroissent et tout point d'accumulation est stationnaire. La coercivité assure que cet ensemble de niveau est borné, mais ne suffit pas seule à garantir la convergence de toute la suite. Une hypothèse de convexité stricte (par exemple forte) permet en outre de conclure à la convergence vers l'unique minimum global.
 
 **Remarque** : Le principal défaut de la méthode de la plus forte pente est que la vitesse de la convergence varie d'une fonction à une autre et la convergence peut être très lente pour certains types de fonctions.
 
@@ -296,7 +295,7 @@ $\Rightarrow$ la relation que vérifie $\lambda$ est : $\lambda_k = -\dfrac{\nab
 
 1. Trouver la solution exacte de ce problème : $\nabla f(x) = \begin{pmatrix}2x_1\\50x_2\end{pmatrix} = \begin{pmatrix}0\\0\end{pmatrix}$ soit $\begin{cases}x_1=0\\x_2=0\end{cases}$
 
-$H = \begin{pmatrix}2&0\\0&50\end{pmatrix}$, $H$ est SDP ; $v=\begin{pmatrix}v_1\\v_2\end{pmatrix}$, $v^tHv = (v_1\ v_2)\begin{pmatrix}2v_1\\50v_2\end{pmatrix} = 2v_1^2+50v_2^2 \ge 0$. Donc $(H)$ admet un minimum en $(0,0)$.
+$H = \begin{pmatrix}2&0\\0&50\end{pmatrix}$ est définie positive ; pour $v=\begin{pmatrix}v_1\\v_2\end{pmatrix}\ne0$, $v^tHv = (v_1\ v_2)\begin{pmatrix}2v_1\\50v_2\end{pmatrix} = 2v_1^2+50v_2^2 > 0$. La fonction est donc strictement convexe et son unique minimum global est $(0,0)$.
 
 2. Suivi de l'algorithme, valeurs intermédiaires :
 
@@ -346,7 +345,9 @@ Comme $\lambda_k$ minimise $q$ dans la direction $d_k$ :
 
 $$\Rightarrow d_k^t\nabla q(x_{k+1}) = d_k^t(Ax_{k+1}+b) = 0$$
 $$\Rightarrow d_k^t\left(A(x_k+\lambda_kd_k)\right)+d_k^tb = 0$$
-$$\Rightarrow \lambda_k = -\frac{d_k^t(Ax_k+b)}{d_k^tAd_k} \ne 0 \text{ car } A \text{ est définie positive.}$$
+Si $g_k=Ax_k+b=0$, $x_k$ est l'unique minimiseur de $q$ et la méthode s'arrête. Sinon :
+
+$$\Rightarrow \lambda_k = -\frac{d_k^t(Ax_k+b)}{d_k^tAd_k}, \qquad d_k^tAd_k>0 \text{ car } A \text{ est définie positive.}$$
 
 Comme $x_k = x_0+\sum_{j=0}^{k-1}\lambda_jd_j \Rightarrow d_k^tAx_k = d_k^tAx_0+\sum_{j=0}^{k-1}\lambda_j\,d_k^tAd_j = d_k^tAx_0$
 
@@ -354,7 +355,7 @@ $$\Rightarrow \lambda_k = -\frac{d_k^t(Ax_0+b)}{d_k^tAd_k}$$
 
 **Propriété** : Pour $1\le k\le n$, le point $x_k = x_0+\sum_{j=0}^{k-1}\lambda_jd_j$ est l'optimum de $q(x)$ sur la variété $V_k$ engendrée par $(d_0,d_1,...,d_{k-1})$. En particulier $x_n = x_0+\sum_{j=0}^{n-1}\lambda_jd_j$ est l'optimum de $q(x)$ sur $\mathbb{R}^n$.
 
-*Démonstration* : $d_i^tAx_k = d_i^tAx_0+\sum_{j=0}^{k-1}\lambda_jd_i^tAd_j = d_i^tAx_0+\lambda_id_i^tAd_i$ (remplaçant $\lambda_i$) $= d_i^tAx_0-d_i^tAx_0+d_i^tb = d_i^tb$
+*Démonstration* : $d_i^tAx_k = d_i^tAx_0+\sum_{j=0}^{k-1}\lambda_jd_i^tAd_j = d_i^tAx_0+\lambda_id_i^tAd_i$ (en remplaçant $\lambda_i$) $= d_i^tAx_0-d_i^t(Ax_0+b) = -d_i^tb$
 
 $\Rightarrow d_i^t(Ax_k+b)=0 \Rightarrow \nabla q(x_k)=(Ax_k+b)\perp V_k \Rightarrow x_k$ est un optimum de $q$ sur $V_k$.
 
@@ -379,7 +380,7 @@ $f(x) = \frac12 x^tAx+b^tx+c$ avec $A=H(x)$, $b=0$, $c=-4$.
 
 Considérons une direction de départ $\hat d_0 = \dfrac{d_0}{\lVert d_0\rVert}$. $\hat d_0 = [1/2, \sqrt3/2]$ ; $\hat d_0^t\hat d_0 = [1/2,\sqrt3/2]\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix} = \frac14+\frac34 = 1$.
 
-Calcul de $x_1$ : $x_1 = x_0+\lambda_0\hat d_0$ avec $\lambda_0 = -\dfrac{\nabla f(x_0)^t\hat d_0}{\hat d_0^tA\hat d_0} = -\dfrac{[8,8]\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix}}{[8,8]\begin{bmatrix}2&0\\0&2\end{bmatrix}\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix}} = -5,46$
+Calcul de $x_1$ : $x_1 = x_0+\lambda_0\hat d_0$ avec $\lambda_0 = -\dfrac{\nabla f(x_0)^t\hat d_0}{\hat d_0^tA\hat d_0} = -\dfrac{[8,8]\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix}}{[1/2,\sqrt3/2]\begin{bmatrix}2&0\\0&2\end{bmatrix}\begin{bmatrix}1/2\\\sqrt3/2\end{bmatrix}} = -5,46$
 
 $\Rightarrow \lambda_0\hat d_0 = -5,46\begin{pmatrix}1/2\\\sqrt3/2\end{pmatrix} = \begin{bmatrix}-2,73\\-4,74\end{bmatrix}$
 
@@ -391,7 +392,7 @@ Ce qui donne : $[\hat d_1^1,\hat d_1^2]\begin{bmatrix}2&0\\0&2\end{bmatrix}\begi
 
 $$\begin{cases}\hat d_1^1+\sqrt3\,\hat d_1^2=0\\(\hat d_1^1)^2+(\hat d_1^2)^2=1\end{cases} \Leftrightarrow \hat d_1 = \begin{bmatrix}-\sqrt3/2\\1/2\end{bmatrix}$$
 
-$\Rightarrow x_2 = x_1+\lambda_1\hat d_1$ avec $\lambda_1 = -\dfrac{\nabla f(x_1)\hat d_1}{\hat d_1^tA\hat d_1} = \dfrac{[2,54,\,-1,48]\begin{bmatrix}-\sqrt3/2\\1/2\end{bmatrix}}{[-\sqrt3/2,\,1/2]\begin{bmatrix}2&0\\0&2\end{bmatrix}\begin{bmatrix}-\sqrt3/2\\1/2\end{bmatrix}} = 1,47$
+$\Rightarrow x_2 = x_1+\lambda_1\hat d_1$ avec $\lambda_1 = -\dfrac{\nabla f(x_1)^t\hat d_1}{\hat d_1^tA\hat d_1} = -\dfrac{[2,54,\,-1,48]\begin{bmatrix}-\sqrt3/2\\1/2\end{bmatrix}}{[-\sqrt3/2,\,1/2]\begin{bmatrix}2&0\\0&2\end{bmatrix}\begin{bmatrix}-\sqrt3/2\\1/2\end{bmatrix}} = 1,47$
 
 $\Rightarrow x_2 = \begin{bmatrix}1,27\\-0,74\end{bmatrix}+1,47\begin{bmatrix}-\sqrt3/2\\1/2\end{bmatrix} = \begin{bmatrix}0\\0\end{bmatrix}$ **solution optimale**.
 
@@ -410,9 +411,9 @@ Supposons que $q(x) = \frac12x^tAx+b^tx+c$.
 
 (i) $x_0$ le point de départ ; $g_0 = \nabla q(x_0) = Ax_0+b$. Poser $d_0=-g_0$, $k=0$.
 
-(ii) À l'itération $k$, on est au point $x_k$. $x_{k+1} = x_k+\lambda_kd_k$ avec :
+(ii) À l'itération $k$, si $g_k=0$, arrêter : pour cette quadratique à matrice $A$ définie positive, $x_k$ est l'unique minimiseur. Sinon, $x_{k+1} = x_k+\lambda_kd_k$ avec :
 
-(1) $\lambda_k = -\dfrac{g_k^td_k}{d_k^tAd_k} \equiv \lambda_k = +\dfrac{g_k^tg_k}{d_k^tAd_k} \ne 0$
+(1) $\lambda_k = -\dfrac{g_k^td_k}{d_k^tAd_k} \equiv \lambda_k = \dfrac{g_k^tg_k}{d_k^tAd_k}>0$
 
 (2) $d_{k+1} = -g_{k+1}+\beta_kd_k$ avec $\beta_k = \dfrac{g_{k+1}^tAd_k}{d_k^tAd_k} \equiv \beta_k = \dfrac{g_{k+1}^t[g_{k+1}-g_k]}{g_k^tg_k} = \dfrac{g_{k+1}^tg_{k+1}}{g_k^tg_k}$
 
@@ -422,11 +423,9 @@ On a : $d_{k+1}^tAd_k = [-g_{k+1}+\beta_kd_k]^tAd_k = -g_{k+1}^tAd_k+\beta_kd_k^
 
 Vérifions que $d_{k+1}^tAd_i = 0\ \forall\ 0\le i\le k-1$ :
 
-$d_{k+1}^tAd_i = [-g_{k+1}^t+\beta_kd_k^t]Ad_i = -g_{k+1}^tAd_i+\beta_k\dfrac{d_k^tAd_i}{0}$
+$$d_{k+1}^tAd_i = -g_{k+1}^tAd_i + \beta_k\underbrace{d_k^tAd_i}_{=0}.$$
 
-or $x_{i+1} = x_i+\lambda_id_i \Rightarrow \lambda_iAd_i = Ax_{i+1}-Ax_i \Rightarrow Ad_i = \dfrac{1}{\lambda_i}[g_{i+1}-g_i]$, et $g_{i+1}=-d_{i+1}+\beta_id_i$, ($g_{i+2}=-d_i+\beta_{i-1}g_{i-1}$) $\Rightarrow Ad_i$ s'écrit comme CL de $d_0,d_1,...,d_{i-1}$.
-
-Et comme $x_{k+1}$ est l'optimum de $q(x)$ sur l'espace engendré par $(d_0,d_1,...,d_k) \Rightarrow \nabla q(x_{k+1}) = g_{k+1} \perp$ à cet espace $\Rightarrow g_{k+1}^tAd_i=0$.
+Comme $\lambda_i\ne0$ avant l'arrêt, $\lambda_iAd_i = g_{i+1}-g_i$. Avec $g_j=-d_j+\beta_{j-1}d_{j-1}$ (et la convention $\beta_{-1}d_{-1}=0$), on obtient donc $Ad_i\in\operatorname{span}(d_{i-1},d_i,d_{i+1})\subseteq\operatorname{span}(d_0,\ldots,d_k)$. Or l'optimalité des recherches linéaires précédentes donne $g_{k+1}\perp\operatorname{span}(d_0,\ldots,d_k)$ ; ainsi $g_{k+1}^tAd_i=0$, d'où la conjugaison recherchée.
 
 **Montrons que** $\lambda_k = \dfrac{g_k^tg_k}{d_k^tAd_k}$ : on a $d_k=-g_k+\beta_{k-1}d_{k-1}$
 
