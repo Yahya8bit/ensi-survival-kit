@@ -65,4 +65,95 @@ If OCR/extraction produced something unclear (garbled character, unreadable tabl
 
 ## 7. Attribution
 
-If the source PDF is a specific handbook, professor's slides, or named document, note the source at the top of the converted doc (e.g. as a short italic line under the title), so future editors know where to check the original if something looks off.
+If the source PDF is a specific handbook, professor's slides, or named document, note the source at the top of the converted doc (e.g. as a short italic line under the title), so future editors know where to check the original if something looks off
+
+## 8. Existing course-page audit and enhancement workflow
+
+The rules in §§1–7 govern **PDF conversion/transcription tasks**. They do not prohibit explicitly requested audit, correction, or enhancement work on existing course pages.
+
+When the user asks to **audit, improve, correct, complete, or enhance an existing course page**, treat that as a separate workflow.
+
+### Mandatory guidance
+
+Before editing an existing course page:
+
+1. Read `ARCHETYPE-EXAMPLES.md` and follow it **to the letter**.
+2. Read `CONVERSION-METHOD.md` and any other repository guidance relevant to the page.
+3. Compare the existing Markdown page directly against its source PDF.
+4. Determine the applicable archetype **section by section** when the page contains mixed content types.
+
+`ARCHETYPE-EXAMPLES.md` is authoritative for the structure and presentation of enhanced course pages.
+
+### Audit scope
+
+Unless the user narrows the task, perform one bounded pass covering:
+
+- substantive technical correctness;
+- source completeness;
+- archetype compliance;
+- required diagrams, examples, definitions, callouts, and other structures prescribed by the applicable archetype;
+- pedagogically important omissions.
+
+Do not perform optional stylistic polishing merely because another formulation is possible.
+
+### Source errors
+
+For audit/correction work, fidelity does **not** require reproducing a technically incorrect source statement.
+
+When the source contains a genuine technical error:
+
+- correct it in the course page;
+- preserve the intended teaching point where possible;
+- mention the intentional source correction in the task summary.
+
+Do not silently “correct” uncertain material. If it is ambiguous rather than demonstrably wrong, flag it instead of guessing.
+
+### Diagrams and pedagogical structure
+
+During an explicitly requested audit/enhancement pass, diagrams, callouts, collapsible details, examples, and other structures required by `ARCHETYPE-EXAMPLES.md` may be added even when they are not literal transcriptions of source formatting.
+
+They must remain faithful to the source concepts and must not introduce unsupported technical claims.
+
+For source diagrams, preserve topology, grouping, directionality, state transitions, and other meaning-bearing visual relationships.
+
+After every diagram, provide the adjacent explanation required by the applicable archetype.
+
+### Editing discipline
+
+- Work on one course page at a time unless explicitly asked otherwise.
+- Modify only the target file unless another file is genuinely required.
+- Prefer the smallest change that resolves a real correctness, completeness, or archetype issue.
+- Do not reopen already completed chapters without an explicit reason.
+- Do not broaden the page with unrelated theory.
+- Do not stage or commit unless explicitly requested.
+- Never push unless explicitly requested.
+- Never use `git add .` or `git add -A`; stage exact paths only.
+
+### Validation
+
+After editing:
+
+1. Inspect the exact diff.
+2. Run `git diff --check`.
+3. Run:
+
+   `DOCUSAURUS_NO_PERSISTENT_CACHE=1 yarn build`
+
+4. Verify that only intended files changed.
+5. Treat environment failures such as timeouts or `ENOSPC` as infrastructure failures, not successful builds or content failures.
+6. Report substantive changes, intentional source corrections, validation results, and any remaining uncertainty.
+
+Known nonfatal project warnings should not trigger unrelated edits.
+
+### Default stopping rule
+
+One audit pass and one bounded correction pass are normally enough.
+
+Once the page:
+
+- is technically correct;
+- contains the important source material;
+- follows its applicable archetype;
+- passes validation;
+
+stop and move to the next chapter. Do not continue with notation-only or preference-only polishing..
